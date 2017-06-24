@@ -11,6 +11,18 @@
 |
 */
 
+//Admin Routes Start
+Route::get('admin/login','Admin\HomeController@login');
+Route::post('admin/login','Admin\LoginController@login');
+Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'adminAuth'],function () {
+    // Controllers Within The "App\Http\Controllers\Admin" Namespace
+    Route::get('/','HomeController@home');
+});
+//Admin Routes End
+
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+
