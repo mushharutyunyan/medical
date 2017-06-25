@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use App\Models\Role;
 class CreateRolesTable extends Migration
 {
     /**
@@ -18,6 +18,9 @@ class CreateRolesTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
+        $role = new Role();
+        $role->name = 'admin';
+        $role->save();
     }
 
     /**

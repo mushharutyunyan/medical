@@ -17,4 +17,18 @@ class Admin extends Authenticatable
     protected $fillable = [
         'id', 'role_id', 'organization_id', 'email' , 'password', 'firstname', 'lastname'
     ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    public function role()
+    {
+        return $this->belongsTo('App\Models\Role');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization');
+    }
 }

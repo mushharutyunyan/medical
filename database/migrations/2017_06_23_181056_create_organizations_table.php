@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use App\Models\Organization;
 class CreateOrganizationsTable extends Migration
 {
     /**
@@ -18,6 +18,9 @@ class CreateOrganizationsTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
+        $organization = new Organization();
+        $organization->name = 'admin';
+        $organization->save();
     }
 
     /**

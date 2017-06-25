@@ -88,8 +88,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
-<script src="/assets/admin/js/respond.min.js"></script>
-<script src="/assets/admin/js/excanvas.min.js"></script>
+<scradminsrc="/assets/admin/js/respond.min.js"></script>
+<scradminsrc="/assets/admin/js/excanvas.min.js"></script>
 <![endif]-->
 <script src="/assets/admin/js/jquery.min.js" type="text/javascript"></script>
 <script src="/assets/admin/js/jquery-migrate.min.js" type="text/javascript"></script>

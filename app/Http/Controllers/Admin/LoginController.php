@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     /*
@@ -18,7 +19,9 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as performLogout;
+    }
 
     /**
      * Where to redirect users after login.
@@ -26,6 +29,12 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/admin';
+
+    protected function logout(Request $request)
+    {
+        $this->performLogout($request);
+        return redirect('admin/login');
+    }
 
     protected function guard()
     {

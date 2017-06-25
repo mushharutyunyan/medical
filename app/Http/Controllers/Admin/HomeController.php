@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
 
@@ -13,5 +15,9 @@ class HomeController extends Controller
 
     public function login(){
         return view('admin/login');
+    }
+
+    public function notFound(){
+        return view('errors/404admin');
     }
 }
