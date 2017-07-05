@@ -92,7 +92,7 @@
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
                                     <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                    <a href="/admin/manage/admins" type="button" class="btn default">Cancel</a>
+                                    <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
                                 </div>
                             </div>
                         </div>

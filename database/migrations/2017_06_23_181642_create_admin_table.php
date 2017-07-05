@@ -23,6 +23,7 @@ class CreateAdminTable extends Migration
             $table->string('lastname');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
             $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('organization_id')->references('id')->on('organizations');
         });

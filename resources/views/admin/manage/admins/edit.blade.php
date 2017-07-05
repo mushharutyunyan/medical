@@ -33,7 +33,15 @@
                             <div class="col-md-4">
                                 <select class="form-control" name="role_id">
                                     @foreach($roles as $role)
-                                        <option value="{{$role->id}}">{{$role->name}}</option>
+                                        @if(Input::old('organization_id') == $role->id)
+                                            <option selected value="{{$role->id}}">{{$role->name}}</option>
+                                        @else
+                                            @if($currentAdmin->role_id == $role->id)
+                                                <option selected value="{{$role->id}}">{{$role->name}}</option>
+                                            @else
+                                                <option value="{{$role->id}}">{{$role->name}}</option>
+                                            @endif
+                                        @endif
                                     @endforeach
                                 </select>
                                 <span class="help-block">You can Add new Role <a target="_blank" href="/admin/manage/roles/create">Here</a></span>
@@ -81,7 +89,7 @@
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
                                 <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                <a href="/admin/manage/admins" type="button" class="btn default">Cancel</a>
+                                <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
                             </div>
                         </div>
                     </div>

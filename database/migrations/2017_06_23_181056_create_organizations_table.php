@@ -16,10 +16,12 @@ class CreateOrganizationsTable extends Migration
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->integer('admin_id')->unsigned();
             $table->timestamps();
         });
         $organization = new Organization();
         $organization->name = 'admin';
+        $organization->admin_id = 1;
         $organization->save();
     }
 

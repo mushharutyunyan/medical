@@ -18,9 +18,10 @@ class CreateRolesTable extends Migration
             $table->string('name');
             $table->timestamps();
         });
-        $role = new Role();
-        $role->name = 'admin';
-        $role->save();
+        $data = array('superAdmin', 'admin');
+        foreach ($data as $value){
+            Role::create(array('name' => $value));
+        }
     }
 
     /**

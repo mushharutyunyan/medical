@@ -21,8 +21,12 @@
     <link href="/assets/admin/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
-    <link href="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css"/>
-    <link href="/assets/admin/plugins/fullcalendar/fullcalendar.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/clockface/css/clockface.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-datepicker/css/datepicker3.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
     <!-- END PAGE LEVEL PLUGIN STYLES -->
     <!-- BEGIN PAGE STYLES -->
     <link href="/assets/admin/css/tasks.css" rel="stylesheet" type="text/css"/>
@@ -253,7 +257,7 @@
                 <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
                 <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
                 <ul class="page-sidebar-menu page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                    @if(Auth::guard('admin')->user()['role_id'] == 1)
+                    @if(Auth::guard('admin')->user()['role_id'] == 1 || Auth::guard('admin')->user()->role->name == 'admin')
                     @if(Request::segment(2) == 'manage')
                     <li class="active">
                     @else
@@ -272,13 +276,22 @@
                             @endif
                                 <a href="/admin/manage/admins">Admins</a>
                             </li>
-                            @if(Request::segment(2) == 'manage' && Request::segment(3) == 'roles')
-                                <li class="active">
-                            @else
+                            @if(Auth::guard('admin')->user()['role_id'] == 1)
+                                @if(Request::segment(2) == 'manage' && Request::segment(3) == 'roles')
+                                    <li class="active">
+                                @else
+                                    <li>
+                                @endif
+                                    <a href="/admin/manage/roles">Roles</a>
+                                </li>
+                                @if(Request::segment(2) == 'manage' && Request::segment(3) == 'drugs')
+                                    <li class="active">
+                                @else
                                 <li>
+                                    @endif
+                                    <a href="/admin/manage/drugs">Drugs</a>
+                                </li>
                             @endif
-                                <a href="/admin/manage/roles">Roles</a>
-                            </li>
                             @if(Request::segment(2) == 'manage' && Request::segment(3) == 'organizations')
                                 <li class="active">
                             @else
@@ -340,8 +353,13 @@
 <script src="/assets/admin/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
 <script src="/assets/admin/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
 <script src="/assets/admin/js/jquery.pulsate.min.js" type="text/javascript"></script>
-<script src="/assets/admin/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
-<script src="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/clockface/js/clockface.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 <!-- IMPORTANT! fullcalendar depends on jquery-ui.min.js for drag & drop support -->
 <script src="/assets/admin/plugins/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
 <script src="/assets/admin/js/jquery.easypiechart.min.js" type="text/javascript"></script>
@@ -355,6 +373,7 @@
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/additional-methods.min.js"></script>
+
 <script src="/assets/admin/js/metronic.js" type="text/javascript"></script>
 <script src="/assets/admin/js/layout.js" type="text/javascript"></script>
 <script src="/assets/admin/js/demo.js" type="text/javascript"></script>
@@ -362,6 +381,7 @@
 <script src="/assets/admin/js/tasks.js" type="text/javascript"></script>
 <script src="/assets/admin/js/table-managed.js"></script>
 <script src="/assets/admin/js/admins.js"></script>
+<script src="/assets/admin/js/drugs.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function() {

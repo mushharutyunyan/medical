@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Organization;
+use Illuminate\Support\Facades\Auth;
+
 class OrganizationsController extends Controller
 {
     /**
@@ -39,7 +41,9 @@ class OrganizationsController extends Controller
         $this->validate($request, [
             'name' => 'required|unique:organizations,name',
         ]);
-        Organization::create($request->all());
+        $data = $request->all();
+        $data['admin_id'] = Auth::guard('admin')->user()['id'];
+        Organization::create($data);
         return redirect('admin/manage/organizations')->with('status', 'New Organizations created successfully');
     }
 

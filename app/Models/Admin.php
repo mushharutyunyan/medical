@@ -21,6 +21,7 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password',
     ];
+    protected $softDelete = true;
 
     public function role()
     {
@@ -30,5 +31,9 @@ class Admin extends Authenticatable
     public function organization()
     {
         return $this->belongsTo('App\Models\Organization');
+    }
+    public function admin_organizations()
+    {
+        return $this->belongsToMany('App\Models\Admin','admin_organizations', 'admin_id', 'admin_organization_id');
     }
 }

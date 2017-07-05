@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 class RolesController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('superAdmin');
+    }
     /**
      * Display a listing of the resource.
      *

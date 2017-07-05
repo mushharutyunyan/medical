@@ -47,7 +47,7 @@
                                 <td>{{$role->name}}</td>
                                 <td>{{$role->created_at}}</td>
                                 <td>
-                                    @if($role->id != 1)
+                                    @if($role->id != 1 && $role->name != 'admin')
                                         {!! Form::open(['url' => 'admin/manage/roles/'.$role->id, 'method' => 'DELETE', 'class' => 'delete-form']) !!}
                                         <a href="/admin/manage/roles/{{$role->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
                                         <button title="Delete" type="submit"><i class="fa fa-remove"></i></button>

@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Role;
 use App\Models\Organization;
+use App\Models\AdminOrganization;
 use App\Http\Requests\AdminsRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 class AdminsController extends Controller
 {
@@ -18,7 +20,11 @@ class AdminsController extends Controller
      */
     public function index()
     {
-        $admins = Admin::all();
+        if(Auth::guard('admin')->user()->role->id != 1){
+            $admins = Auth::guard('admin')->user()->admin_organizations()->get();
+        }else{
+            $admins = Admin::all();
+        }
         return view('admin.manage.admins.index',compact('admins'));
     }
 
@@ -29,7 +35,11 @@ class AdminsController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
+        if(Auth::guard('admin')->user()->role->id != 1){
+            $roles = Role::where('id','!=',1)->where('name','!=','admin')->get();
+        }else{
+            $roles = Role::where('id',1)->orWhere('name','admin')->get();
+        }
         $organizations = Organization::all();
         return view('admin.manage.admins.create',['roles' => $roles, 'organizations' => $organizations]);
     }
@@ -43,7 +53,12 @@ class AdminsController extends Controller
     public function store(AdminsRequest $request)
     {
         $data = $request->all();
-        Admin::create($data);
+        $data['password'] = bcrypt($data['password']);
+        $created = Admin::create($data);
+        if(Auth::guard('admin')->user()->role->id != 1){
+            AdminOrganization::create(array('admin_id' => Auth::guard('admin')->user()['id'],
+                                            'admin_organization_id' => $created->id));
+        }
         return redirect('admin/manage/admins')->with('status', 'Admin profile created successfully');
     }
 
