@@ -23,6 +23,7 @@ use App\Models\DrugType;
 use App\Models\DrugTypeBelonging;
 use App\Models\DrugUnit;
 use App\Models\DrugUnitPrice;
+use Maatwebsite\Excel\Facades\Excel;
 class InsertDrugInfo extends Migration
 {
     /**
@@ -33,7 +34,7 @@ class InsertDrugInfo extends Migration
     public function up()
     {
         ini_set('memory_limit', '-1');
-        $results = \Maatwebsite\Excel\Excel::load(storage_path('archive').'\drugs.xlsx')->all()->toArray();
+        $results = Excel::load(storage_path('archive').'\drugs.xlsx')->all()->toArray();
         $drugs = array();
         $categories = array();
         $groups = array();
