@@ -31,6 +31,7 @@
     <!-- BEGIN PAGE STYLES -->
     <link href="/assets/admin/css/tasks.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/admin/css/error.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/admin/css/jquery-confirm.css" rel="stylesheet" type="text/css"/>
     <!-- END PAGE STYLES -->
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/select2/select2.css"/>
@@ -301,7 +302,19 @@
                             </li>
                         </ul>
                     </li>
+                    @if(Request::segment(2) == 'storage')
+                    <li class="active">
+                    @else
+                    <li>
                     @endif
+                        <a href="/admin/storage">
+                            <i class="icon-basket"></i>
+                            <span class="title">Storage</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+                    @endif
+
                 </ul>
                 <!-- END SIDEBAR MENU -->
             </div>
@@ -373,6 +386,7 @@
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/additional-methods.min.js"></script>
+<script type="text/javascript" src="/assets/admin/js/jquery-confirm.js"></script>
 
 <script src="/assets/admin/js/metronic.js" type="text/javascript"></script>
 <script src="/assets/admin/js/layout.js" type="text/javascript"></script>
@@ -382,6 +396,7 @@
 <script src="/assets/admin/js/table-managed.js"></script>
 <script src="/assets/admin/js/admins.js"></script>
 <script src="/assets/admin/js/drugs.js"></script>
+<script src="/assets/admin/js/storage.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function() {

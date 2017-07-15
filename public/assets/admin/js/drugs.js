@@ -14,4 +14,9 @@ $(document).ready(function(){
         }
         $('input[name="'+block_name+'"]').val(block_count);
     })
+    $(".image-block-delete").on('click',function(){
+        var block_count = $('input[name="picture"]').val();
+        $('input[name="picture"]').val(--block_count);
+        $(this).parent().html("<input type='file' name='picture_"+$(this).attr('data-iteration')+"'>")
+    })
 });

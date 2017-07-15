@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
 {
+    Const STATUS = array('Whole Sale', 'Pharmacy', 'Other Organization');
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'admin_id'
+        'id', 'name', 'admin_id', 'director', 'status', 'email', 'city', 'apartment'
     ];
 }

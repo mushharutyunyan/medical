@@ -33,6 +33,54 @@
                                 {{Form::text('name',$currentOrganization->name,['class' => 'form-control'])}}
                             </div>
                         </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Director</label>
+                                <div class="col-md-4">
+                                    {{Form::text('director',$currentOrganization->director,['class' => 'form-control'])}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Status</label>
+                                <div class="col-md-4">
+                                    <select class="form-control" name="status">
+                                        @foreach($status as $key => $value)
+                                            @if(Input::old('status') == $key)
+                                                <option selected value="{{$key}}">{{$value}}</option>
+                                            @else
+                                                @if($currentOrganization->status == $key)
+                                                    <option selected value="{{$key}}">{{$value}}</option>
+                                                @else
+                                                    <option value="{{$key}}">{{$value}}</option>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Email</label>
+                                <div class="col-md-4">
+                                    {{Form::text('email',$currentOrganization->email,['class' => 'form-control'])}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">City</label>
+                                <div class="col-md-4">
+                                    {{Form::text('city',$currentOrganization->city,['class' => 'form-control'])}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Street</label>
+                                <div class="col-md-4">
+                                    {{Form::text('street',$currentOrganization->street,['class' => 'form-control'])}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Apartment</label>
+                                <div class="col-md-4">
+                                    {{Form::text('apartment',$currentOrganization->apartment,['class' => 'form-control'])}}
+                                </div>
+                            </div>
                     </div>
                     <div class="form-actions">
                         <div class="row">

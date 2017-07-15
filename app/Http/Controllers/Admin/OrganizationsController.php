@@ -17,7 +17,8 @@ class OrganizationsController extends Controller
     public function index()
     {
         $organizations = Organization::all();
-        return view('admin.manage.organizations.index',compact('organizations'));
+        $status = Organization::STATUS;
+        return view('admin.manage.organizations.index',['status' => $status, 'organizations' => $organizations]);
     }
 
     /**
@@ -27,7 +28,8 @@ class OrganizationsController extends Controller
      */
     public function create()
     {
-        return view('admin.manage.organizations.create');
+        $status = Organization::STATUS;
+        return view('admin.manage.organizations.create',['status' => $status]);
     }
 
     /**
@@ -38,13 +40,15 @@ class OrganizationsController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->all();
+        $redirect_uri = $data['redirect_url'];
         $this->validate($request, [
             'name' => 'required|unique:organizations,name',
         ]);
-        $data = $request->all();
         $data['admin_id'] = Auth::guard('admin')->user()['id'];
+        unset($data['redirect_url']);
         Organization::create($data);
-        return redirect('admin/manage/organizations')->with('status', 'New Organizations created successfully');
+        return redirect($redirect_uri)->with('status', 'New Organizations created successfully');
     }
 
     /**
@@ -55,8 +59,9 @@ class OrganizationsController extends Controller
      */
     public function edit($id)
     {
+        $status = Organization::STATUS;
         $currentOrganization = Organization::where('id',$id)->first();
-        return view('admin.manage.organizations.edit',compact('currentOrganization'));
+        return view('admin.manage.organizations.edit',['status' => $status, 'currentOrganization' => $currentOrganization]);
     }
 
     /**
@@ -72,7 +77,9 @@ class OrganizationsController extends Controller
             'name' => 'required|unique:organizations,name,'.$id,
         ]);
         $data = $request->all();
-        Organization::where('id',$id)->update(array('name' => $data['name']));
+        unset($data['_method']);
+        unset($data['_token']);
+        Organization::where('id',$id)->update($data);
         return redirect('admin/manage/organizations')->with('status', 'Organization updated successfully');
     }
 

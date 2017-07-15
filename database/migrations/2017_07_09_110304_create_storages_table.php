@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTypeDrugsTable extends Migration
+class CreateStoragesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,16 @@ class CreateTypeDrugsTable extends Migration
      */
     public function up()
     {
-        Schema::create('drug_types', function (Blueprint $table) {
+        Schema::create('storages', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('drug_id')->unsigned();
-            $table->string('name');
+            $table->integer('organization_id')->unsigned();
+            $table->text('drug_settings');
+            $table->integer('count');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('drug_id')->references('id')->on('drugs');
+            $table->foreign('organization_id')->references('id')->on('organizations');
         });
     }
 
@@ -30,6 +33,6 @@ class CreateTypeDrugsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('drug_types');
+        Schema::dropIfExists('storages');
     }
 }

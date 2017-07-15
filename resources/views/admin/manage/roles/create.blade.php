@@ -31,6 +31,11 @@
                             <label class="control-label col-md-3">Name</label>
                             <div class="col-md-4">
                                 {{Form::text('name','',['class' => 'form-control'])}}
+                                @if(Input::old('redirect_url'))
+                                    <input type="hidden" value="{{Input::old('redirect_url')}}" name="redirect_url">
+                                @else
+                                    <input type="hidden" value="{{url()->previous()}}" name="redirect_url">
+                                @endif
                             </div>
                         </div>
                     </div>

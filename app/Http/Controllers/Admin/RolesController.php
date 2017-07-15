@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use URL;
 class RolesController extends Controller
 {
 
@@ -40,11 +41,15 @@ class RolesController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->all();
+        $redirect_uri = $data['redirect_url'];
         $this->validate($request, [
             'name' => 'required|unique:roles,name',
         ]);
+        unset($data['redirect_url']);
         Role::create($request->all());
-        return redirect('admin/manage/roles')->with('status', 'New Role created successfully');
+
+        return redirect($redirect_uri)->with('status', 'New Role created successfully');
     }
 
     /**

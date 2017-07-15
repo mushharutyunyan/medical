@@ -39,7 +39,7 @@
                                             @endif
                                         @endforeach
                                     </select>
-                                    <span class="help-block">You can Add new Role <a target="_blank" href="/admin/manage/roles/create">Here</a></span>
+                                    <span class="help-block">You can Add new Role <a href="/admin/manage/roles/create">Here</a></span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -54,7 +54,7 @@
                                             @endif
                                         @endforeach
                                     </select>
-                                    <span class="help-block">You can Add new Organization <a target="_blank" href="/admin/manage/organizations/create">Here</a></span>
+                                    <span class="help-block">You can Add new Organization <a href="/admin/manage/organizations/create">Here</a></span>
                                 </div>
                             </div>
                             <div class="form-group">

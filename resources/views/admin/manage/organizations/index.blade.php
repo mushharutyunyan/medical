@@ -34,6 +34,18 @@
                                 Name
                             </th>
                             <th>
+                                Director
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Address
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
                                 Created At
                             </th>
                             <th>
@@ -43,8 +55,17 @@
                         </thead>
                         <tbody>
                         @foreach($organizations as $organization)
+
                             <tr class="odd gradeX">
                                 <td>{{$organization->name}}</td>
+                                <td>{{$organization->director}}</td>
+                                <td>{{$organization->email}}</td>
+                                <td>{{$organization->city}} {{$organization->street}} {{$organization->apartment}}</td>
+                                <td>
+                                    @if($organization->status)
+                                    {{$status[$organization->status]}}
+                                    @endif
+                                </td>
                                 <td>{{$organization->created_at}}</td>
                                 <td>
                                     <a href="/admin/manage/organizations/{{$organization->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>

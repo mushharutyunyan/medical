@@ -15,7 +15,7 @@ class UpdateDrugsTable extends Migration
     {
         Schema::table('drugs', function (Blueprint $table) {
             $table->string('trade_name_ru')->nullable()->after('trade_name');
-            $table->string('trade_name_eng')->nullable()->after('trade_name_ru');
+            $table->string('trade_name_en')->nullable()->after('trade_name_ru');
             $table->string('trade_name')->nullable()->change();
             $table->string('generic_name')->nullable()->change();
             $table->string('dosage_form')->nullable()->change();

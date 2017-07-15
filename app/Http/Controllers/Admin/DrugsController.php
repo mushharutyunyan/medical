@@ -106,6 +106,7 @@ class DrugsController extends Controller
                 }
             }
         }
+        return redirect('admin/manage/drugs')->with('status', 'New Drug created successfully');
     }
 
     /**
@@ -128,11 +129,46 @@ class DrugsController extends Controller
     public function edit($id)
     {
         $currentDrug = Drug::find($id);
-//        foreach($currentDrug->categories as $categories){
-//            echo "<pre>";
-//            print_r($categories);die;
-//        }
-        return view('admin.manage.drugs.edit',['currentDrug' => $currentDrug]);
+        $categories = $currentDrug->category;
+        $certificateNumber = $currentDrug->certificate_number;
+        $country = $currentDrug->country;
+        $expiration = $currentDrug->expiration_date;
+        $group = $currentDrug->group;
+        $manufacturer = $currentDrug->manufacturer;
+        $packCount = $currentDrug->count;
+        $picture = $currentDrug->picture;
+        $registrationCertificateHolder = $currentDrug->registration_certificate_holder;
+        $registrationDate = $currentDrug->registration_date;
+        $releasePackaging = $currentDrug->release_packaging;
+        $releaseOrder = $currentDrug->release_order;
+        $series = $currentDrug->series;
+        $supplier = $currentDrug->supplier;
+        $type = $currentDrug->type;
+        $typeBelonging = $currentDrug->type_belonging;
+        $unit = $currentDrug->unit;
+        $unitPrice = $currentDrug->unit_price;
+        $character = $currentDrug->character;
+        return view('admin.manage.drugs.edit',['currentDrug' => $currentDrug,
+                                                     'categories' => $categories,
+                                                     'certificate_number' => $certificateNumber,
+                                                     'country' => $country,
+                                                     'expiration_date' => $expiration,
+                                                     'group' => $group,
+                                                     'manufacturer' => $manufacturer,
+                                                     'count' => $packCount,
+                                                     'picture' => $picture,
+                                                     'registration_certificate_holder' => $registrationCertificateHolder,
+                                                     'registration_date' => $registrationDate,
+                                                     'releasePackaging' => $releasePackaging,
+                                                     'release_order' => $releaseOrder,
+                                                     'series' => $series,
+                                                     'supplier' => $supplier,
+                                                     'type' => $type,
+                                                     'type_belonging' => $typeBelonging,
+                                                     'unit' => $unit,
+                                                     'unit_price' => $unitPrice,
+                                                     'character' => $character
+                                                    ]);
     }
 
     /**
@@ -144,7 +180,43 @@ class DrugsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $drug = Drug::find($id);
+        $this->validate($request, [
+            'trade_name' => 'required|unique:drugs,trade_name,'.$id,
+            'trade_name_ru' => 'required|unique:drugs,trade_name_ru,'.$id,
+            'trade_name_en' => 'required|unique:drugs,trade_name_en,'.$id,
+        ]);
+        Drug::where('id',$id)->update(array('trade_name' => $data['trade_name'],
+                            'trade_name_ru' => $data['trade_name_ru'],
+                            'trade_name_en' => $data['trade_name_en'],
+                            'generic_name' => $data['generic_name'],
+                            'dosage_form' => $data['dosage_form'],
+                            'dosage_strength' => $data['dosage_strength'],
+                            'code' => $data['code']));
+        foreach($this->sub_fields as $sub_field => $class){
+            $new_data = array();
+            for($i = 1; $i <= $data[$sub_field]; $i++){
+                $object_class = new $class();
+                if(!empty($data[$sub_field."_".$i])){
+                    if($sub_field == 'picture'){
+                        $picture = Input::file($sub_field."_".$i);
+                        if($picture){
+                            $name  = time() . '.' . $picture->getClientOriginalExtension();
+                            $path = public_path('assets/admin/images/drugs/' . $name);
+                            Image::make($picture->getRealPath())->resize(320, 240)->save($path);
+                        }else{
+                            $name = $data[$sub_field."_".$i];
+                        }
+                        $new_data[$name] = $id;
+                    }else{
+                        $new_data[$data[$sub_field."_".$i]] = $id;
+                    }
+                }
+            }
+            $drug->sync($sub_field,$object_class->columnName,$new_data);
+        }
+        return redirect('admin/manage/drugs')->with('status', 'Drug updated successfully');
     }
 
     /**
