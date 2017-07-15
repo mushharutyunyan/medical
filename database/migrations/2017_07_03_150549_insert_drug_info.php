@@ -23,7 +23,6 @@ use App\Models\DrugType;
 use App\Models\DrugTypeBelonging;
 use App\Models\DrugUnit;
 use App\Models\DrugUnitPrice;
-use Excel;
 class InsertDrugInfo extends Migration
 {
     /**
