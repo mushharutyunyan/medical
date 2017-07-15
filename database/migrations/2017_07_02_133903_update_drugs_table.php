@@ -50,7 +50,7 @@ class UpdateDrugsTable extends Migration
     {
         Schema::table('drugs', function (Blueprint $table) {
             $table->dropColumn('trade_name_ru');
-            $table->dropColumn('trade_name_eng');
+            $table->dropColumn('trade_name_en');
             $table->string('group');
             $table->string('series');
             $table->string('country');
