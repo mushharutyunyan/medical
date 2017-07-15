@@ -33,6 +33,7 @@ class InsertDrugInfo extends Migration
      */
     public function up()
     {
+        dd("asdasd");
         ini_set('memory_limit', '-1');
         $results = Excel::load(storage_path('archive').'\drugs.xlsx')->all()->toArray();
         $drugs = array();
