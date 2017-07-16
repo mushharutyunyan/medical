@@ -314,7 +314,17 @@
                         </a>
                     </li>
                     @endif
-
+                    @if(Request::segment(2) == 'order')
+                        <li class="active">
+                    @else
+                        <li>
+                    @endif
+                            <a href="/admin/order">
+                                <i class="icon-basket"></i>
+                                <span class="title">Order</span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
                 </ul>
                 <!-- END SIDEBAR MENU -->
             </div>

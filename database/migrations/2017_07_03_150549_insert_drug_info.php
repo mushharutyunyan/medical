@@ -55,6 +55,9 @@ class InsertDrugInfo extends Migration
         $pictures = array();
         $expiration_dates = array();
         foreach($results as $result){
+            if(Drug::where('trade_name',$result['trade_name_torgovoe_nazvanie'])->count()){
+                continue;
+            }
             if(!in_array($result['trade_name_torgovoe_nazvanie'],$drugs)){
                 $drug = Drug::create(array(
                     'trade_name' => $result['trade_name_torgovoe_nazvanie'],
