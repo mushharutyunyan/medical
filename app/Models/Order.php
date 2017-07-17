@@ -9,9 +9,19 @@ class Order extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'drug_id',
-        'organization_id',
-        'drug_settings',
-        'count'
+        'to',
+        'from',
+        'file',
+        'status'
     ];
+
+    public function to()
+    {
+        return $this->belongsTo('App\Models\Organization','to', 'id');
+    }
+
+    public function from()
+    {
+        return $this->belongsTo('App\Models\Organization','from', 'id');
+    }
 }

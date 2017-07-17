@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 class StorageController extends Controller
 {
@@ -177,7 +178,7 @@ class StorageController extends Controller
 
     public function save(Request $request, $data = null){
         if(!$data){
-            $data = Request::all();
+            $data = Input::all();
             $this->validate($request, [
                 'count' => 'required|numeric',
             ]);

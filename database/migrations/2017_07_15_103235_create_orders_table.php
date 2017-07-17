@@ -21,8 +21,8 @@ class CreateOrdersTable extends Migration
             $table->tinyInteger('status')->comment = '1 - Processing to, 2 - Processing from, 3 - Accepting to, 4 - Accepting from';
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('to')->references('id')->on('admins');
-            $table->foreign('from')->references('id')->on('admins');
+            $table->foreign('to')->references('id')->on('organizations');
+            $table->foreign('from')->references('id')->on('organizations');
         });
     }
 

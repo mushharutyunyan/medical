@@ -322,7 +322,8 @@ $(document).ready(function(){
         var drug_id = tr.find('.row-drug-id').val();
         var count = tr.find('input[name="count"]').val();
         var exist = tr.find('.row-exist').val();
-        var _token = $('#storage_save_all').children('input[name="_token"]').val();
+        var _token = $('.storage-save-all').children('input[name="_token"]').val();
+        console.log(_token);
         var self = this;
         if(settings && drug_id && count > 0){
             $(this).parent().html('<img src="/assets/admin/img/loading.gif" class="row-loading" width="40" style="margin-top: 5%;">');
@@ -342,7 +343,7 @@ $(document).ready(function(){
             })
         }
     })
-    $(document).on("submit","#storage_save_all",function(e){
+    $(document).on("submit",".storage-save-all",function(e){
         e.preventDefault();
         var i = 0;
         var $data = [];
@@ -377,7 +378,7 @@ $(document).ready(function(){
 
         });
         if(access){
-            var _token = $('#storage_save_all').children('input[name="_token"]').val();
+            var _token = $('.storage-save-all').children('input[name="_token"]').val();
             $send_data['_token'] = _token;
             $send_data['info'] = $data;
             $('.save-all-storage').html('Saving...')
