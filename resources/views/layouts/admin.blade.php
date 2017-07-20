@@ -341,7 +341,114 @@
         <!--Cooming Soon...-->
         <!-- END QUICK SIDEBAR -->
     </div>
+
     <!-- END CONTAINER -->
+
+    <div id="search_drug" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Search Drug</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>
+                                    <input type="text" class="form-control search-drug" placeholder="Type and click other place in popup">
+                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                    <span class="error"></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row drug-content">
+
+                        </div>
+
+                        <div class="row drug-settings" style="display: none">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-bordered table-hover drug-settings-table" style="margin-top: 10px;">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Info</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img width="20%" style="display:none" class="drug-loader" src="/assets/admin/img/loader-drugs.gif">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {!! Form::open(['class' => 'storage-save']) !!}
+                    <button type="button" data-dismiss="modal" class="btn default">Close</button>
+                    <button type="submit" class="btn green check-drug">Save changes</button>
+                    {!! Form::close([]) !!}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+    <div class="modal fade bs-modal-sm" id="watch" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body-watch">
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="edit_view_drug" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title"><h4 class="modal-title">View Drug</h4></h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="drug-name">
+
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row drug-content">
+
+                        </div>
+
+                        <div class="row drug-settings">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-bordered table-hover drug-settings-view-table" style="margin-top: 10px;">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Info</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- BEGIN FOOTER -->
     <div class="page-footer">
         <div class="page-footer-inner">
@@ -407,6 +514,7 @@
 <script src="/assets/admin/js/admins.js"></script>
 <script src="/assets/admin/js/drugs.js"></script>
 <script src="/assets/admin/js/storage.js"></script>
+<script src="/assets/admin/js/order.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function() {

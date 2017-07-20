@@ -165,6 +165,11 @@ class StorageController extends Controller
         $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
             ->where('drug_id',$data['drug_id'])
             ->where('drug_settings',$settings)->count();
+        if($exist_drug){
+            $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
+                ->where('drug_id',$data['drug_id'])
+                ->where('drug_settings',$settings)->first();
+        }
         return response()->json($exist_drug);
     }
 

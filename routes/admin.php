@@ -25,7 +25,12 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin'],function () {
             });
         });
     });
+
     Route::resource('/order','OrderController');
+    Route::group(['prefix' => 'order'],function(){
+        Route::get('/messages/{order_id}','OrderController@messages');
+
+    });
     Route::group(['prefix' => 'order'],function(){
 
     });

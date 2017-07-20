@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use SoftDeletes;
-
+    const SAVED = 0;
+    const PROCEEDTO = 1;
+    const PROCEEDFROM = 2;
+    const ACCEPTINGTO = 3;
+    const ACCEPTINGFROM = 4;
+    public static $status = ['Saved','Proceed To','Proceed From','Accepting to','Accepting from'];
     protected $fillable = [
         'to',
         'from',
@@ -15,13 +20,13 @@ class Order extends Model
         'status'
     ];
 
-    public function to()
+    public function organizationTo()
     {
-        return $this->belongsTo('App\Models\Organization','to', 'id');
+        return $this->belongsTo('App\Models\Organization','to');
     }
 
-    public function from()
+    public function organizationFrom()
     {
-        return $this->belongsTo('App\Models\Organization','from', 'id');
+        return $this->belongsTo('App\Models\Organization', 'from');
     }
 }
