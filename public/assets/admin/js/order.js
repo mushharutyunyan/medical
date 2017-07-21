@@ -14,9 +14,16 @@ $(document).ready(function(){
             }
         },
         submitHandler: function(form) {
+            var url = '/admin/order';
+            var method = 'POST';
+            if($(form).hasClass('edit')){
+                url = '/admin/order/'+$(form).attr('data-id');
+                method = 'PUT';
+            }
+            $(".send-order-message-button").attr("disabled","disabled");
             $.ajax({
-                url: "/admin/order",
-                type: "POST",
+                url: url,
+                type: method,
                 data: {data:$(form).find('textarea[name="data"]').val(),message:$(form).find('textarea[name="message"]').val(),_token:$(form).children('input[name="_token"]').val(),to:$('select[name="to"]').val(),order_send:true},
                 dataType: 'json',
                 success: function(data){

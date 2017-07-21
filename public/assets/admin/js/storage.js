@@ -395,7 +395,9 @@ $(document).ready(function(){
         var access = true;
         var order_save = false;
         var order_send = false;
-        var table = '.storage-actions-table'
+        var table = '.storage-actions-table';
+        var edit_order = false;
+        var method = 'POST';
         if($(this).hasClass('order-save')){
             order_save = true;
             table = '.order-actions-table'
@@ -405,21 +407,36 @@ $(document).ready(function(){
             table = '.order-actions-table'
         }
         if(order_save || order_send){
-            var to = $('select[name="to"]').val();
-            if(!parseInt(to)){
-                $.alert({
-                    title: 'Warning!',
-                    content: 'Select Organization!',
-                });
-                return true;
+            if($(this).hasClass('edit')){
+                edit_order = true;
+            }
+            if(!edit_order){
+                var to = $('select[name="to"]').val();
+                if(!parseInt(to)){
+                    $.alert({
+                        title: 'Warning!',
+                        content: 'Select Organization!',
+                    });
+                    return true;
+                }
             }
         }
         if($(table + " tbody tr.process").length == 0){
-            $.alert({
-                title: 'Warning!',
-                content: 'No Drugs for save!',
-            });
-            return true;
+            if(edit_order){
+                if($(table + " tbody tr.saved").length == 0){
+                    $.alert({
+                        title: 'Warning!',
+                        content: 'No Drugs for save!',
+                    });
+                    return true;
+                }
+            }else{
+                $.alert({
+                    title: 'Warning!',
+                    content: 'No Drugs for save!',
+                });
+                return true;
+            }
         }
         $(table + " tbody tr.process").each(function(key,value){
             var row = {};
@@ -449,15 +466,21 @@ $(document).ready(function(){
 
             $send_data['info'] = $data;
             var url = '/admin/storage/saveAll';
+
             if(order_save){
                 url = '/admin/order';
+
                 $send_data['order_save'] = true;
                 $send_data['to'] = to;
             }
             if(order_send){
                 url = '/admin/order';
-
-                $(".order-message").parent().children('input[name="data"]').remove();
+                $("#order_send").removeClass('edit');
+                if(edit_order){
+                    $("#order_send").addClass('edit');
+                    $("#order_send").attr('data-id',$(this).attr('data-id'));
+                }
+                $(".order-message").parent().children('textarea[name="data"]').remove();
                 $(".order-message").val('');
                 order_send_data = JSON.stringify($send_data.info);
                 $(".order-message").parent().append('<textarea style="display:none" name="data">'+order_send_data+'</textarea>')
@@ -466,11 +489,15 @@ $(document).ready(function(){
             }else{
                 $send_data['_token'] = _token;
             }
+            if(edit_order){
+                url = '/admin/order/'+$(this).attr('data-id');
+                method = 'PUT';
+            }
             $('.save-all-storage').html('Saving...');
             $('.save-all-storage').attr('disabled','disabled');
             $.ajax({
                 url: url,
-                type: 'POST',
+                type: method,
                 data: $send_data ,
                 dataType: 'json',
                 success: function(data){

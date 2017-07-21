@@ -70,9 +70,11 @@
                                 <div class="pull-right">
                                     {!! Form::open(['class' => 'storage-save-all']) !!}
                                     @if(!$order->status)
-                                    <button type="submit" data-count="0" class="btn green save-all-storage order-save"><i class="fa fa-check"></i>Save</button>
+                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn green save-all-storage order-save edit"><i class="fa fa-check"></i>Save</button>
+                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>Send</button>
+                                    @else
+                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>Re-Send</button>
                                     @endif
-                                    <button type="submit" data-count="0" class="btn yellow save-all-storage order-send"><i class="fa fa-check"></i>Re-Send</button>
                                     <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
                                     {!! Form::close() !!}
 
@@ -103,7 +105,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn blue">Send</button>
+                    <button class="btn blue send-order-message-button">Send</button>
                 </div>
                 {!! Form::close() !!}
             </div>

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class OrderInfo extends Model
+class OrderInfo extends AbstractModel
 {
     use SoftDeletes;
     protected $fillable = [
@@ -23,4 +23,6 @@ class OrderInfo extends Model
     {
         return $this->belongsTo('App\Models\Drug');
     }
+
+
 }

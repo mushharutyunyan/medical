@@ -29,4 +29,9 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\Organization', 'from');
     }
+
+    public function orderInfo()
+    {
+        return $this->hasMany('App\Models\OrderInfo','order_id');
+    }
 }

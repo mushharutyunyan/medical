@@ -23,6 +23,16 @@ class OrderController extends Controller
     public function create()
     {
         $warning_drugs = Storage::where('organization_id',Auth::guard("admin")->user()['organization_id'])->where('count','<', 10)->get();
+        $orders = Order::where('from',Auth::guard('admin')->user()['organization_id'])->where('status','!=',Order::ACCEPTINGFROM)->get();
+        $ordered_ids = array();
+        foreach($orders as $order){
+            foreach($order->orderInfo as $orderInfo){
+                if($uncheck = Storage::uncheckWarningDrugs($orderInfo->drug_id,$orderInfo->drug_settings)){
+                    $ordered_ids[] = $uncheck->id;
+                }
+            }
+        }
+        $warning_drugs = Storage::getWarningDrugs($ordered_ids);
         $organizations = Organization::where('status',1)->get();
         return view('admin.order.create',['organizations' => $organizations, 'warning_drugs' => $warning_drugs]);
     }
@@ -98,7 +108,50 @@ class OrderController extends Controller
         $currentDrug->unit_price;
         $currentDrug->character;
         return response()->json(array("order" => $order, "drug" => $currentDrug));
+    }
 
+    public function update(Request $request, $id)
+    {
+        $data = $request->all();
+
+        $status = Order::SAVED;
+        if(isset($data['order_send'])){
+            $status = Order::PROCEEDTO;
+        }
+        if(isset($data['order_send'])){
+            $drugs = json_decode($data['data']);
+
+            OrderMessage::create(array(
+                'order_id' => $id,
+                'from' => Auth::guard('admin')->user()['organization_id'],
+                'message' => $data['message']
+            ));
+            if(!empty($drugs)){
+                OrderInfo::where('order_id',$id)->delete();
+                foreach($drugs as $drug){
+                    OrderInfo::create(array(
+                        'order_id' => $id,
+                        'drug_id' => $drug->drug_id,
+                        'drug_settings' => $drug->settings,
+                        'count' => $drug->count
+                    ));
+                }
+            }
+        }elseif($data['order_save']){
+            if(isset($data['info'])){
+                OrderInfo::where('order_id',$id)->delete();
+                $drugs = $data['info'];
+                foreach($drugs as $drug){
+                    OrderInfo::create(array(
+                        'order_id' => $id,
+                        'drug_id' => $drug['drug_id'],
+                        'drug_settings' => $drug['settings'],
+                        'count' => $drug['count']
+                    ));
+                }
+            }
+        }
+        return response()->json(true);
     }
     public function messages($id){
         $messages = OrderMessage::where('order_id',$id)->get();
