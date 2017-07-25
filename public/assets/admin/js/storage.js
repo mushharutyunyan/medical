@@ -273,7 +273,7 @@ $(document).ready(function(){
             if($(this).hasClass('order')){
                 is_order = 1;
             }
-
+            $data['is_order'] = is_order;
             $.ajax({
                 url: '/admin/storage/checkDrug',
                 type: 'POST',
@@ -287,8 +287,11 @@ $(document).ready(function(){
                     if(data){
                         var confirm_message = 'This drug with this params already exists. Only quantity will increase';
                         if(is_order){
-                            confirm_message = 'This drug is already exists in your storage, count - '+data.count;
-
+                            if(data.error){
+                                confirm_message = data.error + ", count - "+data.count;
+                            }else{
+                                confirm_message = 'This drug is already exists in your storage, count - '+data.count;
+                            }
                         }
                         $.confirm({
                             animation: 'bottom',
@@ -398,6 +401,7 @@ $(document).ready(function(){
         var table = '.storage-actions-table';
         var edit_order = false;
         var method = 'POST';
+        var in_table = false;
         if($(this).hasClass('order-save')){
             order_save = true;
             table = '.order-actions-table'
@@ -421,52 +425,56 @@ $(document).ready(function(){
                 }
             }
         }
-        if($(table + " tbody tr.process").length == 0){
-            if(edit_order){
-                if($(table + " tbody tr.saved").length == 0){
+        if($(this).hasClass('in_table')){
+            in_table = true;
+        }
+        if(!in_table){
+            if($(table + " tbody tr.process").length == 0){
+                if(edit_order){
+                    if($(table + " tbody tr.saved").length == 0){
+                        $.alert({
+                            title: 'Warning!',
+                            content: 'No Drugs for save!',
+                        });
+                        return true;
+                    }
+                }else{
                     $.alert({
                         title: 'Warning!',
                         content: 'No Drugs for save!',
                     });
                     return true;
                 }
-            }else{
-                $.alert({
-                    title: 'Warning!',
-                    content: 'No Drugs for save!',
-                });
-                return true;
             }
+            $(table + " tbody tr.process").each(function(key,value){
+                var row = {};
+                var count = $(this).find('input[name="count"]').val();
+                if(count == ''){
+                    $.alert({
+                        title: 'Warning!',
+                        content: 'Check Drug counts!',
+                    });
+                    access = false;
+                }
+                var settings = $(this).find('.row-settings').val();
+                var drug_id = $(this).find('.row-drug-id').val();
+                row['settings'] = settings;
+                row['drug_id'] = drug_id;
+                row['count'] = count;
+
+                if(!order_save && !order_send){
+                    var exist = $(this).find('.row-exist').val();
+                    row['exist'] = exist;
+                }
+                $data.push(row);
+
+            });
         }
-        $(table + " tbody tr.process").each(function(key,value){
-            var row = {};
-            var count = $(this).find('input[name="count"]').val();
-            if(count == ''){
-                $.alert({
-                    title: 'Warning!',
-                    content: 'Check Drug counts!',
-                });
-                access = false;
-            }
-            var settings = $(this).find('.row-settings').val();
-            var drug_id = $(this).find('.row-drug-id').val();
-            row['settings'] = settings;
-            row['drug_id'] = drug_id;
-            row['count'] = count;
-
-            if(!order_save && !order_send){
-                var exist = $(this).find('.row-exist').val();
-                row['exist'] = exist;
-            }
-            $data.push(row);
-
-        });
         if(access){
             var _token = $('.storage-save-all').children('input[name="_token"]').val();
 
             $send_data['info'] = $data;
             var url = '/admin/storage/saveAll';
-
             if(order_save){
                 url = '/admin/order';
 
@@ -476,9 +484,45 @@ $(document).ready(function(){
             if(order_send){
                 url = '/admin/order';
                 $("#order_send").removeClass('edit');
-                if(edit_order){
+                $('.order-form-status-block').html("");
+                $('.order-form-delivery-status-block').html("");
+                if(!edit_order || in_table){
+                    if(in_table){
+                        $("#order_send").addClass('edit');
+                        $("#order_send").attr('data-id',$(this).attr('data-id'));
+                    }
+                    if(!$(this).hasClass('answer')){
+                        $.ajax({
+                            url: '/admin/order/getDeliveryStatuses',
+                            method: 'POST',
+                            data: {_token:_token},
+                            dataType: 'json',
+                            success: function(data){
+                                $("#order_send").find('.order-form-delivery-status-block').html('<select name="delivery_status_id" class="form-control order-deliver-statuses"></select>')
+                                $.each(data,function(key,value){
+                                    $('.order-deliver-statuses').append('<option value="'+value.id+'">'+value.name+'</option>')
+                                });
+                            }
+                        });
+                    }
+                }else{
                     $("#order_send").addClass('edit');
                     $("#order_send").attr('data-id',$(this).attr('data-id'));
+                    if($(this).hasClass('answer')){
+                        $('.order-form-delivery-status-block').html("");
+                        $.ajax({
+                            url: '/admin/order/getAnswerStatuses',
+                            method: 'POST',
+                            data: {_token:_token},
+                            dataType: 'json',
+                            success: function(data){
+                                $("#order_send").find('.order-form-status-block').html('<select name="status" class="form-control order-send-statuses"></select>')
+                                $.each(data,function(key,value){
+                                    $('.order-send-statuses').append('<option value="'+key+'">'+value+'</option>')
+                                })
+                            }
+                        })
+                    }
                 }
                 $(".order-message").parent().children('textarea[name="data"]').remove();
                 $(".order-message").val('');
@@ -510,7 +554,8 @@ $(document).ready(function(){
             });
         }
         return false;
-    })
+    });
+
 
 
     // Index page

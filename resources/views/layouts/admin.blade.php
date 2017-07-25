@@ -449,6 +449,40 @@
             </div>
         </div>
     </div>
+    <div id="order_message" class="modal fade small" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Message</h4>
+                </div>
+                {!! Form::open(['id' => 'order_send']) !!}
+                <div class="modal-body">
+                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                        <div class="row">
+                            <div class=" col-md-12 order-form-delivery-status-block">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class=" col-md-12 order-form-status-block">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <textarea class="order-message form-control" name="message" rows="10"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn blue send-order-message-button">Send</button>
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
     <!-- BEGIN FOOTER -->
     <div class="page-footer">
         <div class="page-footer-inner">

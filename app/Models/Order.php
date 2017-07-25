@@ -10,14 +10,18 @@ class Order extends Model
     const SAVED = 0;
     const PROCEEDTO = 1;
     const PROCEEDFROM = 2;
-    const ACCEPTINGTO = 3;
-    const ACCEPTINGFROM = 4;
-    public static $status = ['Saved','Proceed To','Proceed From','Accepting to','Accepting from'];
+    const APPROVED = 3;
+    const CANCELED = 4;
+    public static $status = ['Saved','Proceed To','Proceed From','Approved','Canceled'];
     protected $fillable = [
         'to',
         'from',
+        'status',
+        'delivery_status_id',
         'file',
-        'status'
+        'date',
+        'delivery_address',
+        'delivery_date',
     ];
 
     public function organizationTo()
@@ -28,6 +32,11 @@ class Order extends Model
     public function organizationFrom()
     {
         return $this->belongsTo('App\Models\Organization', 'from');
+    }
+
+    public function delivery_status()
+    {
+        return $this->belongsTo('App\Models\OrderDeliveryStatus');
     }
 
     public function orderInfo()

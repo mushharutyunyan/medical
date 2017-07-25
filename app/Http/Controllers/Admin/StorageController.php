@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Drug;
+use App\Models\OrderInfo;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Storage;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
@@ -162,6 +164,18 @@ class StorageController extends Controller
     public function checkDrug(Request $request){
         $data = $request->all();
         $settings = json_encode($data['info']);
+        if($data['is_order']){
+            $orders = Order::where('from',Auth::guard('admin')->user()['organization_id'])->whereNotIn('status',array(Order::APPROVED,Order::CANCELED))->get();
+            foreach($orders as $order){
+                if(OrderInfo::where('order_id',$order->id)->where('drug_id',$data['drug_id'])->where('drug_settings',$settings)->count()){
+                    $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
+                        ->where('drug_id',$data['drug_id'])
+                        ->where('drug_settings',$settings)->first();
+                    return response()->json(array('error' => 'This drug has already in your order list',
+                                                  'count' => $exist_drug->count));
+                }
+            }
+        }
         $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
             ->where('drug_id',$data['drug_id'])
             ->where('drug_settings',$settings)->count();

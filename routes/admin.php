@@ -29,6 +29,10 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin'],function () {
     Route::resource('/order','OrderController');
     Route::group(['prefix' => 'order'],function(){
         Route::get('/messages/{order_id}','OrderController@messages');
+        Route::post('/changeStatus','OrderController@changeStatus');
+        Route::post('/getAnswerStatuses','OrderController@getAnswerStatuses');
+        Route::post('/getDeliveryStatuses','OrderController@getDeliveryStatuses');
+        Route::post('/changeStatusTo','OrderController@changeStatusTo');
 
     });
     Route::group(['prefix' => 'order'],function(){

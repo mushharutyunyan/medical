@@ -17,8 +17,11 @@ class CreateOrdersTable extends Migration
             $table->increments('id');
             $table->integer('to')->unsigned();
             $table->integer('from')->unsigned();
-            $table->string('file');
-            $table->tinyInteger('status')->comment = '0 - saved, 1 - Processing to, 2 - Processing from, 3 - Accepting to, 4 - Accepting from';
+            $table->integer('delivery_status_id')->nullable();
+            $table->tinyInteger('status');
+            $table->string('file')->nullable();
+            $table->timestamp('date')->nullable();
+            $table->string('delivery_address')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('to')->references('id')->on('organizations');

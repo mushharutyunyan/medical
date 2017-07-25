@@ -30,39 +30,61 @@
                     <table class="table table-striped table-bordered table-hover datatable">
                         <thead>
                         <tr>
-                            <th>
-                                To
-                            </th>
-                            <th>
-                                From
-                            </th>
-                            <th>
-                                File
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                            <th>
-                                Created At
-                            </th>
-                            <th>
-                                Actions
-                            </th>
+                            <th>To</th>
+                            <th>From</th>
+                            <th>Status</th>
+                            <th>Delivery Status</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($orders as $order)
-
                             <tr class="odd gradeX">
                                 <td>{{$order->organizationTo->name}}</td>
                                 <td>{{$order->organizationFrom->name}}</td>
-                                <td>{{$order->file}}</td>
-                                <td>{{$status[$order->status]}}</td>
+                                <td>
+                                    @if($order->organizationTo->id == Auth::guard('admin')->user()['organization_id'])
+                                        {{$status[$order->status]}}
+                                        @if($order->status != \App\Models\Order::APPROVED)
+                                        {!! Form::open(['id' => 'form_change_order_status','url' => '/admin/order/changeStatus']) !!}
+                                        <input type="hidden" value="{{$order->id}}" name="id">
+                                        <select class="form-control" name="status" id="order_table_status">
+                                            <option value="0"></option>
+                                            @foreach($status_to as $key => $value)
+                                                @if($status[$order->status] != $value)
+                                                    <option value="{{$key}}">{{$value}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @endif
+                                        {!! Form::close() !!}
+                                    @else
+                                        {{$status[$order->status]}}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($order->delivery_status_id)
+                                        {{$order->delivery_status->name}}
+                                    @endif
+                                </td>
                                 <td>{{$order->created_at}}</td>
                                 <td>
-                                    <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="view-edit-order view" data-id="{{$order->id}}" title="View"><i class="fa fa-eye"></i></a>
+                                    @if(\App\Models\Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id'])
                                     <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+                                    @else
+                                        @if($order->status != \App\Models\Order::APPROVED)
+                                        <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                        <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+                                        @else
+                                        <button class="btn blue">Received</button>
+                                        @endif
+                                        @if($order->from == Auth::guard("admin")->user()['organization_id'] && !$order->status)
+                                            {!! Form::open(['class' => 'storage-save-all']) !!}
+                                            <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit in_table"><i class="fa fa-check"></i>Send</button>
+                                            {!! Form::close() !!}
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -121,6 +143,37 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+    <div id="change_order_status_to_modal" class="modal fade small" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Message</h4>
+                </div>
+                {!! Form::open(['id' => 'change_order_status_to']) !!}
+                <div class="modal-body">
+                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                        <div class="row">
+                            <div class=" col-md-12 change-order-status-to-date-block">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <textarea class="change-order-status-to-message form-control" name="message" rows="10"></textarea>
+                                <input type="hidden" name="status" id="status">
+                                <input type="hidden" name="id" id="order_id">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn blue send-order-message-button">Send</button>
+                </div>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

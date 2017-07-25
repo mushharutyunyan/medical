@@ -15,7 +15,7 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    {{$order->organizationTo->name}}
+                                    <h2>{{$order->organizationTo->name}}</h2>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,11 @@
                                     <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn green save-all-storage order-save edit"><i class="fa fa-check"></i>Save</button>
                                     <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>Send</button>
                                     @else
-                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>Re-Send</button>
+                                        @if(Auth::guard('admin')->user()['organization_id'] == $order->to)
+                                        <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit answer"><i class="fa fa-check"></i>Re-Send</button>
+                                        @else
+                                        <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>Re-Send</button>
+                                        @endif
                                     @endif
                                     <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
                                     {!! Form::close() !!}
@@ -87,28 +91,5 @@
             <!-- END EXAMPLE TABLE PORTLET-->
         </div>
     </div>
-    <div id="order_message" class="modal fade small" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Message</h4>
-                </div>
-                {!! Form::open(['id' => 'order_send']) !!}
-                <div class="modal-body">
-                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <textarea class="order-message form-control" name="message" rows="10"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn blue send-order-message-button">Send</button>
-                </div>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
+
 @endsection
