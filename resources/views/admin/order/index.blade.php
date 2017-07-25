@@ -77,7 +77,9 @@
                                         <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
                                         <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
                                         @else
-                                        <button class="btn blue">Received</button>
+                                            @if($order->from == Auth::guard("admin")->user()['organization_id'])
+                                            <button class="btn blue">Received</button>
+                                            @endif
                                         @endif
                                         @if($order->from == Auth::guard("admin")->user()['organization_id'] && !$order->status)
                                             {!! Form::open(['class' => 'storage-save-all']) !!}

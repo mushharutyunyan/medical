@@ -47,7 +47,7 @@ class OrderController extends Controller
         $data_order['to'] = $data['to'];
         $data_order['from'] = Auth::guard('admin')->user()['organization_id'];
         $data_order['status'] = $status;
-        if(isset($data_order['delivery_status_id'])){
+        if(isset($data['delivery_status_id'])){
             if($data_order['delivery_status_id'] != 0){
                 $data_order['delivery_status_id'] = $data['delivery_status_id'];
             }
