@@ -31,7 +31,7 @@
                             <tbody>
                             <?php $i = 0 ?>
                             @foreach($drugs as $drug)
-                                <tr class="odd gradeX saved">
+                                <tr class="odd gradeX process">
                                     <td>
                                         <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-drug-id="{{$drug->drug_id}}">Watch</button>
                                         <button class='remove-storage-row btn btn-warning order' data-id='{{$i}}'>Clear</button>

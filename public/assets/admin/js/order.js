@@ -165,4 +165,23 @@ $(document).ready(function(){
             }
         });
     })
+    $(document).on("click",".view-files",function(e){
+        e.preventDefault();
+        $(".order-files-block").html("");
+        $.ajax({
+            url: "/admin/order/excel/get",
+            data: {order_id:$(this).attr('data-id')},
+            type: "GET",
+            dataType: "json",
+            success: function(data){
+                $(".order-files-block").html('<ul class="list-group order-files-list"></ul>');
+                $.each(data,function(key,value){
+                    if(value){
+                        $('.order-files-list').append('<li class="list-group-item"><a target="_blank" href="/admin/order/excel/download/'+value.file+'"><i class="fa fa-file-excel-o" aria-hidden="true"></i>'+value.created_at+'</a></li>')
+                    }
+                })
+                $("#view_order_files").modal('show');
+            }
+        })
+    })
 });

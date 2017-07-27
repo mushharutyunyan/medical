@@ -12,7 +12,8 @@ class Order extends Model
     const PROCEEDFROM = 2;
     const APPROVED = 3;
     const CANCELED = 4;
-    public static $status = ['Saved','Proceed To','Proceed From','Approved','Canceled'];
+    const RECEIVED = 5;
+    public static $status = ['Saved','Proceed To','Proceed From','Approved','Canceled','Received'];
     protected $fillable = [
         'to',
         'from',
@@ -43,4 +44,5 @@ class Order extends Model
     {
         return $this->hasMany('App\Models\OrderInfo','order_id');
     }
+
 }

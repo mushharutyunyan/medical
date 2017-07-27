@@ -46,7 +46,7 @@
                                 <td>
                                     @if($order->organizationTo->id == Auth::guard('admin')->user()['organization_id'])
                                         {{$status[$order->status]}}
-                                        @if($order->status != \App\Models\Order::APPROVED)
+                                        @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
                                         {!! Form::open(['id' => 'form_change_order_status','url' => '/admin/order/changeStatus']) !!}
                                         <input type="hidden" value="{{$order->id}}" name="id">
                                         <select class="form-control" name="status" id="order_table_status">
@@ -73,14 +73,22 @@
                                     @if(\App\Models\Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id'])
                                     <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
                                     @else
-                                        @if($order->status != \App\Models\Order::APPROVED)
-                                        <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
-                                        <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+                                        @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
+                                            @if($order->from == Auth::guard("admin")->user()['organization_id'] && ($order->status == \App\Models\Order::PROCEEDFROM || $order->status == \App\Models\Order::SAVED))
+                                            <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            @elseif($order->to == Auth::guard("admin")->user()['organization_id'] && $order->status != \App\Models\Order::PROCEEDFROM)
+                                            <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            @endif
                                         @else
                                             @if($order->from == Auth::guard("admin")->user()['organization_id'])
+                                            {!! Form::open(['url' => '/admin/order/changeStatus/received']) !!}
+                                            <input type="hidden" name="order_id" value="{{$order->id}}">
                                             <button class="btn blue">Received</button>
+                                            {!! Form::close() !!}
                                             @endif
                                         @endif
+                                        <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+                                        <a href="#" class="view-files" data-id="{{$order->id}}" title="Watch Files"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
                                         @if($order->from == Auth::guard("admin")->user()['organization_id'] && !$order->status)
                                             {!! Form::open(['class' => 'storage-save-all']) !!}
                                             <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit in_table"><i class="fa fa-check"></i>Send</button>
@@ -153,7 +161,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Message</h4>
+                    <h4 class="modal-title">Change Status</h4>
                 </div>
                 {!! Form::open(['id' => 'change_order_status_to']) !!}
                 <div class="modal-body">
@@ -176,6 +184,25 @@
                     <button class="btn blue send-order-message-button">Send</button>
                 </div>
                 {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    <div id="view_order_files" class="modal fade small" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Files</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                        <div class="row">
+                            <div class=" col-md-12 order-files-block">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

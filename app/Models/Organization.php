@@ -15,4 +15,9 @@ class Organization extends Model
     protected $fillable = [
         'id', 'name', 'admin_id', 'director', 'status', 'email', 'city', 'apartment'
     ];
+
+    public function admin()
+    {
+        return $this->hasMany('App\Models\Admin','organization_id');
+    }
 }

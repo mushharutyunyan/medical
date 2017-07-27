@@ -41,4 +41,12 @@ class Storage extends Model
     public static function getWarningDrugs($unchecked_ids){
         return Storage::where('organization_id',Auth::guard("admin")->user()['organization_id'])->where('count','<', 10)->whereNotIn('id',$unchecked_ids)->get();
     }
+
+    public static function checkDrugExists($drug_id,$drug_settings){
+        if(Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('drug_id',$drug_id)->where('drug_settings',$drug_settings)->count()){
+            $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('drug_id',$drug_id)->where('drug_settings',$drug_settings)->first();
+            return $exist_drug->count;
+        }
+        return false;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\OrderFile;
 use App\Models\OrderInfo;
 use App\Models\OrderMessage;
 use App\Models\Storage;
@@ -13,7 +14,6 @@ use App\Models\Drug;
 use App\Models\OrderDeliveryStatus;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use DB;
 class OrderController extends Controller
 {
     public function index(){
@@ -84,7 +84,9 @@ class OrderController extends Controller
                 ));
             }
         }
-
+        if($status = Order::PROCEEDTO){
+            $this->generateExcel($order->id);
+        }
 
         return response()->json(true);
     }
@@ -96,6 +98,12 @@ class OrderController extends Controller
         }
         if($order->status == Order::APPROVED){
             return redirect('/admin/order');
+        }else{
+            if($order->from == Auth::guard("admin")->user()['organization_id'] && ($order->status != Order::PROCEEDFROM && $order->status != Order::SAVED)){
+                return redirect('/admin/order');
+            }elseif($order->to == Auth::guard("admin")->user()['organization_id'] && $order->status == Order::PROCEEDFROM){
+                return redirect('/admin/order');
+            }
         }
         $drugs = OrderInfo::where('order_id',$id)->get();
         $answer_order = false;
@@ -133,8 +141,8 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $data = $request->all();
+
         $status = Order::SAVED;
         if(isset($data['order_send'])){
             $status = Order::PROCEEDTO;
@@ -142,9 +150,9 @@ class OrderController extends Controller
                 $status = $data['status'];
             }
         }
+
         if(isset($data['order_send'])){
             $drugs = json_decode($data['data']);
-
             OrderMessage::create(array(
                 'order_id' => $id,
                 'from' => Auth::guard('admin')->user()['organization_id'],
@@ -175,6 +183,8 @@ class OrderController extends Controller
                 }
             }
         }
+
+
         $order_data = array();
         $order_data['status'] = $status;
         if($data['delivery_status_id']){
@@ -196,8 +206,13 @@ class OrderController extends Controller
                 $data_order['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
             }
         }
-
         Order::where('id',$id)->update($order_data);
+        if($data['status'] != Order::CANCELED){
+            $file = $this->generateExcel($id);
+            if($data['status'] == Order::APPROVED){
+                Order::where('id',$id)->update('file',$file);
+            }
+        }
         return response()->json(true);
     }
     public function messages($id){
@@ -234,7 +249,7 @@ class OrderController extends Controller
         $data_order = array();
         $data_order['status'] = $data['status'];
         if(!empty($data['delivery_date'])){
-            $data_order['delivery_date'] = $data['delivery_date'];
+            $data_order['date'] = $data['delivery_date'];
         }else{
             if($data['status'] == Order::APPROVED){
                 $data_order['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
@@ -247,6 +262,244 @@ class OrderController extends Controller
             'from' => Auth::guard('admin')->user()['organization_id'],
             'message' => $data['message']
         ));
+        if($data['status'] == Order::APPROVED){
+            $file = OrderFile::where('order_id',$data['id'])->orderBy('id','Desc')->first();
+            Order::where('id',$data['id'])->update(array('file' => $file->file));
+        }
         return response()->json(true);
+    }
+
+    public function receivedOrder(Request $request){
+        $data = $request->all();
+        $drugs = OrderInfo::where('order_id',$data['order_id'])->get();
+        foreach($drugs as $drug){
+            if($count = Storage::checkDrugExists($drug->drug_id,$drug->drug_settings)){
+                Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
+                    ->where('drug_id',$drug->drug_id)->where('drug_settings',$drug->drug_settings)
+                    ->update(array(
+                       'count' => ($count + $drug->count)
+                    ));
+            }else{
+                Storage::create(array(
+                   'organization_id' =>  Auth::guard('admin')->user()['organization_id'],
+                    'drug_id' => $drug->drug_id,
+                    'drug_settings' => $drug->drug_settings,
+                    'count' => $drug->count
+                ));
+            }
+        }
+        Order::where('id',$data['order_id'])->update(array(
+            'status' => Order::RECEIVED
+        ));
+        return redirect('/admin/order');
+    }
+
+    public function excelFiles(Request $request){
+        $data = $request->all();
+        $order = Order::where('id',$data['order_id'])->first();
+        if($order->status == Order::APPROVED || $order->status == Order::RECEIVED){
+            $files = array(OrderFile::where('order_id',$data['order_id'])->orderBy('id','Desc')->first());
+        }else{
+            $files = OrderFile::where('order_id',$data['order_id'])->get();
+        }
+        return response()->json($files);
+    }
+
+    public function excelDownload($file){
+        return response()->download(storage_path().'/exports/'.$file.'.xls');
+    }
+
+    public function generateExcel($order_id = null){
+        $order = Order::where('id',$order_id)->first();
+        if($order->delivery_status->id == 1){
+            $delivery_status = 'ՏԵղում';
+        }else{
+            $delivery_status = 'Առաքում';
+        }
+        if($order->organizationTo->status == 1){
+            $organization_status = 'Մեծածախ';
+        }elseif ($order->organizationTo->status == 2){
+            $organization_status = 'Դեղատուն';
+        }else{
+            $organization_status = '';
+        }
+        if($order->organizationFrom->status == 1){
+            $organization_from_status = 'Մեծածախ';
+        }elseif ($order->organizationFrom->status == 2){
+            $organization_from_status = 'Դեղատուն';
+        }else{
+            $organization_from_status = '';
+        }
+        $order_details = array(
+            'B2' => $order->id.". ".$order->created_at.", ".$delivery_status."",
+            'C4' => $organization_status. " (".$order->organizationTo->name.")",
+            'C5' => $order->organizationTo->admin[0]->firstname." ".$order->organizationTo->admin[0]->lastname." (".$order->organizationTo->admin[0]->email.")",
+            'C6' => $order->organizationTo->admin[0]->city." ".$order->organizationTo->admin[0]->street." ".$order->organizationTo->admin[0]->apartment,
+            'C7' => $order->organizationTo->identification_number,
+            'C8' => $order->organizationTo->bank_account_number,
+            'C9' => $order->organizationTo->phone,
+            'C10' => $order->organizationTo->email,
+            'C11' => $order->delivery_address,
+            'C12' => $order->delivery_date,
+            'C14' => $organization_from_status. " (".$order->organizationFrom->name.")",
+            'C15' => $order->organizationFrom->admin[0]->firstname." ".$order->organizationFrom->admin[0]->lastname." (".$order->organizationFrom->admin[0]->email.")",
+            'C16' => $order->organizationFrom->admin[0]->city." ".$order->organizationFrom->admin[0]->street." ".$order->organizationFrom->admin[0]->apartment,
+            'C17' => $order->organizationFrom->identification_number,
+            'C18' => $order->organizationFrom->bank_account_number,
+            'C19' => $order->organizationFrom->phone,
+            'C20' => $order->organizationFrom->email,
+        );
+        $drugs = OrderInfo::where('order_id',$order_id)->get();
+        $i = 1;
+        $data_drugs = array();
+        foreach($drugs as $drug){
+            $settings = json_decode($drug->drug_settings);
+            $unit_price = '';
+            $price = '';
+            if(isset($drug->unit_price)){
+                $unit_price = $drug->unit_price;
+                $price = $drug->count * $unit_price;
+            }
+            $data_drugs[] = array($i,$drug->drug->trade_name,'',$drug->count,$unit_price,$price,'','','');
+        }
+        $filename = $order_id."_".date("Y_m_d_H_i_s");
+        Excel::create($filename, function($excel) use($order_details,$data_drugs) {
+            // Our first sheet
+            $excel->sheet('First', function($sheet) use($order_details,$data_drugs) {
+                $sheet->setFontSize(10);
+                // Set width for multiple cells
+                $sheet->setWidth(array(
+                    'A'     =>  5,
+                    'B'     =>  50,
+                    'C'     =>  20,
+                    'D'     =>  10,
+                    'E'     =>  15,
+                    'F'     =>  10,
+                    'G'     =>  25,
+                    'H'     =>  13,
+                    'I'     =>  10,
+                ));
+                $sheet->cell('B2', function($cell) {
+                    $cell->setFontSize(16);
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('B3', function($cell) {
+                    $cell->setValue('Պատվիրող');
+                    $cell->setFontWeight('bold');
+                });
+                $sheet->cell('B4', function($cell) {
+                    $cell->setValue('Անվանումը');
+                });
+                $sheet->cell('B5', function($cell) {
+                    $cell->setValue('Անունը');
+                });
+                $sheet->cell('B6', function($cell) {
+                    $cell->setValue('Հասցե');
+                });
+                $sheet->cell('B7', function($cell) {
+                    $cell->setValue('ՀՎՀՀ');
+                });
+                $sheet->cell('B8', function($cell) {
+                    $cell->setValue('Բանկային Հ/Հ');
+                });
+                $sheet->cell('B9', function($cell) {
+                    $cell->setValue('Բջջային հեռ․');
+                });
+                $sheet->cell('B10', function($cell) {
+                    $cell->setValue('Էլ․ փոստի հասցե');
+                });
+                $sheet->cell('B11', function($cell) {
+                    $cell->setValue('Մատակարարվող ապրանքների նշանակման վայրը');
+                });
+                $sheet->cell('B12', function($cell) {
+                    $cell->setValue('Մատակարարման ամսաթիվ');
+                });
+                $sheet->cell('B13', function($cell) {
+                    $cell->setValue('Մատակարար');
+                    $cell->setFontWeight('bold');
+                });
+                $sheet->cell('B14', function($cell) {
+                    $cell->setValue('Անվանումը');
+                });
+                $sheet->cell('B15', function($cell) {
+                    $cell->setValue('Անունը');
+                });
+                $sheet->cell('B16', function($cell) {
+                    $cell->setValue('Հասցե');
+                });
+                $sheet->cell('B17', function($cell) {
+                    $cell->setValue('ՀՎՀՀ');
+                });
+                $sheet->cell('B18', function($cell) {
+                    $cell->setValue('Բանկային Հ/Հ');
+                });
+                $sheet->cell('B19', function($cell) {
+                    $cell->setValue('Բջջային հեռ․');
+                });
+                $sheet->cell('B20', function($cell) {
+                    $cell->setValue('Էլ․ փոստի հասցե');
+                });
+                foreach($order_details as $key => $order_detail){
+                    $sheet->cell($key, function($cell) use ($order_detail) {
+                        $cell->setValue($order_detail);
+                    });
+                }
+                $sheet->mergeCells('A21:D21');
+                $sheet->cells('A21', function($cell) {
+                    $cell->setValue('Մատակարարվող ապրանքների քանակի և վճարման ենթակա գումարի հաշվարկ');
+                    $cell->setValignment('center');
+                    $cell->setFontWeight('bold');
+                });
+                $sheet->setBorder('A22:I22', 'thin');
+                $sheet->cell('A22', function($cell) {
+                    $cell->setValue('Հ/Հ');
+                    $cell->setValignment('center');
+                });
+                $sheet->cell('B22', function($cell) {
+                    $cell->setValue('Ապրանքի անվանումը');
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('C22', function($cell) {
+                    $cell->setValue('Չափման միավորը');
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('D22', function($cell) {
+                    $cell->setValue('Քանակը');
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('E22', function($cell) {
+                    $cell->setValue('Միավորի գինը');
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('F22', function($cell) {
+                    $cell->setValue('Արժեքը');
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('G22', function($cell) {
+                    $cell->setValue('ԱԱՀ դրույքաչափը (%)');
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('H22', function($cell) {
+                    $cell->setValue('ԱԱՀ գումարը');
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('I22', function($cell) {
+                    $cell->setValue('Ընդամենը');
+                    $cell->setAlignment('center');
+                });
+                $sheet->setBorder('A23:I99', 'thin');
+                $sheet->cell('A23:I99', function($cells) {
+                    $cells->setAlignment('center');
+                    $cells->setFontSize(12);
+                });
+                $sheet->fromArray($data_drugs, null, 'A23', false, false);
+            });
+        })->store('xls');
+        OrderFile::create(array(
+            'order_id' => $order_id,
+            'organization_id' => Auth::guard('admin')->user()['organization_id'],
+            'file' => $filename
+        ));
+        return $filename;
     }
 }
