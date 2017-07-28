@@ -3,7 +3,7 @@ Route::get('admin/404','Admin\HomeController@notFound');
 Route::get('admin/login','Admin\HomeController@login');
 Route::post('admin/login','Admin\LoginController@login');
 Route::get('admin/logout','Admin\LoginController@logout');
-Route::group(['namespace' => 'Admin','prefix' => 'admin'],function () {
+Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'globalAdmin'],function () {
     // Controllers Within The "App\Http\Controllers\Admin" Namespace
     Route::group(['middleware' => 'adminAuth'],function(){
         Route::get('/','HomeController@home');
@@ -38,6 +38,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin'],function () {
         Route::post('/changeStatus/received','OrderController@receivedOrder');
 
     });
+    Route::resource('/message','MessageController');
     Route::group(['prefix' => 'order'],function(){
 
     });

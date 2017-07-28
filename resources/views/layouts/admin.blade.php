@@ -65,7 +65,7 @@
     <div class="page-header-inner container">
         <!-- BEGIN LOGO -->
         <div class="page-logo">
-            <a href="index.html">
+            <a href="/admin">
                 <img src="/assets/admin/img/logo-default.png" alt="logo" class="logo-default"/>
             </a>
             <div class="menu-toggler sidebar-toggler">
@@ -93,6 +93,13 @@
             <!-- BEGIN TOP NAVIGATION MENU -->
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
+                    <li class="dropdown dropdown-extended dropdown-inbox">
+                        <a href="/admin/message" class="dropdown-toggle">
+                            <i class="icon-envelope"></i>
+                            <span class="badge badge-default">
+                            <i class="fa fa-plus"></i></span>
+                        </a>
+                    </li>
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
                     <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
@@ -128,30 +135,35 @@
                     <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <i class="icon-envelope-open"></i>
-                            {{--<span class="badge badge-default">--}}
-						{{--4 </span>--}}
+                            @if(count($unread_messages))
+                            <span class="badge badge-default">{{count($unread_messages)}}</span>
+                            @endif
                         </a>
                         <ul class="dropdown-menu">
-                            {{--<li class="external">--}}
-                                {{--<h3>You have <span class="bold">7 New</span> Messages</h3>--}}
-                                {{--<a href="page_inbox.html">view all</a>--}}
-                            {{--</li>--}}
+                            <li class="external">
+                                @if(count($unread_messages))
+                                <h3>You have <span class="bold">{{count($unread_messages)}} New</span> Messages</h3>
+                                @else
+                                <h3>You don't have new Messages</h3>
+                                @endif
+                                <a href="/admin/message">view all</a>
+                            </li>
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-                                    {{--<li>--}}
-                                        {{--<a href="inbox.html?a=view">--}}
-										{{--<span class="photo">--}}
-										{{--<img src="../../assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">--}}
-										{{--</span>--}}
-                                            {{--<span class="subject">--}}
-										{{--<span class="from">--}}
-										{{--Lisa Wong </span>--}}
-										{{--<span class="time">Just Now </span>--}}
-										{{--</span>--}}
-                                            {{--<span class="message">--}}
-										{{--Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
+                                    @if(count($unread_messages))
+                                        @foreach($unread_messages as $unread_message)
+                                            <li>
+                                                <a href="/admin/message/{{$unread_message->from}}">
+                                                    <span class="photo"><img src="/assets/admin/img/avatar.png" class="img-circle" alt=""></span>
+                                                    <span class="subject">
+                                                        <span class="from">{{$unread_message->adminFrom->firstname}} {{$unread_message->adminFrom->lastname}}</span>
+                                                        <span class="time">{{$unread_message->created_at}} </span>
+                                                    </span>
+                                                    <span class="message">{{ \Illuminate\Support\Str::limit($unread_message->message, 10) }}</span>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </li>
                         </ul>
@@ -162,27 +174,39 @@
                     <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <i class="icon-calendar"></i>
-                            {{--<span class="badge badge-default">--}}
-						{{--3 </span>--}}
+                            @if($orders->count())
+                            <span class="badge badge-default">{{$orders->count()}}</span>
+                            @endif
                         </a>
                         <ul class="dropdown-menu extended tasks">
-                            {{--<li class="external">--}}
-                                {{--<h3>You have <span class="bold">12 pending</span> tasks</h3>--}}
-                                {{--<a href="page_todo.html">view all</a>--}}
-                            {{--</li>--}}
+                            <li class="external">
+                                @if($orders->count())
+                                <h3>You have <span class="bold">{{$orders->count()}} pending</span> orders</h3>
+                                <a href="/admin/order">view all</a>
+                                @endif
+                            </li>
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-                                    {{--<li>--}}
-                                        {{--<a href="javascript:;">--}}
-										{{--<span class="task">--}}
-										{{--<span class="desc">New release v1.2 </span>--}}
-										{{--<span class="percent">30%</span>--}}
-										{{--</span>--}}
-                                            {{--<span class="progress">--}}
-										{{--<span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">40% Complete</span></span>--}}
-										{{--</span>--}}
-                                        {{--</a>--}}
-                                    {{--</li>--}}
+                                    @if($orders->count())
+                                        @foreach($orders as $order)
+                                            <li>
+                                                <a href="/admin/order">
+                                                    <span class="task">
+                                                        <span class="desc">
+                                                            @if($order->to == Auth::guard('admin')->user()['organization_id'])
+                                                                {{$order->organizationFrom->name}}
+                                                            @else
+                                                                {{$order->organizationTo->name}}
+                                                            @endif
+                                                            ({{$status[$order->status]}})
+                                                        </span>
+
+                                                        <span class="percent">{{$order->created_at}}</span>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </li>
                         </ul>
@@ -549,6 +573,7 @@
 <script src="/assets/admin/js/drugs.js"></script>
 <script src="/assets/admin/js/storage.js"></script>
 <script src="/assets/admin/js/order.js"></script>
+<script src="/assets/admin/js/message.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function() {
