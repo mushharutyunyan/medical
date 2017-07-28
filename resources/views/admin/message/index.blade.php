@@ -29,7 +29,7 @@
                                             @endif
                                             <li class="current-chat {{$active}}" data-id="{{$admin->id}}" data-child-tab="tab_{{$admin->id}}">
                                                 <a data-toggle="tab" href="#tab_{{$admin->id}}" aria-expanded="true">
-                                                    <i class="fa fa-envelope"></i> {{$admin->firstname}} {{$admin->lastname}} - {{$admin->organization->name}} </a>
+                                                    <i class="fa fa-envelope"></i>{{$admin->organization->name}} </a>
                                                 <span class="after">
 													</span>
                                             </li>
