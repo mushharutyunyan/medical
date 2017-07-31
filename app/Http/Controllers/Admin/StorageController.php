@@ -132,7 +132,9 @@ class StorageController extends Controller
         $name = trim($data['name']);
         $drugs = Drug::where('trade_name','LIKE',"%".$name."%")
             ->orWhere('trade_name_ru','LIKE',"%".$name."%")
-            ->orWhere('trade_name_en','LIKE',"%".$name."%")->orderBy('trade_name','ASC')->get();
+            ->orWhere('trade_name_en','LIKE',"%".$name."%")
+            ->orWhere('code','LIKE',"%".$name."%")
+            ->orderBy('trade_name','ASC')->get();
         return response()->json($drugs);
     }
 
