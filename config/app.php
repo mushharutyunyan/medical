@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => 'Medical',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,8 +169,8 @@ return [
          * Package Service Providers...
          */
 
-        //
-
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        'Thujohn\Twitter\TwitterServiceProvider',
         /*
          * Application Service Providers...
          */
@@ -231,7 +231,9 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Input' => Illuminate\Support\Facades\Input::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Twitter' => 'Thujohn\Twitter\Facades\Twitter',
     ],
 
 ];

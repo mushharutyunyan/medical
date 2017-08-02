@@ -15,5 +15,7 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'socialError' => 'Your Social Email already exists in our system.',
+    'accountUpdate' => 'Your Account has been updated successfully.',
 
 ];

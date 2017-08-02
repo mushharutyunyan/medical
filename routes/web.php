@@ -10,10 +10,17 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
+Route::get('logout', 'Auth\LoginController@logout');
+Route::get('/','HomeController@index');
 
-//Admin Routes Start
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
-//Admin Routes End
+Route::group(['middleware' => 'user'],function(){
+    Route::get('/account','HomeController@account');
+    Route::put('/account/update/{id}','HomeController@accountUpdate');
+});
 
 
 

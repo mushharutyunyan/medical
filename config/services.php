@@ -29,8 +29,20 @@ return [
         'secret' => env('SPARKPOST_SECRET'),
     ],
 
+    'facebook' => [
+        'client_id' => env('FB_KEY'),
+        'client_secret' => env('FB_SECRET'),
+        'redirect' => env('FB_CALLBACK'),
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_ID'),
+        'client_secret' => env('GOOGLE_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT'),
+    ],
+
     'stripe' => [
-        'model' => App\User::class,
+        'model' => App\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],

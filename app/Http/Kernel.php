@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'user' => \App\Http\Middleware\RedirectIfNotAuthenticated::class,
         'adminAuth' => \App\Http\Middleware\AuthAdmin::class,
         'adminPermission' => \App\Http\Middleware\Admin::class,
         'globalAdmin' => \App\Http\Middleware\GlobalAdmin::class,
