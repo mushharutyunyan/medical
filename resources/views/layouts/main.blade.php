@@ -70,7 +70,7 @@
                         <!-- RD Navbar Toggle-->
                         <button data-rd-navbar-toggle=".rd-navbar-nav-wrap" class="rd-navbar-toggle"><span></span></button>
                         <!-- RD Navbar Brand-->
-                        <div class="rd-navbar-brand"><a href="./" class="brand-name"><img alt="" src="/assets/images/logo.png"></a></div>
+                        <div class="rd-navbar-brand"><a href="/" class="brand-name"><img alt="" src="/assets/images/logo.png"></a></div>
                         <div class="rd-navbar-elements-wrap text-right">
                             @if(!Auth::check())
                                 <ul class="rd-navbar-socials elements-group-18 reveal-inline-block text-middle">
@@ -119,7 +119,7 @@
     </main>
     <!-- Page Footer-->
     <footer class="page-footer section-60">
-        <div class="shell"><a href="./" class="brand"><img alt="" src="/assets/images/logo.png" width="163" height="41" class="reveal-inline-block img-responsive"></a>
+        <div class="shell"><a href="/" class="brand"><img alt="" src="/assets/images/logo.png" width="163" height="41" class="reveal-inline-block img-responsive"></a>
             <p>Our products are a combination of classic and modern style; we can satisfy any demands of customers, that is why we have so many fans. You will <br class='veil reveal-lg-block'> always be popular with our jewelry; the magical shine of our products will bring you the best of luck!</p>
             <ul class="elements-group-20 offset-top-20">
                 <li><a href="#" class="icon icon-xs text-base fa-facebook"></a></li>
