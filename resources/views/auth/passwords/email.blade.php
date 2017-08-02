@@ -14,9 +14,9 @@
         <div class="range">
             <div class="cell-md-8 text-xs-left">
                 <h4>Reset Password</h4>
-                @if (session('success'))
+                @if (session('status'))
                     <div class="alert alert-success">
-                        {{ session('success') }}
+                        {{ session('status') }}
                     </div>
                 @endif
                 <form class="offset-top-20 rd-mailform" role="form" method="POST" action="{{ url('/password/email') }}">

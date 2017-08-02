@@ -210,7 +210,6 @@
 @endif
 <!-- Java script-->
 <script src="/assets/js/core.min.js"></script>
-<script src="/assets/js/script.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/jquery.validate.min.js"></script>
 <script src="/assets/js/main.js"></script>
 </body>

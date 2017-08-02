@@ -13,9 +13,9 @@
     <div class="shell section-bottom-60">
         <div class="range">
             <div class="cell-md-8 text-xs-left">
-                @if (session('success'))
+                @if (session('status'))
                     <div class="alert alert-success">
-                        {{ session('success') }}
+                        {{ session('status') }}
                     </div>
                 @endif
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/password/reset') }}">
