@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Organization extends Model
 {
-    Const STATUS = array('Whole Sale', 'Pharmacy', 'Other Organization');
+    Const STATUS = array(1 => 'Whole Sale', 'Pharmacy', 'Other Organization');
     /**
      * The attributes that are mass assignable.
      *
