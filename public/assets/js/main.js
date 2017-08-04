@@ -116,7 +116,7 @@ $(document).ready(function(){
                     $("#errorPorductExist").modal("show");
                     return false;
                 }else{
-                    main_block.find('.basket-subtotal').html(parseFloat(parseFloat(main_block.find('.basket-subtotal').html()) + price*count).toFixed(2));
+                    main_block.find('.basket-subtotal').html(parseFloat(parseFloat(main_block.find('.basket-subtotal').html()) + parseFloat(price*count)).toFixed(2));
                     if(!main_block.find('.shop-products-count').length){
                         main_block.children('.shop-block-header').append('<span class="text-middle shop-products-count label label-circle label-primary"></span>')
                     }
