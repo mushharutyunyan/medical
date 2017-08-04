@@ -29,10 +29,10 @@ class UpdateOrganizationsTable extends Migration
     public function down()
     {
         Schema::table('organizations', function (Blueprint $table) {
-            $table->dropColumn('identification_number');
-            $table->dropColumn('bank_account_number');
-            $table->dropColumn('phone');
-            $table->dropColumn('image');
+//            $table->dropColumn('identification_number');
+//            $table->dropColumn('bank_account_number');
+//            $table->dropColumn('phone');
+//            $table->dropColumn('image');
         });
     }
 }
