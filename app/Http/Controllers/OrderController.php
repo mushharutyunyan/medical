@@ -43,7 +43,7 @@ class OrderController extends Controller
     }
 
     public function updateBasket(Request $request){
-        
+
         print_r($request->all());die;
     }
 

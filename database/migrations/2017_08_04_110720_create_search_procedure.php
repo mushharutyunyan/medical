@@ -55,7 +55,7 @@ class CreateSearchProcedure extends Migration
      */
     public function down()
     {
-        $sql = "DROP PROCEDURE IF EXISTS search";
-        DB::connection()->getPdo()->exec($sql);
+//        $sql = "DROP PROCEDURE IF EXISTS search";
+//        DB::connection()->getPdo()->exec($sql);
     }
 }
