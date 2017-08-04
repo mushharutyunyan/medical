@@ -98,6 +98,7 @@ $(document).ready(function(){
         var storage_id = $(this).attr('data-storage-id');
         var count = product.find('input.stepper-input').val();
         var price = parseFloat(product.find('.product-price').html()).toFixed(2);
+        console.log(price)
         var _token = $(this).attr('data-token');
         data['image'] = image;
         data['name'] = name;
