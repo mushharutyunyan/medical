@@ -2,7 +2,7 @@
 <html lang="en" class="wide wow-animation">
 <head>
     <!-- Site Title-->
-    <title>Home</title>
+    <title>@yield('title')</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -29,36 +29,42 @@
                         <div class="rd-navbar-toppanel-submenu"><a href="#" data-rd-navbar-toggle=".rd-navbar-toppanel-submenu" class="rd-navbar-toppanel-submenu-toggle"></a>
                             <ul>
                                 @if(Auth::check())
-                                <li><a href="/account">My Account</a></li>
+                                <li><a href="/account">{{Lang::get('main.myAccount')}}</a></li>
                                 @endif
                             </ul>
                         </div>
                         <div class="rd-navbar-toppanel-wrapper">
                             <div class="rd-navbar-contact-info">
                                 @if(Auth::check())
-                                <a href="/logout" class="btn btn-primary offset-xs-left-10 offset-top-10 offset-xs-top-0 offset-md-top-10 offset-lg-top-0">Log out</a>
+                                <a href="/logout" class="btn btn-primary offset-xs-left-10 offset-top-10 offset-xs-top-0 offset-md-top-10 offset-lg-top-0">{{Lang::get('main.signout')}}</a>
                                 @else
-                                <button type="button" data-toggle="modal" data-target="#signIn" class="btn btn-primary offset-xs-left-10 offset-top-10 offset-xs-top-0 offset-md-top-10 offset-lg-top-0">Sign In</button>
+                                <button type="button" data-toggle="modal" data-target="#signIn" class="btn btn-primary offset-xs-left-10 offset-top-10 offset-xs-top-0 offset-md-top-10 offset-lg-top-0">{{Lang::get('main.signin')}}</button>
                                 @endif
                             </div>
                             <div class="rd-navbar-toppanel-search">
                                 <!-- RD Navbar Search-->
                                 <div class="rd-navbar-search-wrap">
                                     <div class="rd-navbar-search">
-                                        <form action="search.php" method="GET" class="rd-navbar-search-form">
+                                        {!! Form::open(['url' => '/search','method' => 'GET', 'class' => 'search rd-navbar-search-form']) !!}
                                             <label class="rd-navbar-search-form-input">
-                                                <input type="text" name="s" placeholder="Search..." autocomplete="off">
+                                                <input type="text" name="search" placeholder="{{Lang::get('main.search')}}..." autocomplete="off">
                                             </label>
                                             <button type="submit" class="rd-navbar-search-form-submit"></button>
                                             <div data-rd-navbar-toggle=".rd-navbar-search" class="rd-navbar-search-toggle"></div>
-                                        </form><span class="rd-navbar-live-search-results"></span>
+                                        {!! Form::close() !!}
+                                        <span class="rd-navbar-live-search-results"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="rd-navbar-currency"><a data-rd-navbar-toggle=".rd-navbar-currency" href="#">USD</a>
+                            <div class="rd-navbar-currency"><a data-rd-navbar-toggle=".rd-navbar-currency" href="#">{{ Config::get('languages')[App::getLocale()] }}</a>
                                 <ul>
-                                    <li><a href="#" class="text-primary">USD</a></li>
-                                    <li><a href="#">EUR</a></li>
+                                    @foreach (Config::get('languages') as $lang => $language)
+                                        @if ($lang != App::getLocale())
+                                            <li>
+                                                <a href="{{ route('lang.switch', $lang) }}">{{$language}}</a>
+                                            </li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -78,33 +84,54 @@
                                     <li><a href="/login/twitter" class="text-gray icon icon-xs fa-twitter"></a></li>
                                     <li><a href="/login/google" class="text-gray icon icon-xs fa-google-plus"></a></li>
                                 </ul>
-                            @else
-                            <div class="rd-navbar-shop text-middle text-left">
-                                <div class="rd-navbar-shop-toggle"><a href="#" data-rd-navbar-toggle=".rd-navbar-shop" class="text-middle icon icon-primary fl-line-icon-set-shopping63"></a><span class="text-middle label label-circle label-primary">1</span></div>
-                                <div class="rd-navbar-shop-panel">
-                                    <h4>My Cart</h4>
-                                    <div class="unit unit-spacing-15 unit-horizontal rd-navbar-shop-product">
-                                        <div class="unit-left"><a href="single-product.html" class="text-dark"><img alt="" src="images/header-01.jpg"></a></div>
-                                        <div class="unit-body p"><a href="single-product.html" class="text-dark">Agrafe earrings</a>
-                                            <p>4 x <span class="big text-regular text-primary text-spacing-40">$258.89</span></p><a href="#"><span class="rd-navbar-shop-product-delete icon mdi mdi-close"></span></a>
-                                        </div>
+                            @endif
+                            <div class="rd-navbar-shop shop-block text-middle text-left">
+                                <div class="rd-navbar-shop-toggle shop-block-header">
+                                    <a href="#" data-rd-navbar-toggle=".rd-navbar-shop" class="text-middle icon icon-primary fl-line-icon-set-shopping63"></a>
+                                    @if(session('order'))
+                                    <span class="text-middle shop-products-count label label-circle label-primary">{{count(session('order'))}}</span>
+                                    @endif
+                                </div>
+                                <div class="rd-navbar-shop-panel shop-block-body">
+                                    <h4>{{Lang::get('main.mycart')}}</h4>
+                                    <div class="shop-block-products" data-organization-id="{{session('order') ? session('order')[0]['organization_id'] : ''}}">
+                                        @if(session('order'))
+                                            <?php
+                                            $all_prices = 0;
+                                            ?>
+                                            @foreach(session('order') as $order)
+                                                <?php
+                                                $all_prices += $order['price']*$order['count'];
+                                                ?>
+                                                <div class="unit unit-spacing-15 unit-horizontal rd-navbar-shop-product" data-id="{{$order['storage_id']}}">
+                                                    <div class="unit-left">
+                                                        <a href="javascript:;" class="text-dark"><img alt="" height="50" width="50" src="{{$order['image']}}"></a>
+                                                        </div>
+                                                    <div class="unit-body p"><a href="javascript:;" class="text-dark">{{$order['name']}}</a>
+                                                        <p>{{$order['count']}} x <span class="big text-regular text-primary text-spacing-40 basket-product-price">{{$order['price']}}</span></p>
+                                                        <a href="javascript:;" data-count="{{$order['count']}}" class="delete-basket-product" data-token="{{csrf_token()}}" data-id="{{$order['storage_id']}}"><span onclick="delete_basket_product(this)" class="rd-navbar-shop-product-delete icon mdi mdi-close"></span></a>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
                                     <hr class="divider divider-gray divider-offset-20">
-                                    <h4>Subtotal: <span class="text-regular text-primary text-normal text-spacing-40">$1,035.56</span></h4><a href="cart.html" class="btn btn-block btn-default">VIEW CART</a><a href="checkout.html" class="btn btn-block btn-primary">CHECKOUT</a>
+                                    <h4>Subtotal: <span class="text-regular text-primary text-normal text-spacing-40 basket-subtotal">{{session('order') ? $all_prices : 0}}</span></h4>
+                                    <a href="/order/cart" class="btn btn-block btn-default">VIEW CART</a>
+                                    <a href="checkout.html" class="btn btn-block btn-primary">CHECKOUT</a>
                                 </div>
                             </div>
-                            @endif
                         </div>
                     </div>
                     <div class="rd-navbar-nav-wrap">
                         <!-- RD Navbar Nav-->
                         <ul class="rd-navbar-nav">
                             @if(!Auth::check())
-                            <li class="veil rd-navbar-fixed--visible"><a href="#" data-toggle="modal" data-target="#signIn">Sign In</a></li>
+                            <li class="veil rd-navbar-fixed--visible"><a href="#" data-toggle="modal" data-target="#signIn">{{Lang::get('main.signin')}}</a></li>
                             @endif
-                            <li class="active"><a href="./">home</a></li>
+                            <li class="active"><a href="./">{{Lang::get('main.home')}}</a></li>
                             @if(Auth::check())
-                            <li class="veil rd-navbar-fixed--visible"><a href="/logout">Log out</a></li>
+                            <li class="veil rd-navbar-fixed--visible"><a href="/logout">{{Lang::get('main.logout')}}</a></li>
                             @endif
                         </ul>
                     </div>
@@ -141,19 +168,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Sign In</h4>
+                <h4 class="modal-title">{{Lang::get('main.signin')}}</h4>
             </div>
             <form id="signInForm">
                 {{ csrf_field() }}
                 <div class="modal-body">
                     <label class="error error-login"></label>
-                    <input type="text" name="email" placeholder="Email *" class="form-control">
-                    <input type="password" name="password" placeholder="Password *" class="form-control">
-                    <a href="/password/reset">Forgot Your password?</a>
+                    <input type="text" name="email" placeholder="{{Lang::get('main.email')}} *" class="form-control">
+                    <input type="password" name="password" placeholder="{{Lang::get('main.password')}} *" class="form-control">
+                    <a href="/password/reset">{{Lang::get('main.forgotPassword')}}</a>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary offset-top-20">Sign In</button>
-                    <button type="button" class="btn btn-default sign-up-button" data-dismiss="modal">Sign Up</button>
+                    <button class="btn btn-primary offset-top-20">{{Lang::get('main.signin')}}</button>
+                    <button type="button" class="btn btn-default sign-up-button" data-dismiss="modal">{{Lang::get('main.signup')}}</button>
                 </div>
             </form>
         </div>
@@ -167,20 +194,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Sign Up</h4>
+                <h4 class="modal-title">{{Lang::get('main.signup')}}</h4>
             </div>
             <form id="signUpForm">
                 {{ csrf_field() }}
                 <div class="modal-body">
                     <label class="error error-register"></label>
-                    <input type="text" name="name" placeholder="Name *" class="form-control">
-                    <input type="text" name="email" placeholder="Email *" class="form-control">
-                    <input type="password" name="password" id="password" placeholder="Password *" class="form-control">
-                    <input type="password" name="password_confirmation" placeholder="Password Confirm *" class="form-control">
+                    <input type="text" name="name" placeholder="{{Lang::get('main.name')}} *" class="form-control">
+                    <input type="text" name="email" placeholder="{{Lang::get('main.email')}} *" class="form-control">
+                    <input type="password" name="password" id="password" placeholder="{{Lang::get('main.password')}} *" class="form-control">
+                    <input type="password" name="password_confirmation" placeholder="{{Lang::get('main.confirmPassword')}} *" class="form-control">
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary offset-top-20">Sign Up</button>
-                    <button type="button" class="btn btn-default sign-in-button" data-dismiss="modal">Sign In</button>
+                    <button class="btn btn-primary offset-top-20">{{Lang::get('main.signup')}}</button>
+                    <button type="button" class="btn btn-default sign-in-button" data-dismiss="modal">{{Lang::get('main.signin')}}</button>
                 </div>
             </form>
         </div>
@@ -195,19 +222,55 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Error</h4>
+                <h4 class="modal-title">{{Lang::get('main.error')}}</h4>
             </div>
             <div class="modal-body">
                 <span class="error">{{$errors->first()}}</span>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
             </div>
         </div>
 
     </div>
 </div>
 @endif
+<div id="errorPorductOrganizationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.error')}}</h4>
+            </div>
+            <div class="modal-body">
+                <span class="error">{{Lang::get('main.productOrganizationError')}}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="errorPorductExist" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.error')}}</h4>
+            </div>
+            <div class="modal-body">
+                <span class="error">{{Lang::get('main.errorPorductExist')}}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Java script-->
 <script src="/assets/js/core.min.js"></script>
 <script src="/assets/js/script.js"></script>

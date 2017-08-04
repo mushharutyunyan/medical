@@ -16,7 +16,7 @@
                 </div>
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    {!! Form::open(['url' => 'admin/manage/organizations', "class" => "form-horizontal form-bordered role-form"]) !!}
+                    {!! Form::open(['url' => 'admin/manage/organizations', "class" => "form-horizontal form-bordered role-form", "enctype" => "multipart/form-data"]) !!}
                     <div class="form-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -80,6 +80,12 @@
                             <label class="control-label col-md-3">Apartment</label>
                             <div class="col-md-4">
                                 {{Form::text('apartment','',['class' => 'form-control'])}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Picture</label>
+                            <div class="col-md-4">
+                                {{Form::file('picture','',['class' => 'form-control'])}}
                             </div>
                         </div>
                     </div>

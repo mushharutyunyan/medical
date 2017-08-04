@@ -114,6 +114,11 @@ class Drug extends AbstractModel
         return $this->hasMany('App\Models\DrugCharacter','drug_id');
     }
 
+    public function storage()
+    {
+        return $this->hasMany('App\Models\Storage','drug_id');
+    }
+
     public function syncOptions(array $options, $column = 'option')
     {
         $new_options = array_filter($options);

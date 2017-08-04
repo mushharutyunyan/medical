@@ -79,12 +79,13 @@
                                             @elseif($order->to == Auth::guard("admin")->user()['organization_id'] && $order->status != \App\Models\Order::PROCEEDFROM)
                                             <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
                                             @endif
-                                        @else
+                                        @endif
+                                        @if($order->status == \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
                                             @if($order->from == Auth::guard("admin")->user()['organization_id'])
-                                            {!! Form::open(['url' => '/admin/order/changeStatus/received']) !!}
-                                            <input type="hidden" name="order_id" value="{{$order->id}}">
-                                            <button class="btn blue">Received</button>
-                                            {!! Form::close() !!}
+                                                {!! Form::open(['url' => '/admin/order/changeStatus/received']) !!}
+                                                <input type="hidden" name="order_id" value="{{$order->id}}">
+                                                <button class="btn blue">Received</button>
+                                                {!! Form::close() !!}
                                             @endif
                                         @endif
                                         <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>

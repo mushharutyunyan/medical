@@ -14,9 +14,10 @@ class UpdateOrganizationsTable extends Migration
     public function up()
     {
         Schema::table('organizations', function (Blueprint $table) {
-            $table->string('identification_number')->after('apartment');
-            $table->string('bank_account_number')->after('identification_number');
-            $table->string('phone')->after('bank_account_number');
+            $table->string('identification_number')->after('apartment')->nullable();
+            $table->string('bank_account_number')->after('identification_number')->nullable();
+            $table->string('phone')->after('bank_account_number')->nullable();
+            $table->string('image')->nullable();
         });
     }
 
@@ -28,9 +29,10 @@ class UpdateOrganizationsTable extends Migration
     public function down()
     {
         Schema::table('organizations', function (Blueprint $table) {
-            $table->dropIfExists('identification_number');
-            $table->dropIfExists('bank_account_number');
-            $table->dropIfExists('phone');
+            $table->dropColumn('identification_number');
+            $table->dropColumn('bank_account_number');
+            $table->dropColumn('phone');
+            $table->dropColumn('image');
         });
     }
 }

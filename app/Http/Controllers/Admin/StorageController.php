@@ -21,7 +21,11 @@ class StorageController extends Controller
      */
     public function index()
     {
-        $storage = Storage::paginate(15);
+        if(Auth::guard('admin')->user()['organization_id']){
+            $storage = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])->paginate(15);
+        }else{
+            $storage = Storage::paginate(15);
+        }
         return view('admin.storage.index',['storages' => $storage]);
     }
 

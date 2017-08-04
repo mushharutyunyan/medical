@@ -5,7 +5,7 @@
         <div>
             <ol class="breadcrumb">
                 <li><a href="/" class="icon icon-sm fa-home text-primary"></a></li>
-                <li class="active">Reset Password
+                <li class="active">{{Lang::get('main.resetPassword')}}
                 </li>
             </ol>
         </div>
@@ -24,7 +24,7 @@
 
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                         <div class="col-md-6">
-                            <input id="email" type="email" placeholder="E-Mail Address" class="form-control" name="email" value="{{ old('email') }}" required>
+                            <input id="email" type="email" placeholder="{{Lang::get('main.email')}}" class="form-control" name="email" value="{{ old('email') }}" required>
                             @if ($errors->has('email'))
                                 <span class="help-block">
                                     <strong>{{ $errors->first('email') }}</strong>
@@ -32,7 +32,7 @@
                             @endif
                         </div>
                         <div class="col-md-6">
-                            <button type="submit" class="btn btn-primary">Send Password Reset Link</button>
+                            <button type="submit" class="btn btn-primary">{{Lang::get('main.resetPasswordButton')}}</button>
                         </div>
                     </div>
                 </form>

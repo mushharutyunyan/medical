@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'home' => 'Home',
+    'home' => 'Գլխավոր',
     'myAccount' => 'My Account',
     'account' => 'Account',
     'signout' => 'Sign Out',
@@ -22,8 +22,8 @@ return [
     'close' => 'Close',
     'send' => 'Send',
     'accountInfo' => 'Account Info',
-    'language' => 'en',
     'accountUpdate' => 'Your Account has been updated successfully.',
     'productOrganizationError' => 'You already have other organization in your basket.',
     'errorPorductExist' => 'This drug is already exists in your busket.',
+
 ];

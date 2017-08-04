@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Organization;
 use Illuminate\Support\Facades\Auth;
-
+use Image;
+use Input;
 class OrganizationsController extends Controller
 {
     /**
@@ -46,6 +47,13 @@ class OrganizationsController extends Controller
             'name' => 'required|unique:organizations,name',
         ]);
         $data['admin_id'] = Auth::guard('admin')->user()['id'];
+        if(isset($data['picture'])){
+            $picture = $data['picture'];
+            $name  = time() . '.' . $picture->getClientOriginalExtension();
+            $path = public_path('assets/admin/images/organizations/' . $name);
+            Image::make($picture->getRealPath())->resize(320, 240)->save($path);
+            $data['image'] = $name;
+        }
         unset($data['redirect_url']);
         Organization::create($data);
         return redirect($redirect_uri)->with('status', 'New Organizations created successfully');

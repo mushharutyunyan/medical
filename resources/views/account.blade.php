@@ -5,7 +5,7 @@
         <div>
             <ol class="breadcrumb">
                 <li><a href="/" class="icon icon-sm fa-home text-primary"></a></li>
-                <li class="active">Account
+                <li class="active">{{Lang::get('main.account')}}
                 </li>
             </ol>
         </div>
@@ -13,7 +13,7 @@
     <div class="shell section-bottom-60">
         <div class="range">
             <div class="cell-md-8 text-xs-left">
-                <h4>Account Info</h4>
+                <h4>{{Lang::get('main.accountInfo')}}</h4>
                 @if (session('success'))
                     <div class="alert alert-success">
                         {{ session('success') }}
@@ -31,11 +31,11 @@
                 <!-- RD Mailform-->
                 {{ Form::model(Auth::user(), ['url' => '/account/update/'.Auth::user()['id'], 'method' => 'PUT', 'class' => 'offset-top-20 rd-mailform']) }}
                     {{ csrf_field() }}
-                    <label for="name" class="text-italic">Name:<span class="text-primary">*</span></label>
+                    <label for="name" class="text-italic">{{Lang::get('main.name')}}:<span class="text-primary">*</span></label>
                     <input id="name" type="text" name="name" value="{{Input::old('name') ? Input::old('name') : Auth::user()['name']}}">
-                    <label for="email" class="text-italic">E-mail:<span class="text-primary">*</span></label>
+                    <label for="email" class="text-italic">{{Lang::get('main.email')}}:<span class="text-primary">*</span></label>
                     <input id="email" type="text" name="email" data-constraints="" value="{{Input::old('email') ? Input::old('email') : Auth::user()['email']}}">
-                    <button class="btn btn-primary">Send</button>
+                    <button class="btn btn-primary">{{Lang::get('main.send')}}</button>
                 </form>
             </div>
         </div>
