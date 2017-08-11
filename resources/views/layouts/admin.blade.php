@@ -46,6 +46,16 @@
     <link href="/assets/admin/css/custom.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+        .chat{
+            overflow-y: auto;
+            height: 200px;
+        }
+    </style>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -349,6 +359,17 @@
                                 <span class="arrow "></span>
                             </a>
                         </li>
+                    @if(Request::segment(2) == 'userOrder')
+                        <li class="active">
+                    @else
+                        <li>
+                            @endif
+                            <a href="/admin/userOrder">
+                                <i class="icon-basket"></i>
+                                <span class="title">User Order</span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
                 </ul>
                 <!-- END SIDEBAR MENU -->
             </div>
@@ -574,6 +595,10 @@
 <script src="/assets/admin/js/storage.js"></script>
 <script src="/assets/admin/js/order.js"></script>
 <script src="/assets/admin/js/message.js"></script>
+<script src="/assets/admin/js/userOrder.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false&&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
+        type="text/javascript"></script>
+<script src="/assets/admin/js/organization.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function() {

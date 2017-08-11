@@ -88,6 +88,9 @@
                                 {{Form::file('picture','',['class' => 'form-control'])}}
                             </div>
                         </div>
+                        <input type="hidden"  name="latitude" value="{{$position->latitude}}">
+                        <input type="hidden" name="longitude" value="{{$position->longitude}}">
+                        <div id="map" data-type="create"></div>
                     </div>
                     <div class="form-actions">
                         <div class="row">

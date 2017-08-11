@@ -81,6 +81,9 @@
                                     {{Form::text('apartment',$currentOrganization->apartment,['class' => 'form-control'])}}
                                 </div>
                             </div>
+                            <input type="hidden"  name="latitude" value="{{$position->latitude}}">
+                            <input type="hidden" name="longitude" value="{{$position->longitude}}">
+                            <div id="map" data-type="edit"></div>
                     </div>
                     <div class="form-actions">
                         <div class="row">
@@ -97,4 +100,6 @@
             <!-- END PORTLET-->
         </div>
     </div>
+
+
 @endsection

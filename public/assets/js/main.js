@@ -93,12 +93,14 @@ $(document).ready(function(){
         }
         var product = $(this).closest('.product');
         var product_counts = 0;
+        if($('.shop-products-count').length){
+            product_counts = parseInt($('.shop-products-count').html());
+        }
         var image = product.find('.product-media').find('img').attr('src');
         var name = product.find('.big').text();
         var storage_id = $(this).attr('data-storage-id');
         var count = product.find('input.stepper-input').val();
         var price = parseFloat(product.find('.product-price').html()).toFixed(2);
-        console.log(price)
         var _token = $(this).attr('data-token');
         data['image'] = image;
         data['name'] = name;
@@ -150,11 +152,30 @@ $(document).ready(function(){
             }
         }
     })
+
+    $(".checkout-button").on("click",function(){
+       $("#checkoutModal").modal("show");
+    });
+
+    $('#radioBtn a').on('click', function(){
+        var sel = $(this).data('title');
+        var tog = $(this).data('toggle');
+        $('#'+tog).prop('value', sel);
+        $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+        $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+        $('div[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').hide();
+        $('div[data-toggle="'+tog+'"][data-title="'+sel+'"]').show();
+    })
+
+    if($("#orderFinishModal").length){
+        $("#orderFinishModal").modal('show');
+    }
 });
 function delete_basket_product(self){
     var storage_id = $(self).parent().attr('data-id');
+    var cart_row = false;
     if($(self).parent().hasClass('cart-row')){
-
+        cart_row = true;
         $('.shop-block-products .unit').each(function(key,value){
             if($(this).attr('data-id') == storage_id){
                 $(self).closest('tr').remove();
@@ -177,7 +198,7 @@ function delete_basket_product(self){
     }
     var new_price = parseFloat(price - current_price*current_count).toFixed(2);
     main_block.find('.basket-subtotal').html(new_price);
-    if($(self).parent().hasClass('cart-row')){
+    if(cart_row){
         $(".cart_totals-price").html(new_price);
     }
     current_block.remove();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdminOrganizationsTable extends Migration
+class UpdateAdminOrganizationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,6 +13,7 @@ class CreateAdminOrganizationsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('admin_organizations');
         Schema::create('admin_organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('admin_id')->unsigned();

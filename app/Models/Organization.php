@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Organization extends Model
 {
     Const STATUS = array(1 => 'Whole Sale', 'Pharmacy', 'Other Organization');
+    const PHARMACY = 2;
     /**
      * The attributes that are mass assignable.
      *
@@ -19,5 +20,10 @@ class Organization extends Model
     public function admin()
     {
         return $this->hasMany('App\Models\Admin','organization_id');
+    }
+
+    public function location()
+    {
+        return $this->hasMany('App\Models\OrganizationLocation','organization_id');
     }
 }

@@ -11,6 +11,21 @@
     <!-- Stylesheets-->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic%7CRoboto:400,300,100,700,300italic,400italic,700italic%7CMontserrat:400,700">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+        .chat{
+            background-color:#e6e6e6;
+            height:200px;
+            overflow-y: auto;
+        }
+        .chat .message{
+            padding: 5px;
+            font-size:15px
+        }
+    </style>
     <!--[if lt IE 10]>
     <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
     <script src="/assets/js/html5shiv.min.js"></script>
@@ -117,8 +132,8 @@
                                     </div>
                                     <hr class="divider divider-gray divider-offset-20">
                                     <h4>Subtotal: <span class="text-regular text-primary text-normal text-spacing-40 basket-subtotal">{{session('order') ? $all_prices : 0}}</span></h4>
-                                    <a href="/order/cart" class="btn btn-block btn-default">VIEW CART</a>
-                                    <a href="checkout.html" class="btn btn-block btn-primary">CHECKOUT</a>
+                                    <a href="/order/cart" class="btn btn-block btn-default">{{Lang::get('main.viewCart')}}</a>
+                                    <a href="/order/checkout" class="btn btn-block btn-primary">{{Lang::get('main.checkout')}}</a>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +144,9 @@
                             @if(!Auth::check())
                             <li class="veil rd-navbar-fixed--visible"><a href="#" data-toggle="modal" data-target="#signIn">{{Lang::get('main.signin')}}</a></li>
                             @endif
-                            <li class="active"><a href="./">{{Lang::get('main.home')}}</a></li>
+                            <li class="active"><a href="/">{{Lang::get('main.home')}}</a></li>
+                            <li class="active"><a href="/order">{{Lang::get('main.createOrder')}}</a></li>
+                            <li class="active"><a href="/order/details">{{Lang::get('main.orderDetails')}}</a></li>
                             @if(Auth::check())
                             <li class="veil rd-navbar-fixed--visible"><a href="/logout">{{Lang::get('main.logout')}}</a></li>
                             @endif
@@ -235,6 +252,47 @@
     </div>
 </div>
 @endif
+@if(session('orderDetails'))
+    <div id="orderFinishModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{Lang::get('main.success')}}</h4>
+                </div>
+                <div class="modal-body">
+                    <span style="font-size: 20px;">{!! session('orderDetails') !!}</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+@endif
+<div id="acceptOrganizationModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.accept')}}</h4>
+            </div>
+            <div class="modal-body">
+                <h4>{{Lang::get('main.acceptOrganizationMessage')}}</h4>
+                <p style="font-size: 30px;" class="organization-name"></p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary continue-button">{{Lang::get('main.continue')}}</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="errorPorductOrganizationModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
@@ -272,9 +330,13 @@
     </div>
 </div>
 <!-- Java script-->
+<script src="http://maps.google.com/maps/api/js?sensor=false&&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
+        type="text/javascript"></script>
 <script src="/assets/js/core.min.js"></script>
 <script src="/assets/js/script.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/jquery.validate.min.js"></script>
 <script src="/assets/js/main.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script src="/assets/js/order.js"></script>
 </body>
 </html>

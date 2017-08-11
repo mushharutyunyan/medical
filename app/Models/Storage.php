@@ -20,6 +20,11 @@ class Storage extends Model
         return $this->belongsTo('App\Models\Drug');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization');
+    }
+
     public static function warningDrugs(){
         $orders = Order::where('from',Auth::guard('admin')->user()['organization_id'])->whereNotIn('status',array(Order::APPROVED,Order::CANCELED))->get();
         $ordered_ids = array();

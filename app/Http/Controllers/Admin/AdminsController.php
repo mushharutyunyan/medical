@@ -55,10 +55,6 @@ class AdminsController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
         $created = Admin::create($data);
-        if(Auth::guard('admin')->user()->role->id != 1){
-            AdminOrganization::create(array('admin_id' => Auth::guard('admin')->user()['id'],
-                                            'admin_organization_id' => $created->id));
-        }
         return redirect('admin/manage/admins')->with('status', 'Admin profile created successfully');
     }
 

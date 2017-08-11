@@ -11,6 +11,6 @@ class AdminOrganization extends Model
     protected $fillable = [
         'id',
         'admin_id',
-        'admin_organization_id',
+        'organization_id',
     ];
 }

@@ -171,6 +171,8 @@ return [
 
         Laravel\Socialite\SocialiteServiceProvider::class,
         'Thujohn\Twitter\TwitterServiceProvider',
+        Stevebauman\Location\LocationServiceProvider::class,
+        'GoogleMaps\ServiceProvider\GoogleMapsServiceProvider',
         /*
          * Application Service Providers...
          */
@@ -234,6 +236,8 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Twitter' => 'Thujohn\Twitter\Facades\Twitter',
+        'Location' => Stevebauman\Location\Facades\Location::class,
+        'GoogleMaps' => 'GoogleMaps\Facade\GoogleMapsFacade',
     ],
 
 ];

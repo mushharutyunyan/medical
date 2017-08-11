@@ -19,8 +19,8 @@
                 <div class="range">
                     <div class="cell-md-4">
                         <div class="form-group select-filter">
-                            {!! Form::open(['url' => '/search','method' => 'GET', 'class' => 'search rd-navbar-search-form']) !!}
-                            <input class="form-control" value="{{session('search')}}" name="search">
+                            {!! Form::open(['url' => '/search/'.$organization_id,'method' => 'GET', 'class' => 'search rd-navbar-search-form']) !!}
+                            <input class="form-control" value="{{session('search') ? session('search') : Input::old('search')}}" placeholder="{{session('search') ? session('search') : Lang::get('main.searchFor')." ".$drugs[0]->name}}" name="search">
                             {!! Form::close() !!}
 
                             {{--<select data-placeholder="Select an option" data-minimum-results-for-search="Infinity">--}}
@@ -33,8 +33,11 @@
                             {{--</select>--}}
                         </div>
                     </div>
-                    <div class="cell-md-4 cell-middle text-md-left">
-                        <h6>Showing all <span class='text-primary'>{{count($drugs)}} results</span></h6>
+                    <div class="cell-md-2">
+                        <button class="btn btn-info pull-left">{{Lang::get('main.search')}}</button>
+                    </div>
+                    <div class="cell-md-6 cell-middle text-md-right ">
+                        <h6 class="">Showing all <span class='text-primary'>{{count($drugs)}} results</span></h6>
                     </div>
                 </div>
                 <div class="range offset-top-30">
@@ -62,13 +65,13 @@
                                         <span class="stepper-arrow down"></span>
                                     </div>
                                 </div>
-                                @if(App::getLocale() != 'am')
+                                @if(App::getLocale() == 'am')
                                 <p class="big">{{$drug->trade_name}}<a href="single-product.html" class="text-base"> ({{$drug->name}})</a></p>
                                 @else
-                                    @if(App::getLocale() != 'ru')
+                                    @if(App::getLocale() == 'ru')
                                         <p class="big">{{$drug->trade_name_ru}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
-                                    @elseif(App::getLocale() != 'en')
-                                        <p class="big">{{$drug->trade_name_ru}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
+                                    @elseif(App::getLocale() == 'en')
+                                        <p class="big">{{$drug->trade_name_en}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
                                     @endif
                                 @endif
 

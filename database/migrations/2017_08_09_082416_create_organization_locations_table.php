@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdminOrganizationsTable extends Migration
+class CreateOrganizationLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateAdminOrganizationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_organizations', function (Blueprint $table) {
+        Schema::create('organization_locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('admin_id')->unsigned();
-            $table->integer('organization_id')->unsigned();
+            $table->integer('organization_id');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +29,6 @@ class CreateAdminOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_organizations');
+        Schema::dropIfExists('organization_locations');
     }
 }

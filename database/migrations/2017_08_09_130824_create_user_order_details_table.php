@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAdminOrganizationsTable extends Migration
+class CreateUserOrderDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateAdminOrganizationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_organizations', function (Blueprint $table) {
+        Schema::create('user_order_details', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('admin_id')->unsigned();
-            $table->integer('organization_id')->unsigned();
+            $table->integer('user_order_id');
+            $table->integer('storage_id');
+            $table->decimal('price',10,2);
+            $table->string('count');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +30,6 @@ class CreateAdminOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_organizations');
+        Schema::dropIfExists('user_order_details');
     }
 }
