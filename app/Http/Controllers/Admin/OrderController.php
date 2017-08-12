@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class OrderController extends Controller
 {
     public function index(){
-        $orders = Order::where('from',Auth::guard('admin')->user()['organization_id'])->orWhere('to',Auth::guard('admin')->user()['organization_id'])->where('status','!=',Order::SAVED)->get();
+        $orders = Order::where('from',Auth::guard('admin')->user()['organization_id'])->orWhere('to',Auth::guard('admin')->user()['organization_id'])->where('status','!=',Order::SAVED)->orderBy('id','DESC')->get();
         $status = Order::$status;
         $status_to = array(
             Order::PROCEEDFROM => $status[Order::PROCEEDFROM],
