@@ -238,20 +238,23 @@ $(document).ready(function(){
         var access = true;
         var count = $(table).find('.row-settings').length;
         var drug_id = $('.drug-search-results').val();
-        var $data = {info:{}};
+        var $data = {info:{},data_info:{}};
         $(".drug-settings-table").find('select').each(function(key,value){
             val = $(value).val();
+            var self = this
             if(parseInt($(value).val())){
                 var classList = $(value).attr('class').split(/\s+/);
                 $.each(classList, function(index, item) {
                     if (item !== 'form-control') {
+                        var name = $(self).parent().prev().html();
+                        var value_text = $(self).children('option[value="'+$(value).val()+'"]').text();
                         sub_value = item.split('search-')[1];
                         $data.info[sub_value] = val;
+                        $data.data_info[name] = value_text;
                     }
                 });
             }
         });
-
         $(table+' tbody tr').each(function(key,value){
             if($(value).find('.row-settings').val() == JSON.stringify($data['info']) && parseInt($(value).find('.row-drug-id').val()) == drug_id){
                 if(!$(value).first().hasClass('saved')){
@@ -306,7 +309,11 @@ $(document).ready(function(){
                                             row_id = $(value).attr('data-id');
                                             settings = JSON.stringify($data['info']);
                                             $("#search_drug").modal('hide');
-                                            $(this).parent().html("<button class='remove-storage-row btn btn-warning "+clear_button_class+"' data-id='"+$(value).attr('data-id')+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+" <span class='error'>(" + data.count + ")</span><input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'><input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'><input type='hidden' class='row-exist' name='exist_"+count+"' value='1'>");
+                                            var info = '';
+                                            $.each($data.data_info, function(key, value){
+                                                info += '<p>'+key+': '+value+'</p><br>';
+                                            });
+                                            $(this).parent().html("<button class='remove-storage-row btn btn-warning "+clear_button_class+"' data-id='"+$(value).attr('data-id')+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+" <span class='error'>(" + data.count + ")</span><input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'><input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'><input type='hidden' class='row-exist' name='exist_"+count+"' value='1'>"+info);
                                             return false;
                                         }
                                     })
@@ -330,6 +337,9 @@ $(document).ready(function(){
                                 settings = JSON.stringify($data['info']);
                                 $("#search_drug").modal('hide');
                                 $(this).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+"<input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'><input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'><input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>");
+                                $.each($data.data_info, function(key, value){
+                                    $(this).parent().append('<p>'+key+': '+value+'</p>');
+                                });
                                 return false;
                             }
                         })

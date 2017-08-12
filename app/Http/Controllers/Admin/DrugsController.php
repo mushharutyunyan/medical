@@ -82,7 +82,7 @@ class DrugsController extends Controller
         $drug = Drug::create(array(
             'trade_name' => $data['trade_name'],
             'trade_name_ru' => $data['trade_name_ru'],
-            'trade_name_eng' => $data['trade_name_eng'],
+            'trade_name_en' => $data['trade_name_en'],
             'generic_name' => $data['generic_name'],
             'dosage_form' => $data['dosage_form'],
             'dosage_strength' => $data['dosage_strength'],

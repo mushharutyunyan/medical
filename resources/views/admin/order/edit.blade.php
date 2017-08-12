@@ -31,6 +31,9 @@
                             <tbody>
                             <?php $i = 0 ?>
                             @foreach($drugs as $drug)
+                                <?php
+                                $drug_settings = json_decode($drug->drug_settings);
+                                ?>
                                 <tr class="odd gradeX process">
                                     <td>
                                         <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-drug-id="{{$drug->drug_id}}">Watch</button>
@@ -38,6 +41,17 @@
                                         {{$drug->drug->trade_name}}
                                         <input type='hidden' class='row-settings' name='settings_{{$i}}' value='{{$drug->drug_settings}}'>
                                         <input type='hidden' class='row-drug-id' name='drug_id_{{$i}}' value='{{$drug->drug_id}}'>
+                                        @foreach($drug_settings as $key => $drug_setting)
+                                            @foreach($drug->drug->$key as $key_setting => $setting)
+                                                @if(preg_match('/price/',$key))
+                                                <p>{{$drug->drug->setting_names[$key]}}: {{$setting->price}}</p>
+                                                @elseif(preg_match('/count/',$key))
+                                                <p>{{$drug->drug->setting_names[$key]}}: {{$setting->count}}</p>
+                                                @else
+                                                <p>{{$drug->drug->setting_names[$key]}}: {{$setting->name}}</p>
+                                                @endif
+                                            @endforeach
+                                        @endforeach
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" value="{{$drug->count}}" name="count" placeholder="Count">

@@ -19,6 +19,29 @@ class Drug extends AbstractModel
 
     ];
 
+    public $setting_names = array(
+      'category' => 'Category',
+        'certificate_number' => 'Certificate Number',
+        'country' => 'Country',
+        'expiration_date' => 'Expiration Date',
+        'group' => 'Group',
+        'manufacturer' => 'Manufacturer',
+        'count' => 'Count',
+        'picture' => 'Picture',
+        'registration_certificate_holder' => 'Registration Certificate Holder',
+        'registration_date' => 'Registration Date',
+        'release_packaging' => 'Release Packaging',
+        'release_order' => 'Release Order',
+        'series' => 'Series',
+        'supplier' => 'Supplier',
+        'type' => 'Type',
+        'type_belonging' => 'Type Belonging',
+        'unit' => 'Unit',
+        'unit_price' => 'Unit Price',
+        'character' => 'Character',
+        'storage' => 'Storage',
+    );
+
     public function category()
     {
         return $this->hasMany('App\Models\DrugCategory','drug_id');

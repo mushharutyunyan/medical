@@ -436,7 +436,7 @@
                 <div class="modal-footer">
                     {!! Form::open(['class' => 'storage-save']) !!}
                     <button type="button" data-dismiss="modal" class="btn default">Close</button>
-                    <button type="submit" class="btn green check-drug">Save changes</button>
+                    <button type="submit" class="btn green check-drug">Choose</button>
                     {!! Form::close([]) !!}
                 </div>
             </div>

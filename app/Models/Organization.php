@@ -14,7 +14,7 @@ class Organization extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'admin_id', 'director', 'status', 'email', 'city', 'apartment','image'
+        'id', 'name', 'admin_id', 'director', 'status', 'email', 'city','street', 'apartment','image'
     ];
 
     public function admin()

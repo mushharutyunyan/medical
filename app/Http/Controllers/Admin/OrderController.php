@@ -42,13 +42,12 @@ class OrderController extends Controller
         if(isset($data['order_send'])){
             $status = Order::PROCEEDTO;
         }
-
         $data_order = array();
         $data_order['to'] = $data['to'];
         $data_order['from'] = Auth::guard('admin')->user()['organization_id'];
         $data_order['status'] = $status;
         if(isset($data['delivery_status_id'])){
-            if($data_order['delivery_status_id'] != 0){
+            if($data['delivery_status_id'] != 0){
                 $data_order['delivery_status_id'] = $data['delivery_status_id'];
             }
         }
@@ -84,7 +83,8 @@ class OrderController extends Controller
                 ));
             }
         }
-        if($status = Order::PROCEEDTO){
+
+        if($status == Order::PROCEEDTO){
             $this->generateExcel($order->id);
         }
 

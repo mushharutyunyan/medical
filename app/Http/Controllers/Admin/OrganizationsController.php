@@ -33,7 +33,6 @@ class OrganizationsController extends Controller
     public function create(Request $request)
     {
         $position = Location::get($request->ip());
-
         $status = Organization::STATUS;
         return view('admin.manage.organizations.create',['position' => $position,'status' => $status]);
     }
@@ -73,7 +72,7 @@ class OrganizationsController extends Controller
         OrganizationLocation::create($location);
         AdminOrganization::create(array(
             'admin_id' => Auth::guard('admin')->user()['id'],
-            'admin_organization_id' => $organization->id,
+            'organization_id' => $organization->id,
         ));
         return redirect($redirect_uri)->with('status', 'New Organizations created successfully');
     }
@@ -88,7 +87,6 @@ class OrganizationsController extends Controller
     {
 
         $position = OrganizationLocation::where('organization_id',$id)->first();
-
         $status = Organization::STATUS;
         $currentOrganization = Organization::where('id',$id)->first();
         return view('admin.manage.organizations.edit',['status' => $status, 'currentOrganization' => $currentOrganization, 'position' => $position]);

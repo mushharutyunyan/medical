@@ -198,30 +198,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Type Belonging - (տեսակային պատկանելիություն)</label>
-                            <div class="col-md-4">
-                                <a class="add_drug_param" data-name="type_belonging"><i class="fa fa-plus"></i></a>
-                                {{Form::text('type_belonging_1','',['class' => 'form-control'])}}
-                                {{Form::hidden('type_belonging','1',['class' => 'form-control'])}}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-6">Certificate Number - (Հավաստագրի համարը)</label>
-                            <div class="col-md-4">
-                                <a class="add_drug_param" data-name="certificate_number"><i class="fa fa-plus"></i></a>
-                                {{Form::text('certificate_number_1','',['class' => 'form-control'])}}
-                                {{Form::hidden('certificate_number','1',['class' => 'form-control'])}}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-6">Registration Certificate Holder - (Գրանցման հավաստագրի իրավատերը)</label>
-                            <div class="col-md-4">
-                                <a class="add_drug_param" data-name="registration_certificate_holder"><i class="fa fa-plus"></i></a>
-                                {{Form::text('registration_certificate_holder_1','',['class' => 'form-control'])}}
-                                {{Form::hidden('registration_certificate_holder','1',['class' => 'form-control'])}}
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="control-label col-md-6">Character</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="character"><i class="fa fa-plus"></i></a>

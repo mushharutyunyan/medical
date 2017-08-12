@@ -8,8 +8,12 @@ $(document).ready(function(){
     function initMap() {
         var lat = $('input[name="latitude"]').val();
         var lng = $('input[name="longitude"]').val();
-        $('input[name="latitude"]').val('');
-        $('input[name="longitude"]').val('');
+        if(lat == ''){
+            lat =  40.18436521290417
+            lng =  44.517728090286255
+        }
+        // $('input[name="latitude"]').val('');
+        // $('input[name="longitude"]').val('');
         var haightAshbury = {lat: parseFloat(lat), lng: parseFloat(lng)};
 
         map = new google.maps.Map(document.getElementById('map'), {
