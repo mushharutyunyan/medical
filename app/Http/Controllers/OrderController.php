@@ -201,4 +201,19 @@ class OrderController extends Controller
         }
         return response()->json(['messages' => $data,'order' => $user_order]);
     }
+
+    public function pay(Request $request){
+        $data = $request->all();
+        $take_time = null;
+        if(!empty($data['take_time'])){
+            $take_time = $data['take_time'];
+        }
+        UserOrder::where('order',$data['order'])->update(array(
+            'pay_method' => $data['method'],
+            'pay_type' => $data['type'],
+            'delivery_address' => $data['address'],
+            'take_time' => $take_time,
+        ));
+        return response()->json(true);
+    }
 }

@@ -13,7 +13,7 @@ $(document).ready(function(){
                             '<tr style="text-align: left">' +
                             '<td>'+value.trade_name+'</td>' +
                             '<td>'+value.count+'</td>' +
-                            '<td>'+value.price+'</td>' +
+                            '<td>'+(value.price*value.count)+'</td>' +
                             '</tr>'
                         )
                     });
@@ -107,6 +107,25 @@ $(document).ready(function(){
                             location.replace('/admin/userOrder');
                         }
                     })
+                },
+                cancel: function () {
+
+                }
+            }
+        });
+    })
+
+    $(".cancel-order, .approved-order").on("click",function(e){
+        e.preventDefault();
+        var self = this;
+        $.confirm({
+            animation: 'bottom',
+            closeAnimation: 'bottom',
+            title: 'Confirm!',
+            content: 'Are You sure?',
+            buttons: {
+                confirm: function () {
+                    location.replace($(self).attr('href'));
                 },
                 cancel: function () {
 

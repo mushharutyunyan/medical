@@ -59,10 +59,10 @@
                         <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$details->status])}}</td>
                         <td>{{$details->created_at}}</td>
                         <td>
-                            @if($details->status = \App\Models\UserOrder::APPROVED)
-                                <button class="btn btn-blue">{{Lang::get('main.pay')}}</button>
+                            @if($details->status == \App\Models\UserOrder::APPROVED && !$details->pay_method)
+                                <button class="btn btn-success pay-order" data-order="{{$details->order}}">{{Lang::get('main.pay')}}</button>
                             @endif
-                            <a href="javascript:;" class="show-order-details">{{Lang::get('main.show')}}</a>
+                            <button href="javascript:;" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -113,9 +113,9 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Count</th>
-                        <th>Price</th>
+                        <th>{{Lang::get('main.name')}}</th>
+                        <th>{{Lang::get('main.count')}}</th>
+                        <th>{{Lang::get('main.price')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -129,7 +129,7 @@
                             <td>{{$drugs->storage->drug->trade_name_en}}</td>
                             @endif
                             <td>{{$drugs->count}}</td>
-                            <td>{{$drugs->price}}</td>
+                            <td>{{$drugs->price*$drugs->count}}</td>
                         </tr>
                     @endforeach
                     </tbody>

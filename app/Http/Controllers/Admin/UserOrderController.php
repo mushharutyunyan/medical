@@ -27,7 +27,7 @@ class UserOrderController extends Controller
         $detail = UserOrderDetails::where('id',$data['id'])->first();
 
         if($detail->user_order->organization_id == Auth::guard('admin')->user()['organization_id']){
-            UserOrderDetails::where('id',$data->id)->delete();
+            UserOrderDetails::where('id',$data['id'])->delete();
         }
         return response()->json(true);
     }
@@ -55,5 +55,12 @@ class UserOrderController extends Controller
             }
         }
         return response()->json(true);
+    }
+
+    public function changeStatus($order_id,$status){
+        UserOrder::where('id',$order_id)->update(array(
+           'status' => $status
+        ));
+        return redirect()->back();
     }
 }

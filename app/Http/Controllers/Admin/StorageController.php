@@ -76,7 +76,7 @@ class StorageController extends Controller
         $currentDrug = Drug::find($storage->drug_id);
         $settings_info = [];
         $settings_info['category'] = 'Categories';
-        $settings_info['count'] = 'Count';
+        $settings_info['count'] = 'Unit Count';
         $settings_info['unit_price'] = 'Unit Price';
         $settings_info['country'] = 'Country';
         $settings_info['expiration_date'] = 'Expiration date';
@@ -134,17 +134,43 @@ class StorageController extends Controller
         ]);
         $data = $request->all();
         $name = trim($data['name']);
+        if($data['is_order'] != 'false'){
+            if($data['to'] == 0){
+                return response()->json(['error' => 'Please choose organization']);
+            }else{
+                $storage = Storage::whereHas('drug', function ($query) use ($name){
+                    $query->where('trade_name','LIKE',"%".$name."%")
+                        ->orWhere('trade_name_ru','LIKE',"%".$name."%")
+                        ->orWhere('trade_name_en','LIKE',"%".$name."%")
+                        ->orWhere('code',$name);
+                })->where('organization_id',$data['to'])->get();
+                $drugs = array();
+                foreach($storage as $value){
+                    $drugs[] = array(
+                        'id' => $value->id,
+                        'trade_name' => $value->drug->trade_name,
+                    );
+                }
+                return response()->json($drugs);
+            }
+        }
         $drugs = Drug::where('trade_name','LIKE',"%".$name."%")
             ->orWhere('trade_name_ru','LIKE',"%".$name."%")
             ->orWhere('trade_name_en','LIKE',"%".$name."%")
-            ->orWhere('code','LIKE',"%".$name."%")
+            ->orWhere('code',$name)
             ->orderBy('trade_name','ASC')->get();
         return response()->json($drugs);
     }
 
     public function searchDrugSettings(Request $request){
         $data = $request->all();
-        $currentDrug = Drug::find($data['id']);
+        $storage = '';
+        if($data['is_order']){
+            $storage = Storage::where('id',$data['id'])->first();
+            $currentDrug = $storage->drug;
+        }else{
+            $currentDrug = Drug::find($data['id']);
+        }
         $currentDrug->category;
         $currentDrug->certificate_number;
         $currentDrug->country;
@@ -164,7 +190,7 @@ class StorageController extends Controller
         $currentDrug->unit;
         $currentDrug->unit_price;
         $currentDrug->character;
-        return response()->json(['currentDrug' => $currentDrug]);
+        return response()->json(['currentDrug' => $currentDrug,'storage' => $storage]);
 
     }
     public function checkDrug(Request $request){

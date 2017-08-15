@@ -81,7 +81,7 @@ $(document).ready(function(){
                             '<tr style="text-align: left">' +
                                 '<td>'+value.trade_name+'</td>' +
                                 '<td>'+value.count+'</td>' +
-                                '<td>'+value.price+'</td>' +
+                                '<td>'+(value.price*value.count)+'</td>' +
                             '</tr>'
                         )
                     });

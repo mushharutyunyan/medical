@@ -34,6 +34,7 @@ Route::group(['prefix' => 'order'],function(){
     Route::post('/details','OrderController@getDetails');
     Route::post('/createMessage','OrderController@createMessage');
     Route::post('/getMessages','OrderController@getMessages');
+    Route::post('/pay','OrderController@pay');
 });
 
 

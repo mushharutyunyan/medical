@@ -11,6 +11,12 @@
     <!-- Stylesheets-->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic%7CRoboto:400,300,100,700,300italic,400italic,700italic%7CMontserrat:400,700">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/clockface/css/clockface.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-datepicker/css/datepicker3.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
     <style>
         #map {
             height: 400px;
@@ -231,8 +237,89 @@
 
     </div>
 </div>
+<div id="chooseMethodPayModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.choosePayMethod')}}</h4>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-info" data-dismiss="modal">{{Lang::get('main.credit')}}</button>
+                <button class="btn btn-info choose-pay-method" data-dismiss="modal">{{Lang::get('main.inplace')}}</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="chooseTypePayModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.choosePayType')}}</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    {{ csrf_field() }}
+                    <input type="hidden" id="delivery" value="{{\App\Models\UserOrder::DELIVERY}}">
+                    <input type="hidden" id="pharmacy" value="{{\App\Models\UserOrder::PHARMACY}}">
+                    <button type="button" class="btn btn-info choose-pay-type"  data-dismiss="modal" data-id="{{\App\Models\UserOrder::DELIVERY}}">{{Lang::get('main.delivery')}}</button>
+                    <button type="button" class="btn btn-info choose-pay-type" data-dismiss="modal" data-method="{{\App\Models\UserOrder::INPLACE}}" data-id="{{\App\Models\UserOrder::PHARMACY}}">{{Lang::get('main.takeFromPharmacy')}}</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="paySendModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.deliveryAddress')}}</h4>
+            </div>
+            <div class="modal-body">
+                <form id="delivery_address_form">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="payment_method" value="{{\App\Models\UserOrder::INPLACE}}">
+                    <input type="hidden" name="payment_type" value="">
+                    <input type="hidden" value="" name="type">
+                    <input type="text" class="form-control" id="delivery_address" name="delivery_address" placeholder="{{Lang::get('main.enterDeliveryAddress')}}">
+                    <input type="text" class="form-control" id="order_take_time" name="order_take_time" placeholder="{{Lang::get('main.enterTakeTime')}}">
+                    <button class="btn btn-default">{{Lang::get('main.send')}}</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="orderPayFinishModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.success')}}</h4>
+            </div>
+            <div class="modal-body">
+                <span style="font-size: 20px;">{{Lang::get('main.orderPaySuccess')}}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 @if($errors->has('social_email_exists'))
-<div id="errorModal" class="modal fade" role="dialog">
+<div id="errorModal" class="modal-sm fade" role="dialog">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -335,6 +422,14 @@
 <script src="/assets/js/core.min.js"></script>
 <script src="/assets/js/script.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/clockface/js/clockface.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>

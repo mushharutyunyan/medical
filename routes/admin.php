@@ -42,5 +42,6 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
     Route::resource('/userOrder','UserOrderController');
     Route::get('/userOrder/details/delete','UserOrderController@deleteDetail');
     Route::post('/userOrder/details/save','UserOrderController@saveDetails');
+    Route::get('/userOrder/{order_id}/{status}','UserOrderController@changeStatus');
 
 });

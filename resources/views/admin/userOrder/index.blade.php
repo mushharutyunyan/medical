@@ -43,7 +43,9 @@
                                     <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>
                                     <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages">{{Lang::get('main.messages')}}</a>
                                     @if($order->status != \App\Models\UserOrder::CLOSED)
-                                    <a href="/admin/userOrder/{{$order->id}}/edit">{{Lang::get('main.edit')}}</a>
+                                    <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
+                                    <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
+                                    <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Cancel</a>
                                     @endif
                                 </td>
                             </tr>

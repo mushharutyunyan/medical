@@ -46,7 +46,7 @@
                                 <td>
                                     @if($order->organizationTo->id == Auth::guard('admin')->user()['organization_id'])
                                         {{$status[$order->status]}}
-                                        @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
+                                        @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED && $order->status != \App\Models\Order::PROCEEDFROM)
                                         {!! Form::open(['id' => 'form_change_order_status','url' => '/admin/order/changeStatus']) !!}
                                         <input type="hidden" value="{{$order->id}}" name="id">
                                         <select class="form-control" name="status" id="order_table_status">

@@ -25,17 +25,18 @@
                 </thead>
                 <tbody>
                     @foreach($orders as $order)
+
                         <tr style="text-align: left">
                             <td>{{$order->order}}</td>
                             <td>{{$order->order_details[0]->storage->organization->name}}</td>
                             <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
                             <td>{{$order->created_at}}</td>
                             <td>
-                                @if($details->status = \App\Models\UserOrder::APPROVED)
-                                    <button class="btn btn-blue">{{Lang::get('main.pay')}}</button>
+                                @if($order->status == \App\Models\UserOrder::APPROVED && !$order->pay_method)
+                                    <button class="btn btn-success pay-order" data-order="{{$order->order}}">{{Lang::get('main.pay')}}</button>
                                 @endif
-                                <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>
-                                <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages">{{Lang::get('main.messages')}}</a>
+                                <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history btn btn-info">{{Lang::get('main.details')}}</a>
+                                <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages btn btn-info">{{Lang::get('main.messages')}}</a>
                             </td>
                         </tr>
                     @endforeach
@@ -55,9 +56,9 @@
                 <table class="table table-striped order-details-modal-table">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Count</th>
-                        <th>Price</th>
+                        <th>{{Lang::get('main.name')}}</th>
+                        <th>{{Lang::get('main.count')}}</th>
+                        <th>{{Lang::get('main.price')}}</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -165,12 +165,77 @@ $(document).ready(function(){
         $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
         $('div[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').hide();
         $('div[data-toggle="'+tog+'"][data-title="'+sel+'"]').show();
-    })
-
+    });
+    $('.pay-order').on("click",function(){
+        $("#chooseMethodPayModal").find(".modal-body").children('button').attr('data-order',$(this).attr('data-order'));
+        $("#chooseMethodPayModal").modal('show');
+    });
+    $(".choose-pay-method").on("click",function(){
+        $("#chooseTypePayModal").find(".modal-body").find('button').attr('data-order',$(this).attr('data-order'));
+        $("#chooseTypePayModal").modal('show');
+    });
+    $(".choose-pay-type").on("click",function(){
+        $("#paySendModal").find('#delivery_address_form').append(
+            '<input type="hidden" value="'+$(this).attr('data-order')+'" name="order">'
+        );
+        $("#paySendModal").find('input[name="type"]').val($(this).attr('data-id'));
+        if($(this).attr('data-id') == $(this).parent().children('#delivery').val()){
+            $("#paySendModal").find('input[name="payment_type"]').val('delivery');
+            $("#order_take_time").hide();
+            $("#delivery_address").show();
+        }else{// take from pharmacy
+            $("#paySendModal").find('input[name="payment_type"]').val('pharmacy');
+            $("#order_take_time").show();
+            $("#delivery_address").hide();
+            $("#order_take_time").datetimepicker();
+        }
+        $("#paySendModal").modal('show');
+    });
+    $("#delivery_address_form").on('submit',function(e){
+        e.preventDefault();
+        var address = $(this).find('input[name="address"]').val();
+        if(address == '' && address.length < 7){
+            return false;
+        }
+        var payment_type = $(this).find('input[name="payment_type"]').val();
+        var delivery_address = '';
+        var take_time = '';
+        if(payment_type == 'delivery'){
+            delivery_address = $(this).find('input[name="delivery_address"]').val();
+            take_time = '';
+        }else if(payment_type == 'pharmacy'){
+            delivery_address = '';
+            take_time = $(this).find('input[name="order_take_time"]').val();
+        }else{
+            return false;
+        }
+        send_order(
+            $(this).find('input[name="payment_method"]').val(),
+            $(this).find('input[name="type"]').val(),
+            $(this).find('input[name="order"]').val(),
+            delivery_address,
+            take_time,
+            $(this).find('input[name="_token"]').val()
+        )
+    });
     if($("#orderFinishModal").length){
         $("#orderFinishModal").modal('show');
     }
 });
+function send_order(method,type,order,address,take_time,_token){
+    $.ajax({
+        url: '/order/pay',
+        type: 'POST',
+        data: {method:method,type:type,order:order,address:address,take_time:take_time,_token:_token},
+        dataType: 'json',
+        success: function(data){
+            $("#paySendModal").modal('hide');
+            $("#orderPayFinishModal").modal('show');
+            $('.pay-order').remove();
+        }
+    })
+}
+
 function delete_basket_product(self){
     var storage_id = $(self).parent().attr('data-id');
     var cart_row = false;
