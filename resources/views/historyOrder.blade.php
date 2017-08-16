@@ -25,7 +25,9 @@
                 </thead>
                 <tbody>
                     @foreach($orders as $order)
-
+                    <?php
+                        $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$order->id)->where('read',0)->where('from','pharmacy')->count();
+                    ?>
                         <tr style="text-align: left">
                             <td>{{$order->order}}</td>
                             <td>{{$order->order_details[0]->storage->organization->name}}</td>
@@ -36,7 +38,11 @@
                                     <button class="btn btn-success pay-order" data-order="{{$order->order}}">{{Lang::get('main.pay')}}</button>
                                 @endif
                                 <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history btn btn-info">{{Lang::get('main.details')}}</a>
-                                <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages btn btn-info">{{Lang::get('main.messages')}}</a>
+                                    <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages btn btn-info">{{Lang::get('main.messages')}}
+                                        @if($count_unread_messages)
+                                        <span style="color:red">({{$count_unread_messages}})</span>
+                                        @endif
+                                    </a>
                             </td>
                         </tr>
                     @endforeach

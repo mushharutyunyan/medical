@@ -27941,6 +27941,78 @@ img.mfp-img {
   top: calc(100% + 10px);
 }
 
+.rd-navbar-message {
+  display: inline-block;
+  position: relative;
+}
+
+.rd-navbar-message:focus {
+  outline: 0;
+  color: #7fcbc9;
+}
+
+.rd-navbar-message-toggle {
+  display: inline-block;
+}
+
+.rd-navbar-message-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 30px);
+  z-index: 5;
+  height: calc(100vh - 66px);
+  overflow: auto;
+  min-width: 270px;
+  padding: 20px;
+  box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.12);
+  background-color: #fff;
+  transition: .15s ease-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (min-height: 450px) {
+  .rd-navbar-message-panel {
+    height: auto;
+  }
+}
+
+.rd-navbar-message-panel h4 {
+  margin-bottom: 10px;
+}
+
+.rd-navbar-message-panel h4 + .btn {
+  margin-top: 14px;
+}
+
+.rd-navbar-message-product {
+  padding-right: 30px;
+  position: relative;
+}
+
+.rd-navbar-message-product-delete {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 18px;
+  color: #7fcbc9;
+  transition: .3s;
+}
+
+.rd-navbar-message-product-delete:hover {
+  color: #141414;
+}
+
+.rd-navbar-message .label {
+  margin-left: 6px;
+}
+
+.rd-navbar-message.active .rd-navbar-message-panel {
+  opacity: 1;
+  visibility: visible;
+  top: calc(100% + 10px);
+}
+
 .rd-navbar-toppanel {
   border-bottom: 1px solid #e8e8e8;
 }

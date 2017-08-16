@@ -287,6 +287,10 @@ class OrderController extends Controller
                     'count' => $drug->count
                 ));
             }
+
+            // update whole sale storage
+//            $old_count = Storage::where('organization_id',$drug->order->to)->
+
         }
         Order::where('id',$data['order_id'])->update(array(
             'status' => Order::RECEIVED

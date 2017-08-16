@@ -106,6 +106,30 @@
                                     <li><a href="/login/google" class="text-gray icon icon-xs fa-google-plus"></a></li>
                                 </ul>
                             @endif
+                            @if(Auth::check())
+                            <div class="rd-navbar-message message-block text-middle text-left">
+                                <div class="rd-navbar-message-toggle shop-block-header">
+                                    <a href="#" data-rd-navbar-toggle=".rd-navbar-message" class="text-middle icon icon-primary">
+                                        <i class="fa fa-envelope"></i>
+                                    </a>
+                                    <span class="text-middle shop-products-count label label-circle label-primary">{{count($messages)}}</span>
+                                </div>
+                                <div class="rd-navbar-message-panel shop-block-body">
+                                    <h4>{{Lang::get('main.notifications')}}</h4>
+                                    <div>
+                                        @foreach($messages as $message)
+                                        <hr class="divider divider-gray divider-offset-20">
+                                        <div class="unit unit-spacing-15 unit-horizontal rd-navbar-shop-product" >
+                                            <div class="unit-body p"><a href="/order/details" class="text-dark">{{$message['name']}}</a>
+                                                <p><a href="/order/details"><span class="big text-regular text-primary text-spacing-40 basket-product-price">{{$message['message']}}</span></a></p>
+                                            </div>
+                                        </div>
+                                        <hr class="divider divider-gray divider-offset-20">
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             <div class="rd-navbar-shop shop-block text-middle text-left">
                                 <div class="rd-navbar-shop-toggle shop-block-header">
                                     <a href="#" data-rd-navbar-toggle=".rd-navbar-shop" class="text-middle icon icon-primary fl-line-icon-set-shopping63"></a>
@@ -142,6 +166,7 @@
                                     <a href="/order/checkout" class="btn btn-block btn-primary">{{Lang::get('main.checkout')}}</a>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="rd-navbar-nav-wrap">
@@ -149,10 +174,12 @@
                         <ul class="rd-navbar-nav">
                             @if(!Auth::check())
                             <li class="veil rd-navbar-fixed--visible"><a href="#" data-toggle="modal" data-target="#signIn">{{Lang::get('main.signin')}}</a></li>
+
                             @endif
-                            <li class="active"><a href="/">{{Lang::get('main.home')}}</a></li>
-                            <li class="active"><a href="/order">{{Lang::get('main.createOrder')}}</a></li>
-                            <li class="active"><a href="/order/details">{{Lang::get('main.orderDetails')}}</a></li>
+                            <li><a href="/">{{Lang::get('main.home')}}</a></li>
+                            <li><a href="/order">{{Lang::get('main.createOrder')}}</a></li>
+                            <li><a href="/order/details">{{Lang::get('main.orderDetails')}}</a></li>
+                            <li class="veil rd-navbar-fixed--visible"><a href="/order/cart">{{Lang::get('main.mycart')}}</a></li>
                             @if(Auth::check())
                             <li class="veil rd-navbar-fixed--visible"><a href="/logout">{{Lang::get('main.logout')}}</a></li>
                             @endif

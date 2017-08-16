@@ -52,7 +52,9 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                <?php
+                    $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$details->id)->where('read',0)->where('from','pharmacy')->count();
+                ?>
                     <tr style="text-align: left">
                         <td>{{$details->order}}</td>
                         <td>{{$details->order_details[0]->storage->organization->name}}</td>
@@ -61,6 +63,9 @@
                         <td>
                             @if($details->status == \App\Models\UserOrder::APPROVED && !$details->pay_method)
                                 <button class="btn btn-success pay-order" data-order="{{$details->order}}">{{Lang::get('main.pay')}}</button>
+                            @endif
+                            @if($count_unread_messages)
+                                <span style="color:red">Unread Messages ({{$count_unread_messages}}) </span>
                             @endif
                             <button href="javascript:;" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
                         </td>

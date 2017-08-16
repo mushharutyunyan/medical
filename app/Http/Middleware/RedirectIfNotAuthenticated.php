@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use App\Models\UserOrder;
+use App\Models\UserOrderMessage;
 class RedirectIfNotAuthenticated
 {
     /**
@@ -18,6 +20,8 @@ class RedirectIfNotAuthenticated
         if (!Auth::guard($guard)->check()) {
             return redirect('/');
         }
+
         return $next($request);
     }
 }
+

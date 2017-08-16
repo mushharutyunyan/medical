@@ -120,7 +120,7 @@ class OrderController extends Controller
     public function details(){
         $page = 'searchOrder';
         if(Auth::check()){
-            $user_orders = UserOrder::where('user_id',Auth::user()['id'])->where('status','!=',UserOrder::CLOSED)->get();
+            $user_orders = UserOrder::where('user_id',Auth::user()['id'])->where('status','!=',UserOrder::CLOSED)->orderBy('id','DESC')->get();
             $page = 'historyOrder';
             return view($page,['orders' => $user_orders]);
         }
@@ -167,10 +167,20 @@ class OrderController extends Controller
     public function createMessage(Request $request){
         $data = $request->all();
         if(UserOrder::where('order',$data['order'])->where('id',$data['id'])->count()){
+            if(Auth::check()){
+                $from = 'user';
+                $status = UserOrder::SENDED;
+            }else{
+                $from = 'pharmacy';
+                $status = UserOrder::RESEND;
+            }
             $message = UserOrderMessage::create(array(
                 'user_order_id' => $data['id'],
-                'from' => 'user',
+                'from' => $from,
                 'message' => $data['message']
+            ));
+            UserOrder::where('order',$data['order'])->update(array(
+               'status' => $status
             ));
             $data = array(
                 'message' => $message->message,
@@ -191,6 +201,13 @@ class OrderController extends Controller
 
             return response()->json(['error' => Lang::get('main.orderNotFound')]);
         }
+        $from = 'pharmacy';
+        if(!Auth::check()){
+            $from = 'user';
+        }
+        UserOrderMessage::where('user_order_id',$data['id'])->where('from',$from)->update(array(
+           'read' => 1
+        ));
         $data = array();
         foreach($messages as $message){
             $data[] = array(

@@ -36,4 +36,15 @@ class UserOrder extends Model
     {
         return $this->hasMany('App\Models\UserOrderDetails','user_order_id');
     }
+
+    public function order_messages()
+    {
+        return $this->hasMany('App\Models\UserOrderMessage','user_order_id');
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization');
+    }
+
 }

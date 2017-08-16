@@ -7,7 +7,9 @@ use App\Models\Order;
 use App\Models\Message;
 use App\Models\WatchMessage;
 use Auth;
-
+use App\Models\UserOrder;
+use App\Models\UserOrderMessage;
+use Lang;
 class GlobalAdmin
 {
     /**
@@ -40,7 +42,26 @@ class GlobalAdmin
                 }
             }
 
-            $view->with(['orders'=>$orders,'status'=>$status,'unread_messages' => $unread_messages]);
+            $userOrders = UserOrder::where('status',UserOrder::SENDED)
+                ->orWhere('status',UserOrder::APPROVED)
+                ->where('pay_method','!=',null)->get();
+            $user_notifications = array();
+            foreach ($userOrders as $order){
+                if(Auth::guard('admin')->user()['organization_id'] != $order->organization_id){
+                    continue;
+                }
+                $unread_messages_count = UserOrderMessage::where('user_order_id',$order->id)->where('read',0)->where('from','user')->count();
+                $message = Lang::get('main.orderStatusText',['status' => Lang::get('main.'.UserOrder::$status[$order->status])]);
+                if($unread_messages_count){
+                    $message .= ", ".Lang::get('main.orderMessageText',['count' => $unread_messages_count]);
+                }
+                $user_notifications[] = array(
+                    'name' => $order->order,
+                    'message' => $message,
+                    'datetime' => $order->updated_at
+                );
+            }
+            $view->with(['orders'=>$orders,'status'=>$status,'unread_messages' => $unread_messages,'user_notifications' => $user_notifications]);
         });
         return $next($request);
     }

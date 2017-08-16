@@ -22,6 +22,31 @@ $(document).ready(function(){
             }
         })
     });
+    $(".add-order-message").on('submit',function(e){
+        e.preventDefault();
+        var self = this;
+        var message = $(this).find("#message").val();
+        if(message == ''){
+            return false;
+        }
+        $.ajax({
+            url:$(this).attr('action'),
+            type: $(this).attr('method'),
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(data){
+                if(data){
+                    $(".chat").append(
+                        '<div class="message">' +
+                        '<span>'+data.from+': ('+data.date+')</span>' +
+                        '<p>'+data.message+'</p>' +
+                        '</div>'
+                    )
+                    $(self).find("#message").val('');
+                }
+            }
+        })
+    });
     $(".show-order-details-messages").on("click",function(){
         $.ajax({
             url: '/order/getMessages',
