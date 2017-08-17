@@ -123,6 +123,7 @@
 
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                                    @if(count($user_notifications))
                                     @foreach($user_notifications as $user_notification)
                                     <li>
                                         <a href="/admin/userOrder">
@@ -135,6 +136,7 @@
                                         </a>
                                     </li>
                                     @endforeach
+                                    @endif
                                 </ul>
                             </li>
                         </ul>
