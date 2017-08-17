@@ -16,14 +16,14 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
                 Route::resource('/organizations','OrganizationsController');
                 Route::get('/admins/{id}/changePassword','AdminsController@changePassword');
             });
-            Route::group(['prefix' => 'storage'],function(){
-                Route::post('/searchDrug','StorageController@searchDrug');
-                Route::post('/searchDrugSettings','StorageController@searchDrugSettings');
-                Route::post('/checkDrug','StorageController@checkDrug');
-                Route::post('/save','StorageController@save');
-                Route::post('/saveAll','StorageController@saveAll');
-            });
         });
+    });
+    Route::group(['prefix' => 'storage'],function(){
+        Route::post('/searchDrug','StorageController@searchDrug');
+        Route::post('/searchDrugSettings','StorageController@searchDrugSettings');
+        Route::post('/checkDrug','StorageController@checkDrug');
+        Route::post('/save','StorageController@save');
+        Route::post('/saveAll','StorageController@saveAll');
     });
 
     Route::resource('/order','OrderController');
