@@ -390,9 +390,7 @@ $(document).ready(function(){
                 if(is_order){
                     var count_in_storage = $(this).find('.row-count-in-storage').val();
                     var self = this;
-                    console.log(count_in_storage)
-                    console.log(count)
-                    if(count_in_storage < count){
+                    if(parseInt(count_in_storage) < parseInt(count)){
                         $.alert({
                             title: 'Warning!',
                             content: 'The imported count is bigger than planned',
