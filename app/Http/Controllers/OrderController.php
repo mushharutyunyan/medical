@@ -133,10 +133,13 @@ class OrderController extends Controller
             if(empty($data['searchOrder'])){
                 return redirect()->back();
             }
-            $user_order = UserOrder::where('order',$data['searchOrder'])->where('status','!=',UserOrder::CLOSED)->first();
+            $user_order = UserOrder::where('order',$data['searchOrder'])->first();
             if(!$user_order){
                 return redirect()->back()->withErrors(['error' => Lang::get('main.orderNotFound')]);
             }
+            UserOrderMessage::where('user_order_id',$user_order->id)->update(array(
+                'read' => 1
+            ));
         }else{
             $user_order = UserOrder::where('id',$data['id'])->first();
             if(!$user_order){
@@ -167,7 +170,7 @@ class OrderController extends Controller
     public function createMessage(Request $request){
         $data = $request->all();
         if(UserOrder::where('order',$data['order'])->where('id',$data['id'])->count()){
-            if(Auth::check()){
+            if(Auth::check() || (isset($data['user']) && $data['user'] == 'anonymus')){
                 $from = 'user';
                 $status = UserOrder::SENDED;
             }else{

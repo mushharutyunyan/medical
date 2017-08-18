@@ -185,15 +185,15 @@ $(document).ready(function(){
         e.preventDefault();
         var table = '.storage-actions-table',
             save_all_button = '.save-all-storage';
+        var access = true;
         if($(this).hasClass('order')){ // ORDER LOGIC
-
             table = '.order-actions-table';
             save_all_button = '.save-all-order';
             var storage_id = $(".drug-settings-table").find('input[name="storage_id"]').val();
             var count = $(".drug-settings-table").find('.count_in_storage').html();
             var token = $(this).children('input[name="_token"]').val();
             $(table+' tbody tr').each(function(key,value){
-                if($(value).find('.storage-id').val() == storage_id){
+                if($(value).find('.row-storage-id').val() == storage_id){
                     if(!$(value).first().hasClass('saved')){
                         $.alert({
                             title: 'Warning!',
@@ -217,10 +217,11 @@ $(document).ready(function(){
                     $data.data_info[name] = value_text;
                 }
             });
-            storage_save($data,save_all_button,table,0);
+            if(access){
+                storage_save($data,save_all_button,table,0);
+            }
 
         }else{ // STORAGE LOGIC
-            var access = true;
             var count = $(table).find('.row-settings').length;
             var drug_id = $('.drug-search-results').val();
             var $data = {info:{},data_info:{}};
@@ -675,17 +676,20 @@ function storage_save($data,save_all_button,table,count){
                         settings = JSON.stringify($data['info']);
                         $("#search_drug").modal('hide');
                         if($data['is_order']){
-                            params = "<input type='hidden' class='row-storage-id' name='storage_id_"+count+"' value='"+$data['storage_id']+"'>"
+                            params = "<input type='hidden' class='row-storage-id' name='storage_id_"+count+"' value='"+$data['storage_id']+"'>" +
+                                "<input type='hidden' class='row-count-in-storage' name='count_in_storage_"+count+"' value='"+$data['count']+"'>"
                         }else{
                             params = "<input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'>" +
                                 "<input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'>";
                         }
+                        var info = '';
+                        $.each($data.data_info, function(key, value){
+                            info += '<p>'+key+': '+value+'</p>';
+                        });
                         $(this).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+
                             params +
-                            "<input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>");
-                        $.each($data.data_info, function(key, value){
-                            $(this).parent().append('<p>'+key+': '+value+'</p>');
-                        });
+                            "<input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>" + info);
+
                         return false;
                     }
                 })

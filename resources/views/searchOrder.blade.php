@@ -95,6 +95,7 @@
                 <div class="col-sm-11">
                     <input type="text" name="message" id="message" placeholder="{{Lang::get('main.enterTextMessage')}}" class="form-control">
                     <input type="hidden" value="{{$details->order}}" name="order">
+                    <input type="hidden" value="anonymus" name="user">
                     <input type="hidden" value="{{$details->id}}" name="id">
                 </div>
                 <div class="col-sm-1">
