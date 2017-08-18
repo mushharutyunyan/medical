@@ -184,10 +184,10 @@ class OrderController extends Controller
 
         $order_data = array();
         $order_data['status'] = $status;
-        if($data['delivery_status_id']){
+        if(isset($data['delivery_status_id'])){
             $order_data['delivery_status_id'] = $data['delivery_status_id'];
         }
-        if($data['order_delivery_address']){
+        if(isset($data['order_delivery_address'])){
             $order_data['delivery_address'] = $data['order_delivery_address'];
         }
         if(isset($data['delivery_date'])){
@@ -199,15 +199,19 @@ class OrderController extends Controller
                 }
             }
         }else{
-            if($data['status'] == Order::APPROVED){
-                $data_order['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
+            if(isset($data['status'])){
+                if($data['status'] == Order::APPROVED){
+                    $data_order['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
+                }
             }
         }
         Order::where('id',$id)->update($order_data);
-        if($data['status'] != Order::CANCELED){
-            $file = $this->generateExcel($id);
-            if($data['status'] == Order::APPROVED){
-                Order::where('id',$id)->update('file',$file);
+        if(isset($data['status'])){
+            if($data['status'] != Order::CANCELED){
+                $file = $this->generateExcel($id);
+                if($data['status'] == Order::APPROVED){
+                    Order::where('id',$id)->update('file',$file);
+                }
             }
         }
         return response()->json(true);
@@ -318,6 +322,7 @@ class OrderController extends Controller
 
     public function generateExcel($order_id = null){
         $order = Order::where('id',$order_id)->first();
+        print_r($order);die;
         if($order->delivery_status->id == 1){
             $delivery_status = 'ՏԵղում';
         }else{
