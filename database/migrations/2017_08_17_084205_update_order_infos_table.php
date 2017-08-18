@@ -14,10 +14,10 @@ class UpdateOrderInfosTable extends Migration
     public function up()
     {
         Schema::table('order_infos', function (Blueprint $table) {
-//            $table->dropForeign(['drug_id']);
+            $table->dropForeign(['drug_id']);
             $table->dropColumn('drug_id');
             $table->dropColumn('drug_settings');
-//            $table->integer('storage_id')->after('order_id')->nullable();
+            $table->integer('storage_id')->after('order_id')->nullable();
         });
     }
 

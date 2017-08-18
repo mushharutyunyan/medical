@@ -18,7 +18,28 @@ class Drug extends AbstractModel
         'code',
 
     ];
-
+    public $settings = array(
+        'category',
+        'certificate_number',
+        'country',
+        'expiration_date',
+        'group',
+        'manufacturer',
+        'count',
+        'picture',
+        'registration_certificate_holder',
+        'registration_date',
+        'release_packaging',
+        'release_order',
+        'series',
+        'supplier',
+        'type',
+        'type_belonging',
+        'unit',
+        'unit_price',
+        'character',
+        'storage',
+    );
     public $setting_names = array(
       'category' => 'Category',
         'certificate_number' => 'Certificate Number',

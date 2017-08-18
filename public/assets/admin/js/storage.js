@@ -99,259 +99,69 @@ $(document).ready(function(){
                 if(data.currentDrug.code){
                     code = data.currentDrug.code;
                 }
+                if(is_order){
+                    $('.drug-settings-table tbody').append('<tr style="color:red"><td>Count in storage</td><td><span class="count_in_storage">'+data.storage.count+'</span><input type="hidden" name="storage_id" value="'+data.storage.id+'"></td></tr>');
+                }
                 $('.drug-settings-table tbody').append('<tr><td>Generic Name</td><td>'+generic_name+'</td></tr>');
                 $('.drug-settings-table tbody').append('<tr><td>Dosage Form</td><td>'+dosage_form+'</td></tr>');
                 $('.drug-settings-table tbody').append('<tr><td>Dosage Strength</td><td>'+dosage_strength+'</td></tr>');
                 $('.drug-settings-table tbody').append('<tr><td>Code</td><td>'+code+'</td></tr>');
-                if(data.currentDrug.category.length){
-                    var categories = data.currentDrug.category;
-                    $('.drug-settings-table tbody').append('<tr><td>Categories</td><td><select class="form-control search-categories"><option value="0"></option></select></td></tr>');
-                    $.each(categories,function(key,value){
-                        if(drugs_settings.category.length){
-                            if(drugs_settings.category == value.id){
-                                $('.search-categories').append('<option value="'+value.id+'">'+value.name+'</option>')
+                    $.each(data.currentDrug,function(key,value){
+                        if(jQuery.inArray(key, data.settings) !== -1){
+                            if($(this).length){
+                                var setting = $(this);
+                                var setting_name = key;
+                                if(!is_order){ // STORAGE LOGIC
+                                    $('.drug-settings-table tbody').append('<tr><td>'+data.setting_names[key]+'</td><td><select class="form-control search-'+setting_name+'"><option value="0"></option></select></td></tr>');
+                                    $.each(setting,function(key,value){
+                                        if(setting_name.match(/price/)){
+                                            $('.search-'+setting_name).append('<option value="'+value.id+'">'+value.price+'</option>')
+                                        }else if(setting_name.match(/count/) && setting_name != 'country'){
+                                            $('.search-'+setting_name).append('<option value="'+value.id+'">'+value.count+'</option>')
+                                        }else if(setting_name.match(/date/)){
+                                            $('.search-'+setting_name).append('<option value="'+value.id+'">'+value.date+'</option>')
+                                        }else{
+                                            name = value.name;
+                                            if(key == 'character'){
+                                                name = value.name.substring(0, 10);
+                                            }
+                                            $('.search-'+setting_name).append('<option value="'+value.id+'">'+name+'</option>')
+                                            if(key == 'character' || key == 'picture'){
+                                                $('.search-'+key).after('<button class="open-'+key+' btn blue">Open</button>')
+                                            }
+                                        }
+                                    })
+                                }else{ // ORDER LOGIC
+                                    var storage_drug_settings = JSON.parse(data.storage.drug_settings);
+                                    $.each(storage_drug_settings, function(key,value){
+                                        if(key == setting_name){
+                                            var id = value;
+                                            $.each(setting,function(key_setting,value_setting){
+                                                if(id == value_setting.id){
+                                                    if(setting_name.match(/price/)){
+                                                        $('.drug-settings-table tbody').append('<tr><td>'+data.setting_names[key]+'</td><td><span class="search-'+setting_name+'">'+value_setting.price+'</span></td></tr>');
+                                                    }else if(setting_name.match(/count/) && setting_name != 'country'){
+                                                        $('.drug-settings-table tbody').append('<tr><td>'+data.setting_names[key]+'</td><td><span class="search-'+setting_name+'">'+value_setting.count+'</span></td></tr>');
+                                                    }else if(setting_name.match(/date/)){
+                                                        $('.drug-settings-table tbody').append('<tr><td>'+data.setting_names[key]+'</td><td><span class="search-'+setting_name+'">'+value_setting.date+'</span></td></tr>');
+                                                    }else{
+                                                        name = value_setting.name;
+                                                        if(key == 'character'){
+                                                            name = value_setting.name.substring(0, 10);
+                                                        }
+                                                        $('.drug-settings-table tbody').append('<tr><td>'+data.setting_names[key]+'</td><td><span class="search-'+setting_name+'">'+value_setting.name+'</span></td></tr>');
+                                                        if(key == 'character' || key == 'picture'){
+                                                            $('.search-'+key).after('<button class="open-'+key+' btn blue">Open</button>')
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
-                        }else{
-                            $('.search-categories').append('<option value="'+value.id+'">'+value.name+'</option>')
                         }
-                    })
-                }
-                if(data.currentDrug.count.length){
-                    var count = data.currentDrug.count;
-                    $('.drug-settings-table tbody').append('<tr><td>Count</td><td><select class="form-control search-count"><option value="0"></option></select></td></tr>');
-                    $.each(count,function(key,value){
-                        if(drugs_settings.count){
-                            if(drugs_settings.count == value.id){
-                                $('.search-count').append('<option value="'+value.id+'">'+value.count+'</option>')
-                            }
-                        }else{
-                            $('.search-count').append('<option value="'+value.id+'">'+value.count+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.unit_price.length){
-                    var unit_price = data.currentDrug.unit_price;
-                    $('.drug-settings-table tbody').append('<tr><td>Unit Price</td><td><select class="form-control search-unit_price"><option value="0"></option></select></td></tr>');
-                    $.each(unit_price,function(key,value){
-                        if(drugs_settings.unit_price){
-                            if(drugs_settings.unit_price == value.id){
-                                $('.search-unit_price').append('<option value="'+value.id+'">'+value.price+'</option>')
-                            }
-                        }else{
-                            $('.search-unit_price').append('<option value="'+value.id+'">'+value.price+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.country.length){
-                    var country = data.currentDrug.country;
-                    $('.drug-settings-table tbody').append('<tr><td>Country</td><td><select class="form-control search-country"><option value="0"></option></select></td></tr>');
-                    $.each(country,function(key,value){
-                        if(drugs_settings.country){
-                            if(drugs_settings.country == value.id){
-                                $('.search-country').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-country').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.expiration_date.length){
-                    var expiration_date = data.currentDrug.expiration_date;
-                    $('.drug-settings-table tbody').append('<tr><td>Expiration date</td><td><select class="form-control search-expiration_date"><option value="0"></option></select></td></tr>');
-                    $.each(expiration_date,function(key,value){
-                        if(drugs_settings.expiration_date){
-                            if(drugs_settings.expiration_date == value.id){
-                                $('.search-expiration_date').append('<option value="'+value.id+'">'+value.date+'</option>')
-                            }
-                        }else{
-                            $('.search-expiration_date').append('<option value="'+value.id+'">'+value.date+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.registration_date.length){
-                    var registration_date = data.currentDrug.registration_date;
-                    $('.drug-settings-table tbody').append('<tr><td>Registration Date</td><td><select class="form-control search-registration_date"><option value="0"></option></select></td></tr>');
-                    $.each(registration_date,function(key,value){
-                        if(drugs_settings.registration_date){
-                            if(drugs_settings.registration_date == value.id){
-                                $('.search-registration_date').append('<option value="'+value.id+'">'+value.date+'</option>')
-                            }
-                        }else{
-                            $('.search-registration_date').append('<option value="'+value.id+'">'+value.date+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.group.length){
-                    var group = data.currentDrug.group;
-                    $('.drug-settings-table tbody').append('<tr><td>Group</td><td><select class="form-control search-group"><option value="0"></option></select></td></tr>');
-                    $.each(group,function(key,value){
-                        if(drugs_settings.group){
-                            if(drugs_settings.group == value.id){
-                                $('.search-group').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-group').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.manufacturer.length){
-                    var manufacturer = data.currentDrug.manufacturer;
-                    $('.drug-settings-table tbody').append('<tr><td>Manufacturer</td><td><select class="form-control search-manufacturer"><option value="0"></option></select></td></tr>');
-                    $.each(manufacturer,function(key,value){
-                        if(drugs_settings.manufacturer){
-                            if(drugs_settings.manufacturer == value.id){
-                                $('.search-manufacturer').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-manufacturer').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.series.length){
-                    var series = data.currentDrug.series;
-                    $('.drug-settings-table tbody').append('<tr><td>Series</td><td><select class="form-control search-series"><option value="0"></option></select></td></tr>');
-                    $.each(series,function(key,value){
-                        if(drugs_settings.series){
-                            if(drugs_settings.series == value.id){
-                                $('.search-series').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-series').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.supplier.length){
-                    var supplier = data.currentDrug.supplier;
-                    $('.drug-settings-table tbody').append('<tr><td>Supplier</td><td><select class="form-control search-supplier"><option value="0"></option></select></td></tr>');
-                    $.each(supplier,function(key,value){
-                        if(drugs_settings.supplier){
-                            if(drugs_settings.supplier == value.id){
-                                $('.search-supplier').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-supplier').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.type.length){
-                    var type = data.currentDrug.type;
-                    $('.drug-settings-table tbody').append('<tr><td>Type</td><td><select class="form-control search-type"><option value="0"></option></select></td></tr>');
-                    $.each(type,function(key,value){
-                        if(drugs_settings.type){
-                            if(drugs_settings.type == value.id){
-                                $('.search-type').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-type').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.unit.length){
-                    var unit = data.currentDrug.unit;
-                    $('.drug-settings-table tbody').append('<tr><td>Unit</td><td><select class="form-control search-unit"><option value="0"></option></select></td></tr>');
-                    $.each(unit,function(key,value){
-                        if(drugs_settings.unit){
-                            if(drugs_settings.unit == value.id){
-                                $('.search-unit').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-unit').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.certificate_number.length){
-                    var certificate_number = data.currentDrug.certificate_number;
-                    $('.drug-settings-table tbody').append('<tr><td>Certificate Number</td><td><select class="form-control search-certificate_number"><option value="0"></option></select></td></tr>');
-                    $.each(certificate_number,function(key,value){
-                        if(drugs_settings.certificate_number){
-                            if(drugs_settings.certificate_number == value.id){
-                                $('.search-certificate_number').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-certificate_number').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.release_order.length){
-                    var release_order = data.currentDrug.release_order;
-                    $('.drug-settings-table tbody').append('<tr><td>Release Order</td><td><select class="form-control search-release_order"><option value="0"></option></select></td></tr>');
-                    $.each(release_order,function(key,value){
-                        if(drugs_settings.release_order){
-                            if(drugs_settings.release_order == value.id){
-                                $('.search-release_order').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-release_order').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.release_packaging.length){
-                    var release_packaging = data.currentDrug.release_packaging;
-                    $('.drug-settings-table tbody').append('<tr><td>Release Packaging</td><td><select class="form-control search-release_packaging"><option value="0"></option></select></td></tr>');
-                    $.each(release_packaging,function(key,value){
-                        if(drugs_settings.release_packaging){
-                            if(drugs_settings.release_packaging == value.id){
-                                $('.search-release_packaging').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-release_packaging').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.type_belonging.length){
-                    var type_belonging = data.currentDrug.type_belonging;
-                    $('.drug-settings-table tbody').append('<tr><td>Type Belonging</td><td><select class="form-control search-type_belonging"><option value="0"></option></select></td></tr>');
-                    $.each(type_belonging,function(key,value){
-                        if(drugs_settings.type_belonging){
-                            if(drugs_settings.type_belonging == value.id){
-                                $('.search-type_belonging').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-type_belonging').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.registration_certificate_holder.length){
-                    var registration_certificate_holder = data.currentDrug.registration_certificate_holder;
-                    $('.drug-settings-table tbody').append('<tr><td>Registration Certificate Holder</td><td><select class="form-control search-registration_certificate_holder"><option value="0"></option></select></td></tr>');
-                    $.each(registration_certificate_holder,function(key,value){
-                        if(drugs_settings.registration_certificate_holder){
-                            if(drugs_settings.registration_certificate_holder == value.id){
-                                $('.search-registration_certificate_holder').append('<option value="'+value.id+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-registration_certificate_holder').append('<option value="'+value.id+'">'+value.name+'</option>')
-                        }
-                    })
-                }
-                if(data.currentDrug.character.length){
-                    var character = data.currentDrug.character;
-                    $('.drug-settings-table tbody').append('<tr><td>Character</td><td><select class="form-control search-character"><option value="0"></option></select></td></tr>');
-                    $.each(character,function(key,value){
-                        if(drugs_settings.character){
-                            if(drugs_settings.character == value.id){
-                                $('.search-character').append('<option value="'+value.id+'" data-text="'+value.name+'">'+value.name.substring(0, 10)+'...</option>')
-                            }
-                        }else{
-                            $('.search-character').append('<option value="'+value.id+'" data-text="'+value.name+'">'+value.name.substring(0, 10)+'...</option>')
-                        }
-                    })
-                    $('.search-character').after('<button class="open-character btn blue">Open</button>')
-                }
-                if(data.currentDrug.picture.length){
-                    var picture = data.currentDrug.picture;
-                    $('.drug-settings-table tbody').append('<tr><td>Picture</td><td><select class="form-control search-picture"><option value="0"></option></select></td></tr>');
-                    $.each(picture,function(key,value){
-                        if(drugs_settings.picture){
-                            if(drugs_settings.picture == value.id){
-                                $('.search-picture').append('<option value="'+value.id+'" data-src="'+value.name+'">'+value.name+'</option>')
-                            }
-                        }else{
-                            $('.search-picture').append('<option value="'+value.id+'" data-src="'+value.name+'">'+value.name+'</option>')
-                        }
-                    })
-                    $('.search-picture').after('<button class="open-picture btn blue">Open</button>')
-                }
+                    });
             }
         })
     })
@@ -375,129 +185,92 @@ $(document).ready(function(){
         e.preventDefault();
         var table = '.storage-actions-table',
             save_all_button = '.save-all-storage';
-        if($(this).hasClass('order')){
+        if($(this).hasClass('order')){ // ORDER LOGIC
+
             table = '.order-actions-table';
             save_all_button = '.save-all-order';
-        }
-        var access = true;
-        var count = $(table).find('.row-settings').length;
-        var drug_id = $('.drug-search-results').val();
-        var $data = {info:{},data_info:{}};
-        $(".drug-settings-table").find('select').each(function(key,value){
-            val = $(value).val();
-            var self = this
-            if(parseInt($(value).val())){
-                var classList = $(value).attr('class').split(/\s+/);
-                $.each(classList, function(index, item) {
-                    if (item !== 'form-control') {
-                        var name = $(self).parent().prev().html();
-                        var value_text = $(self).children('option[value="'+$(value).val()+'"]').text();
-                        sub_value = item.split('search-')[1];
-                        $data.info[sub_value] = val;
-                        $data.data_info[name] = value_text;
-                    }
-                });
-            }
-        });
-        $(table+' tbody tr').each(function(key,value){
-            if($(value).find('.row-settings').val() == JSON.stringify($data['info']) && parseInt($(value).find('.row-drug-id').val()) == drug_id){
-                if(!$(value).first().hasClass('saved')){
-                    $.alert({
-                        title: 'Warning!',
-                        content: 'This drug is already exists in current insert table!',
-                    });
-                    access = false;
-                }else{
-                   $(value).addClass('dublicate');
-                }
-            }
-        });
-        if(Object.keys($data['info']).length != 0 && access){
-            $data['drug_id'] = drug_id;
-            token = $(this).children('input[name="_token"]').val();
-            $data['_token'] = token;
-            var is_order = 0;
-            if($(this).hasClass('order')){
-                is_order = 1;
-            }
-            $data['is_order'] = is_order;
-            $.ajax({
-                url: '/admin/storage/checkDrug',
-                type: 'POST',
-                data: $data ,
-                dataType: 'json',
-                success: function(data){
-                    var clear_button_class = '';
-                    if(is_order){
-                        clear_button_class = 'order';
-                    }
-                    if(data){
-                        var confirm_message = 'This drug with this params already exists. Only quantity will increase';
-                        if(is_order){
-                            if(data.error){
-                                confirm_message = data.error + ", count - "+data.count;
-                            }else{
-                                confirm_message = 'This drug is already exists in your storage, count - '+data.count;
-                            }
-                        }
-                        $.confirm({
-                            animation: 'bottom',
-                            closeAnimation: 'bottom',
-                            title: 'Confirm!',
-                            content: confirm_message,
-                            buttons: {
-                                confirm: function () {
-                                    $(table+' tr').find('.search-drug-button').each(function(key,value){
-                                        if($(value).attr('data-id') == $('.search-drug').attr('data-id')){
-                                            $(this).parent().parent().addClass('process');
-                                            row_id = $(value).attr('data-id');
-                                            settings = JSON.stringify($data['info']);
-                                            $("#search_drug").modal('hide');
-                                            var info = '';
-                                            $.each($data.data_info, function(key, value){
-                                                info += '<p>'+key+': '+value+'</p><br>';
-                                            });
-                                            $(this).parent().html("<button class='remove-storage-row btn btn-warning "+clear_button_class+"' data-id='"+$(value).attr('data-id')+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+" <span class='error'>(" + data.count + ")</span><input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'><input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'><input type='hidden' class='row-exist' name='exist_"+count+"' value='1'>"+info);
-                                            return false;
-                                        }
-                                    })
-                                    $(save_all_button).attr('data-count',++count);
-                                    $(table+' tbody tr').each(function(key,value){
-                                       if($(value).hasClass('dublicate')){
-                                           $(value).remove();
-                                       }
-                                    });
-                                },
-                                cancel: function () {
-
-                                }
-                            }
+            var storage_id = $(".drug-settings-table").find('input[name="storage_id"]').val();
+            var count = $(".drug-settings-table").find('.count_in_storage').html();
+            var token = $(this).children('input[name="_token"]').val();
+            $(table+' tbody tr').each(function(key,value){
+                if($(value).find('.storage-id').val() == storage_id){
+                    if(!$(value).first().hasClass('saved')){
+                        $.alert({
+                            title: 'Warning!',
+                            content: 'This drug is already exists in current insert table!',
                         });
+                        access = false;
                     }else{
-                        $(table + ' tr').find('.search-drug-button').each(function(key,value){
-                            if($(value).attr('data-id') == $('.search-drug').attr('data-id')){
-                                $(this).parent().parent().addClass('process');
-                                row_id = $(value).attr('data-id');
-                                settings = JSON.stringify($data['info']);
-                                $("#search_drug").modal('hide');
-                                $(this).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+"<input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'><input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'><input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>");
-                                $.each($data.data_info, function(key, value){
-                                    $(this).parent().append('<p>'+key+': '+value+'</p>');
-                                });
-                                return false;
-                            }
-                        })
-                        $(save_all_button).attr('data-count',++count);
-                        $(table+' tbody tr').each(function(key,value){
-                            if($(value).hasClass('dublicate')){
-                                $(value).remove();
-                            }
-                        });
+                        $(value).addClass('dublicate');
                     }
                 }
-            })
+            });
+            $data = {data_info:{}};
+            $data['storage_id'] = storage_id;
+            $data['count'] = count;
+            $data['is_order'] = true;
+            $data['_token'] = token;
+            $(".drug-settings-table").find('tr').each(function(key,value){
+                var name = $(this).children(":first").html();
+                var value_text = $(this).find('span').html();
+                if(value_text != '' && value_text){
+                    $data.data_info[name] = value_text;
+                }
+            });
+            storage_save($data,save_all_button,table,0);
+
+        }else{ // STORAGE LOGIC
+            var access = true;
+            var count = $(table).find('.row-settings').length;
+            var drug_id = $('.drug-search-results').val();
+            var $data = {info:{},data_info:{}};
+            $data['is_order'] = false;
+            $(".drug-settings-table").find('select').each(function(key,value){
+                val = $(value).val();
+                var self = this
+                if(parseInt($(value).val())){
+                    var classList = $(value).attr('class').split(/\s+/);
+                    $.each(classList, function(index, item) {
+                        if (item !== 'form-control') {
+                            var name = $(self).parent().prev().html();
+                            var value_text = $(self).children('option[value="'+$(value).val()+'"]').text();
+                            sub_value = item.split('search-')[1];
+                            $data.info[sub_value] = val;
+                            $data.data_info[name] = value_text;
+                        }
+                    });
+                }
+
+            });
+            $(table+' tbody tr').each(function(key,value){
+                if($(value).find('.row-settings').val() == JSON.stringify($data['info']) && parseInt($(value).find('.row-drug-id').val()) == drug_id){
+                    if(!$(value).first().hasClass('saved')){
+                        $.alert({
+                            title: 'Warning!',
+                            content: 'This drug is already exists in current insert table!',
+                        });
+                        access = false;
+                    }else{
+                       $(value).addClass('dublicate');
+                    }
+                }
+            });
+            if(Object.keys($data['info']).length != 0 && access) {
+                $data['drug_id'] = drug_id;
+                token = $(this).children('input[name="_token"]').val();
+                $data['_token'] = token;
+                var is_order = 0;
+                if ($(this).hasClass('order')) {
+                    is_order = 1;
+                }
+                $data['is_order'] = is_order;
+                storage_save($data,save_all_button,table,count);
+            }
         }
+
+
     })
+
     $(document).on('click','.remove-storage-row',function(){
         $(this).parent().parent().removeClass('process');
         count = $('.save-all-storage').attr('data-count');
@@ -552,16 +325,19 @@ $(document).ready(function(){
         var access = true;
         var order_save = false;
         var order_send = false;
+        var is_order = false;
         var table = '.storage-actions-table';
         var edit_order = false;
         var method = 'POST';
         var in_table = false;
         if($(this).hasClass('order-save')){
             order_save = true;
+            is_order = true;
             table = '.order-actions-table'
         }
         if($(this).hasClass('order-send')){
             order_send = true;
+            is_order = true;
             table = '.order-actions-table'
         }
         if(order_save || order_send){
@@ -610,10 +386,24 @@ $(document).ready(function(){
                     });
                     access = false;
                 }
-                var settings = $(this).find('.row-settings').val();
-                var drug_id = $(this).find('.row-drug-id').val();
-                row['settings'] = settings;
-                row['drug_id'] = drug_id;
+                if(is_order){
+                    var count_in_storage = $(this).find('.row-count-in-storage').val();
+                    var self = this;
+                    if(count_in_storage < count){
+                        $.alert({
+                            title: 'Warning!',
+                            content: 'The imported count is bigger than planned',
+                        });
+                        access = false;
+                    }
+                    var storage_id = $(this).find('.row-storage-id').val();
+                    row['storage_id'] = storage_id;
+                }else{
+                    var settings = $(this).find('.row-settings').val();
+                    var drug_id = $(this).find('.row-drug-id').val();
+                    row['settings'] = settings;
+                    row['drug_id'] = drug_id;
+                }
                 row['count'] = count;
 
                 if(!order_save && !order_send){
@@ -810,3 +600,102 @@ $(document).ready(function(){
         })
     })
 });
+
+function storage_save($data,save_all_button,table,count){
+    $.ajax({
+        url: '/admin/storage/checkDrug',
+        type: 'POST',
+        data: $data ,
+        dataType: 'json',
+        success: function(data){
+            var clear_button_class = '';
+            if($data['is_order']){
+                clear_button_class = 'order';
+            }
+            if(data){
+                var confirm_message = 'This drug with this params already exists. Only quantity will increase';
+                if($data['is_order']){
+                    if(data.error){
+                        confirm_message = data.error + ", count - "+data.count;
+                    }else{
+                        confirm_message = 'This drug is already exists in your storage, count - '+data.count;
+                    }
+                }
+                $.confirm({
+                    animation: 'bottom',
+                    closeAnimation: 'bottom',
+                    title: 'Confirm!',
+                    content: confirm_message,
+                    buttons: {
+                        confirm: function () {
+                            $(table+' tr').find('.search-drug-button').each(function(key,value){
+                                if($(value).attr('data-id') == $('.search-drug').attr('data-id')){
+
+                                    $(this).parent().parent().addClass('process');
+                                    row_id = $(value).attr('data-id');
+                                    settings = JSON.stringify($data['info']);
+                                    $("#search_drug").modal('hide');
+                                    var info = '';
+                                    $.each($data.data_info, function(key, value){
+                                        info += '<p>'+key+': '+value+'</p>';
+                                    });
+                                    if($data['is_order']){
+                                        params = "<input type='hidden' class='row-storage-id' name='storage_id_"+count+"' value='"+$data['storage_id']+"'>" +
+                                            "<input type='hidden' class='row-count-in-storage' name='count_in_storage_"+count+"' value='"+$data['count']+"'>"
+                                    }else{
+                                        params = "<input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'>" +
+                                            "<input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'>";
+                                    }
+                                    $(this).parent().html(
+                                        "<button class='remove-storage-row btn btn-warning "+clear_button_class+"' data-id='"+$(value).attr('data-id')+"'>Clear</button>"
+                                        + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+
+                                        " <span class='error'>(" + data.count + ")</span>" +
+                                        params +
+                                        "<input type='hidden' class='row-exist' name='exist_"+count+"' value='1'>"+info);
+                                    return false;
+                                }
+                            });
+                            $(save_all_button).attr('data-count',++count);
+                            $(table+' tbody tr').each(function(key,value){
+                                if($(value).hasClass('dublicate')){
+                                    $(value).remove();
+                                }
+                            });
+                        },
+                        cancel: function () {
+
+                        }
+                    }
+                });
+            }else{
+                $(table + ' tr').find('.search-drug-button').each(function(key,value){
+                    if($(value).attr('data-id') == $('.search-drug').attr('data-id')){
+                        $(this).parent().parent().addClass('process');
+                        row_id = $(value).attr('data-id');
+                        settings = JSON.stringify($data['info']);
+                        $("#search_drug").modal('hide');
+                        if($data['is_order']){
+                            params = "<input type='hidden' class='row-storage-id' name='storage_id_"+count+"' value='"+$data['storage_id']+"'>"
+                        }else{
+                            params = "<input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'>" +
+                                "<input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'>";
+                        }
+                        $(this).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+
+                            params +
+                            "<input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>");
+                        $.each($data.data_info, function(key, value){
+                            $(this).parent().append('<p>'+key+': '+value+'</p>');
+                        });
+                        return false;
+                    }
+                })
+                $(save_all_button).attr('data-count',++count);
+                $(table+' tbody tr').each(function(key,value){
+                    if($(value).hasClass('dublicate')){
+                        $(value).remove();
+                    }
+                });
+            }
+        }
+    })
+}

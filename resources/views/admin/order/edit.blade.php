@@ -39,9 +39,10 @@
                                         <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-drug-id="{{$drug->drug_id}}">Watch</button>
                                         <button class='remove-storage-row btn btn-warning order' data-id='{{$i}}'>Clear</button>
                                         {{$drug->drug->trade_name}}
-                                        <input type='hidden' class='row-settings' name='settings_{{$i}}' value='{{$drug->drug_settings}}'>
-                                        <input type='hidden' class='row-drug-id' name='drug_id_{{$i}}' value='{{$drug->drug_id}}'>
-                                        @foreach($drug_settings as $key => $drug_setting)
+                                        <input type='hidden' class='row-storage-id' name='storage_id_{{$i}}' value='{{$drug->storage_id}}'>
+                                        <input type='hidden' class='row-count-in-storage' name='count_in_storage_{{$i}}' value='{{$drug->count}}'>
+
+                                    @foreach($drug_settings as $key => $drug_setting)
                                             @foreach($drug->drug->$key as $key_setting => $setting)
                                                 @if(preg_match('/price/',$key))
                                                 <p>{{$drug->drug->setting_names[$key]}}: {{$setting->price}}</p>

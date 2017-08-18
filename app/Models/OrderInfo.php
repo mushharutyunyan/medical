@@ -9,8 +9,7 @@ class OrderInfo extends AbstractModel
     use SoftDeletes;
     protected $fillable = [
         'order_id',
-        'drug_id',
-        'drug_settings',
+        'storage_id',
         'count'
     ];
 
@@ -19,9 +18,9 @@ class OrderInfo extends AbstractModel
         return $this->belongsTo('App\Models\Order');
     }
 
-    public function drug()
+    public function storage()
     {
-        return $this->belongsTo('App\Models\Drug');
+        return $this->belongsTo('App\Models\Storage');
     }
 
 

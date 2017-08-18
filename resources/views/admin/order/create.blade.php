@@ -15,12 +15,18 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <select class="form-control" name="to">
+                                    {!! Form::open(['url' => 'admin/order/changeOrganization', "class" => "change_organization_form"]) !!}
+                                    <select class="form-control" name="to" id="order_organization_list" >
                                         <option value="0">Check Organization</option>
                                         @foreach($organizations as $organization)
+                                            @if(Input::old('to') == $organization->id)
+                                            <option selected value="{{$organization->id}}">{{$organization->name}}</option>
+                                            @else
                                             <option value="{{$organization->id}}">{{$organization->name}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
+                                    {!! Form::close() !!}
                                 </div>
                             </div>
                         </div>
@@ -39,8 +45,8 @@
                                 <tr class="odd gradeX saved">
                                     <td>
                                         {{$warning_drug->drug->trade_name}} <span class="error">({{$warning_drug->count}})</span>
-                                        <input type='hidden' class='row-settings' name='settings_{{$i}}' value='{{$warning_drug->drug_settings}}'>
-                                        <input type='hidden' class='row-drug-id' name='drug_id_{{$i}}' value='{{$warning_drug->drug_id}}'>
+                                        <input type='hidden' class='row-storage-id' name='storage_id_{{$i}}' value='{{$warning_drug->id}}'>
+                                        <input type='hidden' class='row-count-in-storage' name='count_in_storage_{{$i}}' value='{{$warning_drug->count}}'>
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" name="count" placeholder="Count">

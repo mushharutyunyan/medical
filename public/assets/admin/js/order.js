@@ -184,4 +184,7 @@ $(document).ready(function(){
             }
         })
     })
+    $("#order_organization_list").on('change',function(){
+        $(".change_organization_form").submit();
+    })
 });

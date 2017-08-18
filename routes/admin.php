@@ -33,6 +33,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
         Route::post('/getAnswerStatuses','OrderController@getAnswerStatuses');
         Route::post('/getDeliveryStatuses','OrderController@getDeliveryStatuses');
         Route::post('/changeStatusTo','OrderController@changeStatusTo');
+        Route::post('/changeOrganization','OrderController@changeOrganization');
         Route::get('/excel/get','OrderController@excelFiles');
         Route::get('/excel/download/{file}','OrderController@excelDownload');
         Route::post('/changeStatus/received','OrderController@receivedOrder');

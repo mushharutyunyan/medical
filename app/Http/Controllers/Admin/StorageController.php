@@ -34,8 +34,9 @@ class StorageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+
         return view('admin.storage.create');
     }
 
@@ -162,10 +163,10 @@ class StorageController extends Controller
         return response()->json($drugs);
     }
 
-    public function searchDrugSettings(Request $request){
+    public function searchDrugSettings(Request $request, Drug $drug){
         $data = $request->all();
         $storage = '';
-        if($data['is_order']){
+        if($data['is_order'] != 'false'){
             $storage = Storage::where('id',$data['id'])->first();
             $currentDrug = $storage->drug;
         }else{
@@ -190,30 +191,33 @@ class StorageController extends Controller
         $currentDrug->unit;
         $currentDrug->unit_price;
         $currentDrug->character;
-        return response()->json(['currentDrug' => $currentDrug,'storage' => $storage]);
+        return response()->json(['currentDrug' => $currentDrug,'storage' => $storage,'setting_names' => $drug->setting_names,'settings' => $drug->settings]);
 
     }
     public function checkDrug(Request $request){
         $data = $request->all();
-        $settings = json_encode($data['info']);
         if($data['is_order']){
+            $checked_drug = Storage::where('id',$data['storage_id'])->first();
+            $drug_id = $checked_drug->drug_id;
+            $settings = $checked_drug->drug_settings;
             $orders = Order::where('from',Auth::guard('admin')->user()['organization_id'])->whereNotIn('status',array(Order::APPROVED,Order::CANCELED))->get();
             foreach($orders as $order){
-                if(OrderInfo::where('order_id',$order->id)->where('drug_id',$data['drug_id'])->where('drug_settings',$settings)->count()){
-                    $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
-                        ->where('drug_id',$data['drug_id'])
-                        ->where('drug_settings',$settings)->first();
+                if(OrderInfo::where('order_id',$order->id)->where('storage_id',$data['storage_id'])->count()){
+                    $exist_drug = OrderInfo::where('order_id',$order->id)->where('storage_id',$data['storage_id'])->first();
                     return response()->json(array('error' => 'This drug has already in your order list',
-                                                  'count' => $exist_drug->count));
+                        'count' => $exist_drug->count));
                 }
             }
+        }else{
+            $settings = json_encode($data['info']);
+            $drug_id = $data['drug_id'];
         }
         $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
-            ->where('drug_id',$data['drug_id'])
+            ->where('drug_id',$drug_id)
             ->where('drug_settings',$settings)->count();
         if($exist_drug){
             $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
-                ->where('drug_id',$data['drug_id'])
+                ->where('drug_id',$drug_id)
                 ->where('drug_settings',$settings)->first();
         }
         return response()->json($exist_drug);

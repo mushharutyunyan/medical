@@ -27,8 +27,9 @@ class OrderController extends Controller
         return view('admin.order.index',['orders' => $orders,'status' => $status, 'status_to' => $status_to]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $data = $request->all();
         $warning_drugs = Storage::where('organization_id',Auth::guard("admin")->user()['organization_id'])->where('count','<', 10)->get();
         $orders = Order::where('from',Auth::guard('admin')->user()['organization_id'])->whereNotIn('status',array(Order::APPROVED,Order::CANCELED))->get();
         $warning_drugs = Storage::warningDrugs();
@@ -67,8 +68,7 @@ class OrderController extends Controller
             foreach($drugs as $drug){
                 OrderInfo::create(array(
                     'order_id' => $order->id,
-                    'drug_id' => $drug->drug_id,
-                    'drug_settings' => $drug->settings,
+                    'storage_id' => $drug->storage_id,
                     'count' => $drug->count
                 ));
             }
@@ -77,8 +77,7 @@ class OrderController extends Controller
             foreach($drugs as $drug){
                 OrderInfo::create(array(
                     'order_id' => $order->id,
-                    'drug_id' => $drug['drug_id'],
-                    'drug_settings' => $drug['settings'],
+                    'storage_id' => $drug['storage_id'],
                     'count' => $drug['count']
                 ));
             }
@@ -163,8 +162,7 @@ class OrderController extends Controller
                 foreach($drugs as $drug){
                     OrderInfo::create(array(
                         'order_id' => $id,
-                        'drug_id' => $drug->drug_id,
-                        'drug_settings' => $drug->settings,
+                        'storage_id' => $drug->storage_id,
                         'count' => $drug->count
                     ));
                 }
@@ -176,8 +174,7 @@ class OrderController extends Controller
                 foreach($drugs as $drug){
                     OrderInfo::create(array(
                         'order_id' => $id,
-                        'drug_id' => $drug['drug_id'],
-                        'drug_settings' => $drug['settings'],
+                        'storage_id' => $drug['storage_id'],
                         'count' => $drug['count']
                     ));
                 }
@@ -273,29 +270,35 @@ class OrderController extends Controller
         $data = $request->all();
         $drugs = OrderInfo::where('order_id',$data['order_id'])->get();
         foreach($drugs as $drug){
-            if($count = Storage::checkDrugExists($drug->drug_id,$drug->drug_settings)){
+            if($count = Storage::checkDrugExists($drug->storage->drug_id,$drug->storage->drug_settings)){
                 Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
-                    ->where('drug_id',$drug->drug_id)->where('drug_settings',$drug->drug_settings)
+                    ->where('drug_id',$drug->storage->drug_id)->where('drug_settings',$drug->storage->drug_settings)
                     ->update(array(
                        'count' => ($count + $drug->count)
                     ));
             }else{
                 Storage::create(array(
                    'organization_id' =>  Auth::guard('admin')->user()['organization_id'],
-                    'drug_id' => $drug->drug_id,
-                    'drug_settings' => $drug->drug_settings,
+                    'drug_id' => $drug->storage->drug_id,
+                    'drug_settings' => $drug->storage->drug_settings,
                     'count' => $drug->count
                 ));
             }
 
             // update whole sale storage
-//            $old_count = Storage::where('organization_id',$drug->order->to)->
-
+            $old_count = Storage::where('id',$drug->storage_id)->first();
+            Storage::where('id',$drug->storage_id)->update(array(
+                'count' => ($old_count->count - $count)
+            ));
         }
         Order::where('id',$data['order_id'])->update(array(
             'status' => Order::RECEIVED
         ));
         return redirect('/admin/order');
+    }
+
+    public function changeOrganization(Request $request){
+        return redirect()->back()->withInput();
     }
 
     public function excelFiles(Request $request){
@@ -364,7 +367,7 @@ class OrderController extends Controller
                 $unit_price = $drug->unit_price;
                 $price = $drug->count * $unit_price;
             }
-            $data_drugs[] = array($i,$drug->drug->trade_name,'',$drug->count,$unit_price,$price,'','','');
+            $data_drugs[] = array($i,$drug->storage->drug->trade_name,'',$drug->count,$unit_price,$price,'','','');
         }
         $filename = $order_id."_".date("Y_m_d_H_i_s");
         Excel::create($filename, function($excel) use($order_details,$data_drugs) {

@@ -400,7 +400,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                    <div class="scroller" style="height:300px;overflow-y: auto;" data-always-visible="1" data-rail-visible1="1">
                         <div class="row">
                             <div class="col-md-6">
                                 <p>

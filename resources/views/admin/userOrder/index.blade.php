@@ -26,6 +26,15 @@
                                 Status
                             </th>
                             <th>
+                                Pay method
+                            </th>
+                            <th>
+                                Pay type
+                            </th>
+                            <th>
+                                Delivery address / Take time
+                            </th>
+                            <th>
                                 Created At
                             </th>
                             <th>
@@ -41,6 +50,13 @@
                             <tr style="text-align: left">
                                 <td>{{$order->order}}</td>
                                 <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
+                                <td>{{$order->pay_method ? \App\Models\UserOrder::$pay_methods[$order->pay_method] : ''}}</td>
+                                <td>{{$order->pay_type ? \App\Models\UserOrder::$pay_types[$order->pay_type] : ''}}</td>
+                                @if($order->pay_type == \App\Models\UserOrder::DELIVERY)
+                                <td>{{$order->delivery_address}}</td>
+                                @else
+                                <td>{{$order->take_time}}</td>
+                                @endif
                                 <td>{{$order->created_at}}</td>
                                 <td>
                                     <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>

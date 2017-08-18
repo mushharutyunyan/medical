@@ -25,10 +25,12 @@ class UserOrder extends Model
     const CLOSED = 4;
 
     // pay methods
+    public static $pay_methods = array(1 => 'Credit','In place');
     const CREDIT = 1;
     const INPLACE = 2;
 
     // pay types
+    public static $pay_types = array(1 => 'Delivery','Take in pharmacy');
     const DELIVERY = 1;
     const PHARMACY = 2;
 
