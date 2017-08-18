@@ -31,9 +31,10 @@
                             <tbody>
                             <?php $i = 0 ?>
                             @foreach($drugs as $drug)
+
                                 <tr class="odd gradeX process">
                                     <td>
-                                        <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-drug-id="{{$drug->drug_id}}">Watch</button>
+                                        <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-drug-id="{{$drug->storage->drug_id}}">Watch</button>
                                         <button class='remove-storage-row btn btn-warning order' data-id='{{$i}}'>Clear</button>
                                         {{$drug->drug->trade_name}}
                                         <input type='hidden' class='row-storage-id' name='storage_id_{{$i}}' value='{{$drug->storage_id}}'>
