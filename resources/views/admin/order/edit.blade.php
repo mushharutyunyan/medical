@@ -31,9 +31,6 @@
                             <tbody>
                             <?php $i = 0 ?>
                             @foreach($drugs as $drug)
-                                <?php
-                                $drug_settings = json_decode($drug->drug_settings);
-                                ?>
                                 <tr class="odd gradeX process">
                                     <td>
                                         <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-drug-id="{{$drug->drug_id}}">Watch</button>
