@@ -15,7 +15,10 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <h2>{{$order->organizationTo->name}}</h2>
+                                    <h2>
+                                        {{$order->organizationTo->name}}
+                                        <input type="hidden" name="to" value="{{$order->organizationTo->id}}">
+                                    </h2>
                                 </div>
                             </div>
                         </div>
@@ -36,12 +39,12 @@
                                 ?>
                                 <tr class="odd gradeX process">
                                     <td>
-                                        <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-drug-id="{{$drug->storage->drug_id}}">Watch</button>
+                                        <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-storage-id="{{$drug->storage_id}}">Watch</button>
 
                                         <button class='remove-storage-row btn btn-warning order' data-id='{{$i}}'>Clear</button>
                                         {{$drug->storage->drug->trade_name}}
                                         <input type='hidden' class='row-storage-id' name='storage_id_{{$i}}' value='{{$drug->storage_id}}'>
-                                        <input type='hidden' class='row-count-in-storage' name='count_in_storage_{{$i}}' value='{{$drug->count}}'>
+                                        <input type='hidden' class='row-count-in-storage' name='count_in_storage_{{$i}}' value='{{$drug->storage->count}}'>
 
                                     @foreach($drug_settings as $key => $drug_setting)
                                             @foreach($drug->storage->drug->$key as $key_setting => $setting)
@@ -87,7 +90,7 @@
                                     {!! Form::open(['class' => 'storage-save-all']) !!}
                                     @if(!$order->status)
                                     <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn green save-all-storage order-save edit"><i class="fa fa-check"></i>Save</button>
-                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>Send</button>
+                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit" data-saved="{{!$order->status ? 1 : 0}}"><i class="fa fa-check"></i>Send</button>
                                     @else
                                         @if(Auth::guard('admin')->user()['organization_id'] == $order->to)
                                         <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit answer"><i class="fa fa-check"></i>Re-Send</button>

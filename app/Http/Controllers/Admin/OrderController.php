@@ -114,8 +114,8 @@ class OrderController extends Controller
 
     public function show(Request $request,$id){
         $data = $request->all();
-        $order = OrderInfo::where('order_id',$id)->where('drug_id',$data['drug_id'])->first();
-        $currentDrug = Drug::find($data['drug_id']);
+        $order = OrderInfo::where('order_id',$id)->where('storage_id',$data['storage_id'])->first();
+        $currentDrug = Drug::find($order->storage->drug_id);
         $currentDrug->category;
         $currentDrug->certificate_number;
         $currentDrug->country;
@@ -141,7 +141,6 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-
         $status = Order::SAVED;
         if(isset($data['order_send'])){
             $status = Order::PROCEEDTO;
@@ -185,23 +184,27 @@ class OrderController extends Controller
         $order_data = array();
         $order_data['status'] = $status;
         if(isset($data['delivery_status_id'])){
-            $order_data['delivery_status_id'] = $data['delivery_status_id'];
+            if($data['delivery_status_id']){
+                $order_data['delivery_status_id'] = $data['delivery_status_id'];
+            }
         }
         if(isset($data['order_delivery_address'])){
-            $order_data['delivery_address'] = $data['order_delivery_address'];
+            if($data['order_delivery_address']){
+                $order_data['delivery_address'] = $data['order_delivery_address'];
+            }
         }
         if(isset($data['delivery_date'])){
             if($data['delivery_date'] != 0){
                 $order_data['date'] = $data['delivery_date'];
             }else{
                 if($data['status'] == Order::APPROVED){
-                    $data_order['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
+                    $order_data['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
                 }
             }
         }else{
             if(isset($data['status'])){
                 if($data['status'] == Order::APPROVED){
-                    $data_order['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
+                    $order_data['date'] = date("Y-m-d H:i:s",strtotime("+3 hour"));
                 }
             }
         }
@@ -210,7 +213,7 @@ class OrderController extends Controller
             if($data['status'] != Order::CANCELED){
                 $file = $this->generateExcel($id);
                 if($data['status'] == Order::APPROVED){
-                    Order::where('id',$id)->update('file',$file);
+                    Order::where('id',$id)->update(array('file' => $file));
                 }
             }
         }
@@ -287,6 +290,7 @@ class OrderController extends Controller
                     'drug_settings' => $drug->storage->drug_settings,
                     'count' => $drug->count
                 ));
+                $count = $drug->count;
             }
 
             // update whole sale storage
@@ -322,7 +326,6 @@ class OrderController extends Controller
 
     public function generateExcel($order_id = null){
         $order = Order::where('id',$order_id)->first();
-        print_r($order);die;
         if($order->delivery_status->id == 1){
             $delivery_status = 'ՏԵղում';
         }else{

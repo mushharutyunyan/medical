@@ -121,7 +121,7 @@ class StorageController extends Controller
             }
         }
         $drug_settings = json_encode($settings);
-        $checkDrug = Storage::where('id','!=',$id)->where('drug_id',$data['drug_id'])->where('drug_settings',$drug_settings)->first();
+        $checkDrug = Storage::where('id','!=',$id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('drug_id',$data['drug_id'])->where('drug_settings',$drug_settings)->first();
         if($checkDrug){
             return response()->json(array('exist' => $checkDrug->id));
         }

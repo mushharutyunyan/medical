@@ -30,6 +30,9 @@ $(document).ready(function(){
         if($('select[name="to"]').length){
             to = $('select[name="to"]').val();
             is_order = true;
+        }else if($('input[name="to"]').length){
+            to = $('input[name="to"]').val();
+            is_order = true;
         }
         $('.search-drug').parent().children('error').html('');
         $.ajax({
@@ -68,6 +71,9 @@ $(document).ready(function(){
         var is_order = false;
         if($('select[name="to"]').length){
             to = $('select[name="to"]').val();
+            is_order = true;
+        }else if($('input[name="to"]').length){
+            to = $('input[name="to"]').val();
             is_order = true;
         }
         $('.drug-loader').show();
@@ -345,6 +351,12 @@ $(document).ready(function(){
             if($(this).hasClass('edit')){
                 edit_order = true;
             }
+            var saved = false;
+            if($(this).attr('data-saved')){
+                if($(this).attr('data-saved') != 0){
+                    saved = true;
+                }
+            }
             if(!edit_order){
                 var to = $('select[name="to"]').val();
                 if(!parseInt(to)){
@@ -431,8 +443,8 @@ $(document).ready(function(){
                 $("#order_send").removeClass('edit');
                 $('.order-form-status-block').html("");
                 $('.order-form-delivery-status-block').html("");
-                if(!edit_order || in_table){
-                    if(in_table){
+                if(!edit_order || saved || in_table){
+                    if(in_table || saved){
                         $("#order_send").addClass('edit');
                         $("#order_send").attr('data-id',$(this).attr('data-id'));
                     }
@@ -532,27 +544,42 @@ $(document).ready(function(){
         var order = false;
         if($(this).hasClass('order')){
             url = '/admin/order/'+id;
-            drug_id = $(this).attr('data-drug-id');
+            storage_id = $(this).attr('data-storage-id');
             order = true;
         }
         $.ajax({
             url: url,
             type: 'GET',
-            data: {drug_id:drug_id},
+            data: {storage_id:storage_id},
             dataType: 'json',
             success: function(data){
                 if(order){
-                    var settings = JSON.parse(data.order.drug_settings);
+                    var settings = JSON.parse(data.order.storage.drug_settings);
                 }else{
                     var settings = JSON.parse(data.storage.drug_settings);
                 }
-
+                var generic_name = '';
+                var dosage_form = '';
+                var dosage_strength = '';
+                var code = '';
+                if(data.drug.generic_name){
+                    generic_name = data.drug.generic_name;
+                }
+                if(data.drug.dosage_form){
+                    dosage_form = data.drug.dosage_form;
+                }
+                if(data.drug.dosage_strength){
+                    dosage_strength = data.drug.dosage_strength
+                }
+                if(data.drug.code){
+                    code = data.drug.code;
+                }
                 $("#edit_view_drug").find(".drug-name").html(data.drug.trade_name);
                 $(".drug-settings-view-table tbody").html('');
-                $('.drug-settings-view-table tbody').append('<tr><td>Generic Name</td><td>'+data.drug.generic_name+'</td></tr>');
-                $('.drug-settings-view-table tbody').append('<tr><td>Dosage Form</td><td>'+data.drug.dosage_form+'</td></tr>');
-                $('.drug-settings-view-table tbody').append('<tr><td>Dosage Strength</td><td>'+data.drug.dosage_strength+'</td></tr>');
-                $('.drug-settings-view-table tbody').append('<tr><td>Code</td><td>'+data.drug.code+'</td></tr>');
+                $('.drug-settings-view-table tbody').append('<tr><td>Generic Name</td><td>'+generic_name+'</td></tr>');
+                $('.drug-settings-view-table tbody').append('<tr><td>Dosage Form</td><td>'+dosage_form+'</td></tr>');
+                $('.drug-settings-view-table tbody').append('<tr><td>Dosage Strength</td><td>'+dosage_strength+'</td></tr>');
+                $('.drug-settings-view-table tbody').append('<tr><td>Code</td><td>'+code+'</td></tr>');
                 $.each(settings, function(key,value){
                     $.each(data.drug, function(drugKey,drugValue){
                         if(drugKey == key){
