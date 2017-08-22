@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DrugRequest;
 use Illuminate\Http\Request;
 use App\Models\Drug;
 use App\Models\DrugCategory;
@@ -24,6 +25,7 @@ use App\Models\DrugType;
 use App\Models\DrugTypeBelonging;
 use App\Models\DrugUnit;
 use App\Models\DrugUnitPrice;
+use Illuminate\Support\Facades\Lang;
 use Image;
 use Input;
 class DrugsController extends Controller
@@ -75,9 +77,18 @@ class DrugsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DrugRequest $request)
     {
         $data = $request->all();
+        $expiration_date = false;
+        for($i = 1; $i <= $data['expiration_date']; $i++){
+            if(!empty($data['expiration_date_'.$i])){
+                $expiration_date = true;
+            }
+        }
+        if(!$expiration_date){
+            return redirect()->back()->withErrors(['error' => Lang::get('validation.filled',['attribute' => 'Expiration date'])]);
+        }
         // Main table Insert
         $drug = Drug::create(array(
             'trade_name' => $data['trade_name'],

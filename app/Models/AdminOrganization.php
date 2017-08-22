@@ -13,4 +13,9 @@ class AdminOrganization extends Model
         'admin_id',
         'organization_id',
     ];
+
+    public function admin()
+    {
+        return $this->hasMany('App\Models\Admin', 'organization_id','organization_id');
+    }
 }

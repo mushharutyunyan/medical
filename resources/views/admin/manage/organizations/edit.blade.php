@@ -81,8 +81,27 @@
                                     {{Form::text('apartment',$currentOrganization->apartment,['class' => 'form-control'])}}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Phone</label>
+                                <div class="col-md-4">
+                                    {{Form::text('phone',$currentOrganization->phone,['class' => 'form-control'])}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Identification number</label>
+                                <div class="col-md-4">
+                                    {{Form::text('identification_number',$currentOrganization->identification_number,['class' => 'form-control'])}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Bank account number</label>
+                                <div class="col-md-4">
+                                    {{Form::text('bank_account_number',$currentOrganization->bank_account_number,['class' => 'form-control'])}}
+                                </div>
+                            </div>
                             <input type="hidden"  name="latitude" value="{{$position->latitude}}">
                             <input type="hidden" name="longitude" value="{{$position->longitude}}">
+                            <input id="pac-input" class="controls form-control" type="text" placeholder="Search Box">
                             <div id="map" data-type="edit"></div>
                     </div>
                     <div class="form-actions">

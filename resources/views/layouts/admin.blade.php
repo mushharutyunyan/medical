@@ -44,6 +44,7 @@
     <link href="/assets/admin/css/layout.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/admin/css/grey.css" rel="stylesheet" type="text/css" id="style_color"/>
     <link href="/assets/admin/css/custom.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/css/map.css" rel="stylesheet" type="text/css"/>
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
     <style>
@@ -465,7 +466,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                    <div class="scroller" style="height:300px;overflow-y: auto" data-always-visible="1" data-rail-visible1="1">
                         <div class="row">
                             <div class="col-md-6">
                                 <h4 class="drug-name">
@@ -598,7 +599,7 @@
 <script src="/assets/admin/js/order.js"></script>
 <script src="/assets/admin/js/message.js"></script>
 <script src="/assets/admin/js/userOrder.js"></script>
-<script src="http://maps.google.com/maps/api/js?sensor=false&&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
+<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
         type="text/javascript"></script>
 <script src="/assets/admin/js/organization.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->

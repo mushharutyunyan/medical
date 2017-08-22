@@ -21,11 +21,11 @@ class AdminsController extends Controller
     public function index()
     {
         if(Auth::guard('admin')->user()->role->id != 1){
-            $admins = Auth::guard('admin')->user()->admin_organizations()->get();
+            $admin_organizations = Auth::guard('admin')->user()->admin_organizations()->get();
         }else{
             $admins = Admin::all();
         }
-        return view('admin.manage.admins.index',compact('admins'));
+        return view('admin.manage.admins.index',compact('admin_organizations'));
     }
 
     /**
@@ -66,7 +66,11 @@ class AdminsController extends Controller
      */
     public function edit($id)
     {
-        $roles = Role::all();
+        if(Auth::guard('admin')->user()->role->id != 1){
+            $roles = Role::where('id','!=',1)->where('name','!=','admin')->get();
+        }else{
+            $roles = Role::where('id',1)->orWhere('name','admin')->get();
+        }
         $organizations = Organization::all();
         $currentAdmin = Admin::where('id',$id)->first();
         return view('admin.manage.admins.edit',['currentAdmin' => $currentAdmin,'roles' => $roles, 'organizations' => $organizations]);

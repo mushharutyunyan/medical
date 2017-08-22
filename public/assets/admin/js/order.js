@@ -175,9 +175,19 @@ $(document).ready(function(){
             dataType: "json",
             success: function(data){
                 $(".order-files-block").html('<ul class="list-group order-files-list"></ul>');
-                $.each(data,function(key,value){
+                var i = 0;
+                $.each(data.files,function(key,value){
                     if(value){
-                        $('.order-files-list').append('<li class="list-group-item"><a target="_blank" href="/admin/order/excel/download/'+value.file+'"><i class="fa fa-file-excel-o" aria-hidden="true"></i>'+value.created_at+'</a></li>')
+                        if(i == 0){
+                            if(data.approved){
+                                $('.order-files-list').append('<li class="list-group-item" style="background-color: greenyellow"><a target="_blank" href="/admin/order/excel/download/'+value.file+'"><i class="fa fa-file-excel-o" aria-hidden="true"></i>'+value.created_at+' (Approved file)</a></li>')
+                            }else{
+                                $('.order-files-list').append('<li class="list-group-item"><a target="_blank" href="/admin/order/excel/download/'+value.file+'"><i class="fa fa-file-excel-o" aria-hidden="true"></i>'+value.created_at+'</a></li>')
+                            }
+                        }else{
+                            $('.order-files-list').append('<li class="list-group-item"><a target="_blank" href="/admin/order/excel/download/'+value.file+'"><i class="fa fa-file-excel-o" aria-hidden="true"></i>'+value.created_at+'</a></li>')
+                        }
+                        i++;
                     }
                 })
                 $("#view_order_files").modal('show');

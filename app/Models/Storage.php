@@ -12,7 +12,8 @@ class Storage extends Model
         'drug_id',
         'organization_id',
         'drug_settings',
-        'count'
+        'count',
+        'price_id'
     ];
 
     public function drug()
@@ -23,6 +24,11 @@ class Storage extends Model
     public function organization()
     {
         return $this->belongsTo('App\Models\Organization');
+    }
+
+    public function price()
+    {
+        return $this->belongsTo('App\Models\DrugUnitPrice');
     }
 
     public static function warningDrugs(){

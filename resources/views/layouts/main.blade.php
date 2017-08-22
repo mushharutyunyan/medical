@@ -36,10 +36,14 @@
     <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
     <script src="/assets/js/html5shiv.min.js"></script>
     <![endif]-->
+
 </head>
+
 <body>
+
 <!-- Page-->
 <div class="page text-center">
+
     <!-- Page Header-->
     <header class="page-header">
         <!-- RD Navbar-->
@@ -54,6 +58,7 @@
                                 @endif
                             </ul>
                         </div>
+
                         <div class="rd-navbar-toppanel-wrapper">
                             <div class="rd-navbar-contact-info">
                                 @if(Auth::check())
@@ -444,10 +449,9 @@
     </div>
 </div>
 <!-- Java script-->
-<script src="http://maps.google.com/maps/api/js?sensor=false&&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
+<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
         type="text/javascript"></script>
 <script src="/assets/js/core.min.js"></script>
-<script src="/assets/js/script.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/jquery-validation/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>

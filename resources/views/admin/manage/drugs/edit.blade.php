@@ -385,19 +385,19 @@
                                 @if($registration_date->count() != 0 || Input::old('registration_date') != 0)
                                     @if(Input::old('registration_date') != 0)
                                         @for($i = 1; $i <= Input::old('registration_date'); $i++)
-                                            {{Form::text('registration_date_'.$i,Input::old('registration_date_'.$i),['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                            {{Form::text('registration_date_'.$i,Input::old('registration_date_'.$i),['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                         @endfor
                                         {{Form::hidden('registration_date',Input::old('registration_date'),['class' => 'form-control'])}}
                                     @else
                                         <?php $i = 1; ?>
                                         @foreach($registration_date as $value)
-                                            {{Form::text('registration_date_'.$i,$value->date,['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                            {{Form::text('registration_date_'.$i,$value->date,['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                             <?php $i++; ?>
                                         @endforeach
                                         {{Form::hidden('registration_date',$registration_date->count(),['class' => 'form-control'])}}
                                     @endif
                                 @else
-                                    {{Form::text('registration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                    {{Form::text('registration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                     {{Form::hidden('registration_date','1',['class' => 'form-control'])}}
                                 @endif
                             </div>
@@ -409,19 +409,19 @@
                                 @if($expiration_date->count() != 0 || Input::old('expiration_date') != 0)
                                     @if(Input::old('expiration_date') != 0)
                                         @for($i = 1; $i <= Input::old('expiration_date'); $i++)
-                                            {{Form::text('expiration_date_'.$i,Input::old('expiration_date_'.$i),['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                            {{Form::text('expiration_date_'.$i,Input::old('expiration_date_'.$i),['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                         @endfor
                                         {{Form::hidden('expiration_date',Input::old('expiration_date'),['class' => 'form-control'])}}
                                     @else
                                         <?php $i = 1; ?>
                                         @foreach($expiration_date as $value)
-                                            {{Form::text('expiration_date_'.$i,$value->date,['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                            {{Form::text('expiration_date_'.$i,$value->date,['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                             <?php $i++; ?>
                                         @endforeach
                                         {{Form::hidden('expiration_date',$expiration_date->count(),['class' => 'form-control'])}}
                                     @endif
                                 @else
-                                {{Form::text('expiration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                {{Form::text('expiration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                 {{Form::hidden('expiration_date','1',['class' => 'form-control'])}}
                                 @endif
                             </div>

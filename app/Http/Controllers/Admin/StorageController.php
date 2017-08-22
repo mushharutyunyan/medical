@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Drug;
+use App\Models\DrugUnitPrice;
 use App\Models\OrderInfo;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ class StorageController extends Controller
 
     public function show($id){
         $storage = Storage::find($id);
+        $storage->price;
         $currentDrug = Drug::find($storage->drug_id);
         $currentDrug->category;
         $currentDrug->certificate_number;
@@ -114,18 +116,29 @@ class StorageController extends Controller
         unset($data['_token']);
         $settings = array();
         foreach($data as $key => $value){
-            if($key != 'drug_id' && $key != 'storage_count'){
+            if($key != 'drug_id' && $key != 'storage_count' && $key != 'price'){
                 if(!empty($value)){
                     $settings[$key] = $value;
                 }
             }
         }
+        $price = $data['price'];
+        if(!DrugUnitPrice::where('drug_id',$data['drug_id'])->where('price',$price)->count()){
+            $drug_unit_price = DrugUnitPrice::create(array(
+                'drug_id' => $data['drug_id'],
+                'price' => $price
+            ));
+        }else{
+            $drug_unit_price = DrugUnitPrice::where('drug_id',$data['drug_id'])->where('price',$price)->first();
+        }
+        unset($data['price']);
+        $data['price_id'] = $drug_unit_price->id;
         $drug_settings = json_encode($settings);
         $checkDrug = Storage::where('id','!=',$id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('drug_id',$data['drug_id'])->where('drug_settings',$drug_settings)->first();
         if($checkDrug){
             return response()->json(array('exist' => $checkDrug->id));
         }
-        Storage::where('id','=',$id)->update(array('count' => $data['storage_count'],'drug_settings' => $drug_settings));
+        Storage::where('id','=',$id)->update(array('count' => $data['storage_count'],'drug_settings' => $drug_settings,'price_id' => $data['price_id']));
         return response()->json(true);
     }
 
@@ -219,6 +232,7 @@ class StorageController extends Controller
             $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
                 ->where('drug_id',$drug_id)
                 ->where('drug_settings',$settings)->first();
+            $exist_drug->price;
         }
         return response()->json($exist_drug);
     }
@@ -236,15 +250,28 @@ class StorageController extends Controller
             $data = Input::all();
             $this->validate($request, [
                 'count' => 'required|numeric',
+                'price' => 'required|numeric',
             ]);
+        }
+        $drug_settings = $data['settings'];
+
+        $price = number_format($data['price'],2,".","");
+        if(!DrugUnitPrice::where('drug_id',$data['drug_id'])->where('price',$price)->count()){
+            $drug_unit_price = DrugUnitPrice::create(array(
+                'drug_id' => $data['drug_id'],
+                'price' => $price
+            ));
+        }else{
+            $drug_unit_price = DrugUnitPrice::where('drug_id',$data['drug_id'])->where('price',$price)->first();
         }
         if($data['exist']){
             $exist = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
                 ->where('drug_id',$data['drug_id'])
-                ->where('drug_settings',$data['settings'])->first();
+                ->where('drug_settings',$drug_settings)->first();
             Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
                 ->where('drug_id',$data['drug_id'])
-                ->where('drug_settings',$data['settings'])->update(array('count'=>($data['count'] + $exist->count)));
+                ->where('drug_settings',$drug_settings)->update(array('count'=>($data['count'] + $exist->count),
+                                                                      'price_id' => $drug_unit_price->id));
             return response()->json(true);
         }
         Storage::create(array(
@@ -252,6 +279,7 @@ class StorageController extends Controller
             'drug_id' => $data['drug_id'],
             'organization_id' => Auth::guard('admin')->user()['organization_id'],
             'count' => $data['count'],
+            'price_id' => $drug_unit_price->id,
         ));
         return response()->json(true);
     }

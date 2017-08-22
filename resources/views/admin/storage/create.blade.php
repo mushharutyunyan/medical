@@ -15,6 +15,7 @@
                         <thead>
                         <tr>
                             <th>Drug</th>
+                            <th>Price</th>
                             <th>Count</th>
                             <th></th>
                         </tr>
@@ -23,6 +24,7 @@
                         @for($i = 0; $i <= 15; $i++)
                             <tr class="odd gradeX">
                                 <td><button type="button" data-id="{{$i}}" class="btn btn-success search-drug-button">Search</button></td>
+                                <td><input type="text" class="form-control" name="price" placeholder="Price"></td>
                                 <td><input type="text" class="form-control" name="count" placeholder="Count"></td>
                                 <td>
                                     <button class="btn green save-storage-row">Save</button>

@@ -43,6 +43,9 @@
                                 Address
                             </th>
                             <th>
+                                Phone
+                            </th>
+                            <th>
                                 Status
                             </th>
                             <th>
@@ -61,6 +64,7 @@
                                 <td>{{$organization->director}}</td>
                                 <td>{{$organization->email}}</td>
                                 <td>{{$organization->city}} {{$organization->street}} {{$organization->apartment}}</td>
+                                <td>{{$organization->phone}}</td>
                                 <td>
                                     @if($organization->status)
                                     {{$status[$organization->status]}}

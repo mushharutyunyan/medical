@@ -118,10 +118,12 @@ $(document).ready(function(){
                                 var setting = $(this);
                                 var setting_name = key;
                                 if(!is_order){ // STORAGE LOGIC
-                                    $('.drug-settings-table tbody').append('<tr><td>'+data.setting_names[key]+'</td><td><select class="form-control search-'+setting_name+'"><option value="0"></option></select></td></tr>');
+                                    if(key != 'unit_price'){
+                                        $('.drug-settings-table tbody').append('<tr><td>'+data.setting_names[key]+'</td><td><select class="form-control search-'+setting_name+'"><option value="0"></option></select></td></tr>');
+                                    }
                                     $.each(setting,function(key,value){
                                         if(setting_name.match(/price/)){
-                                            $('.search-'+setting_name).append('<option value="'+value.id+'">'+value.price+'</option>')
+                                            // $('.search-'+setting_name).append('<option value="'+value.id+'">'+value.price+'</option>')
                                         }else if(setting_name.match(/count/) && setting_name != 'country'){
                                             $('.search-'+setting_name).append('<option value="'+value.id+'">'+value.count+'</option>')
                                         }else if(setting_name.match(/date/)){
@@ -293,7 +295,7 @@ $(document).ready(function(){
         var iteration = $('.storage-actions-table tbody tr').length;
         for(i = 1; i <= row_count; i++){
             ++iteration;
-            $('.storage-actions-table tbody').append('<tr><td><button type="button" data-id="'+iteration+'" class="btn btn-success search-drug-button">Search</button></td><td><input type="text" class="form-control" name="count" placeholder="Count"></td><td><button class="btn green save-storage-row">Save</button></td></tr>')
+            $('.storage-actions-table tbody').append('<tr><td><button type="button" data-id="'+iteration+'" class="btn btn-success search-drug-button">Search</button></td><td><input type="text" class="form-control" name="price" placeholder="Price"></td><td><input type="text" class="form-control" name="count" placeholder="Count"></td><td><button class="btn green save-storage-row">Save</button></td></tr>')
         }
 
     })
@@ -303,15 +305,16 @@ $(document).ready(function(){
         var settings = tr.find('.row-settings').val();
         var drug_id = tr.find('.row-drug-id').val();
         var count = tr.find('input[name="count"]').val();
+        var price = tr.find('input[name="price"]').val();
         var exist = tr.find('.row-exist').val();
         var _token = $('.storage-save-all').children('input[name="_token"]').val();
         var self = this;
-        if(settings && drug_id && count > 0){
+        if(settings && drug_id && count > 0 && price > 0){
             $(this).parent().html('<img src="/assets/admin/img/loading.gif" class="row-loading" width="40" style="margin-top: 5%;">');
             $.ajax({
                 url: '/admin/storage/save',
                 type: 'POST',
-                data: {settings:settings,drug_id:drug_id,count:count,_token:_token,exist:exist},
+                data: {settings:settings,drug_id:drug_id,count:count,price:price,_token:_token,exist:exist},
                 dataType: 'json',
                 success: function(){
                     $(tr).find('.row-loading').parent().html('<button class="btn blue">Added</button>');
@@ -392,6 +395,16 @@ $(document).ready(function(){
             $(table + " tbody tr.process").each(function(key,value){
                 var row = {};
                 var count = $(this).find('input[name="count"]').val();
+                if(!order_save && !order_send){
+                    var price = $(this).find('input[name="price"]').val();
+                    if(price == '' || price < 0){
+                        $.alert({
+                            title: 'Warning!',
+                            content: 'Check Drug prices!',
+                        });
+                        access = false;
+                    }
+                }
                 if(count == ''){
                     $.alert({
                         title: 'Warning!',
@@ -421,7 +434,9 @@ $(document).ready(function(){
 
                 if(!order_save && !order_send){
                     var exist = $(this).find('.row-exist').val();
+                    var price = $(this).find('input[name="price"]').val();
                     row['exist'] = exist;
+                    row['price'] = price;
                 }
                 $data.push(row);
 
@@ -538,7 +553,7 @@ $(document).ready(function(){
     $settings_info['picture'] = 'Picture';
     $(document).on('click','.view-edit-drug', function(e){
         e.preventDefault();
-        var id = $(this).attr('data-id');
+        var id = $(this).attr('data-storage-id');
         var url = '/admin/storage/'+id;
         var drug_id = 0;
         var order = false;
@@ -546,6 +561,9 @@ $(document).ready(function(){
             url = '/admin/order/'+id;
             storage_id = $(this).attr('data-storage-id');
             order = true;
+        }
+        if($(this).hasClass('view')){
+            storage_id = $(this).attr('data-storage-id');
         }
         $.ajax({
             url: url,
@@ -580,6 +598,7 @@ $(document).ready(function(){
                 $('.drug-settings-view-table tbody').append('<tr><td>Dosage Form</td><td>'+dosage_form+'</td></tr>');
                 $('.drug-settings-view-table tbody').append('<tr><td>Dosage Strength</td><td>'+dosage_strength+'</td></tr>');
                 $('.drug-settings-view-table tbody').append('<tr><td>Code</td><td>'+code+'</td></tr>');
+                $('.drug-settings-view-table tbody').append('<tr><td>Price</td><td>'+data.storage.price.price+'</td></tr>');
                 $.each(settings, function(key,value){
                     $.each(data.drug, function(drugKey,drugValue){
                         if(drugKey == key){
@@ -658,12 +677,13 @@ function storage_save($data,save_all_button,table,count){
                         confirm: function () {
                             $(table+' tr').find('.search-drug-button').each(function(key,value){
                                 if($(value).attr('data-id') == $('.search-drug').attr('data-id')){
-
+                                    var closest_tr = $(this).parent().parent();
                                     $(this).parent().parent().addClass('process');
                                     row_id = $(value).attr('data-id');
                                     settings = JSON.stringify($data['info']);
                                     $("#search_drug").modal('hide');
                                     var info = '';
+                                    closest_tr.find('input[name="price"]').val(data.price.price)
                                     $.each($data.data_info, function(key, value){
                                         info += '<p>'+key+': '+value+'</p>';
                                     });
@@ -698,6 +718,11 @@ function storage_save($data,save_all_button,table,count){
             }else{
                 $(table + ' tr').find('.search-drug-button').each(function(key,value){
                     if($(value).attr('data-id') == $('.search-drug').attr('data-id')){
+                        var closest_tr = $(this).parent().parent();
+                        if(!$data['is_order']){
+                            closest_tr.find('input[name="price"]').removeAttr('disabled');
+                        }
+
                         $(this).parent().parent().addClass('process');
                         row_id = $(value).attr('data-id');
                         settings = JSON.stringify($data['info']);
@@ -711,6 +736,11 @@ function storage_save($data,save_all_button,table,count){
                         }
                         var info = '';
                         $.each($data.data_info, function(key, value){
+                            if(!$data['is_order']){
+                                if(key == 'Unit Price'){
+                                    closest_tr.find('input[name="price"]').val(value)
+                                }
+                            }
                             info += '<p>'+key+': '+value+'</p>';
                         });
                         $(this).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+

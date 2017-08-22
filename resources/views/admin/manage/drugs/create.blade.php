@@ -169,7 +169,7 @@
                             <label class="control-label col-md-6">Registration Date - (գրանցման ժամկետը)</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="registration_date"><i class="fa fa-plus"></i></a>
-                                {{Form::text('registration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                {{Form::text('registration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                 {{Form::hidden('registration_date','1',['class' => 'form-control'])}}
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                             <label class="control-label col-md-6">Expiration Date - (Պահպանման ժամկետը)</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="expiration_date"><i class="fa fa-plus"></i></a>
-                                {{Form::text('expiration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm-dd'])}}
+                                {{Form::text('expiration_date_1','',['class' => 'form-control datepicker','data-date-format' => 'yyyy-mm'])}}
                                 {{Form::hidden('expiration_date','1',['class' => 'form-control'])}}
                             </div>
                         </div>

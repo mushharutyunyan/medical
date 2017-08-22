@@ -74,26 +74,30 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($admins as $admin)
-                        <tr class="odd gradeX">
-                                <td>{{$admin->role->name}}</td>
-                                <td>{{$admin->organization->name}}</td>
-                                <td>{{$admin->firstname}} {{$admin->lastname}}</td>
-                                <td>{{$admin->email}}</td>
-                                <td>{{$admin->created_at}}</td>
-                                <td>
-                                    @if($admin->id != 1)
-                                    {!! Form::open(['url' => 'admin/manage/admins/'.$admin->id, 'method' => 'DELETE', 'class' => 'delete-form']) !!}
-                                    <a href="/admin/manage/admins/{{$admin->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
-                                    <a href="/admin/manage/admins/{{$admin->id}}/changePassword" title="Change Password"><i class="fa fa-cogs"></i></a>
-                                    <button title="Delete" type="submit"><i class="fa fa-remove"></i></button>
-                                    {!! Form::close() !!}
-                                    @else
-                                    <a href="/admin/manage/admins/{{$admin->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
-                                    <a href="/admin/manage/admins/{{$admin->id}}/changePassword" title="Change Password"><i class="fa fa-cogs"></i></a>
-                                    @endif
-                                </td>
-                        </tr>
+                        @foreach($admin_organizations as $admin_organization)
+                            @foreach($admin_organization->admin as $admin)
+                                @if(Auth::guard('admin')->user()['id'] != $admin->id)
+                                <tr class="odd gradeX">
+                                        <td>{{$admin->role->name}}</td>
+                                        <td>{{$admin->organization->name}}</td>
+                                        <td>{{$admin->firstname}} {{$admin->lastname}}</td>
+                                        <td>{{$admin->email}}</td>
+                                        <td>{{$admin->created_at}}</td>
+                                        <td>
+                                            @if($admin->id != 1)
+                                            {!! Form::open(['url' => 'admin/manage/admins/'.$admin->id, 'method' => 'DELETE', 'class' => 'delete-form']) !!}
+                                            <a href="/admin/manage/admins/{{$admin->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            <a href="/admin/manage/admins/{{$admin->id}}/changePassword" title="Change Password"><i class="fa fa-cogs"></i></a>
+                                            <button title="Delete" type="submit"><i class="fa fa-remove"></i></button>
+                                            {!! Form::close() !!}
+                                            @else
+                                            <a href="/admin/manage/admins/{{$admin->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                            <a href="/admin/manage/admins/{{$admin->id}}/changePassword" title="Change Password"><i class="fa fa-cogs"></i></a>
+                                            @endif
+                                        </td>
+                                </tr>
+                                @endif
+                            @endforeach
                         @endforeach
                         </tbody>
                     </table>

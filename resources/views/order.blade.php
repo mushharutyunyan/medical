@@ -43,6 +43,7 @@
         <div class="section-bottom-60"></div>
 
         <div class="row" data-toggle="typeOrg" data-title="select">
+            <input id="address" class="controls form-control" type="text" placeholder="Search Box">
             <div id="map"></div>
         </div>
         <div class="row" data-toggle="typeOrg" data-title="choose" style="display:none">

@@ -283,6 +283,7 @@ class OrderController extends Controller
                     ->update(array(
                        'count' => ($count + $drug->count)
                     ));
+                $count = $drug->count;
             }else{
                 Storage::create(array(
                    'organization_id' =>  Auth::guard('admin')->user()['organization_id'],
@@ -292,7 +293,6 @@ class OrderController extends Controller
                 ));
                 $count = $drug->count;
             }
-
             // update whole sale storage
             $old_count = Storage::where('id',$drug->storage_id)->first();
             Storage::where('id',$drug->storage_id)->update(array(
@@ -317,7 +317,11 @@ class OrderController extends Controller
         }else{
             $files = OrderFile::where('order_id',$data['order_id'])->get();
         }
-        return response()->json($files);
+        $approved = false;
+        if($order->status == Order::APPROVED){
+            $approved = true;
+        }
+        return response()->json(["files"=>$files,"approved" => $approved]);
     }
 
     public function excelDownload($file){

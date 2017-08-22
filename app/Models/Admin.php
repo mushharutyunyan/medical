@@ -34,6 +34,7 @@ class Admin extends Authenticatable
     }
     public function admin_organizations()
     {
-        return $this->belongsToMany('App\Models\Admin','admin_organizations', 'admin_id', 'admin_organization_id');
+        return $this->hasMany('App\Models\AdminOrganization', 'admin_id');
     }
+
 }

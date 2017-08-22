@@ -62,40 +62,41 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">{{$settings}}</label>
                                 <div class="col-md-4">
-
-                                    <select class="form-control" name="{{$key}}">
-                                        <option></option>
-                                        @foreach($currentDrug->$key as $setVal)
-                                            <?php $attr = ''; ?>
-                                            @if($key == 'count')
-                                                <?php $name = $setVal->count ?>
-                                            @elseif(preg_match('/date/',$key))
-                                                <?php $name = $setVal->date ?>
-                                            @elseif(preg_match('/price/',$key))
-                                                <?php $name = $setVal->price ?>
-                                            @else
-                                                @if($key == 'picture')
-                                                    <?php $attr = 'data-src='.$setVal->name; ?>
-                                                @elseif($key == 'character')
-                                                    <?php $attr = 'data-text='.$setVal->name; ?>
-                                                @endif
-                                                <?php $name = $setVal->name ?>
-                                            @endif
-                                            @if(isset($currentSettings->$key))
-                                                @if($currentSettings->$key == $setVal->id)
-                                                <option selected {{$attr}} value="{{$setVal->id}}">{{$name}}</option>
+                                    @if(preg_match('/price/',$key))
+                                        <input class="form-control" value="{{$storage->price->price}}" name="price">
+                                    @else
+                                        <select class="form-control" name="{{$key}}">
+                                            <option></option>
+                                            @foreach($currentDrug->$key as $setVal)
+                                                <?php $attr = ''; ?>
+                                                @if($key == 'count')
+                                                    <?php $name = $setVal->count ?>
+                                                @elseif(preg_match('/date/',$key))
+                                                    <?php $name = $setVal->date ?>
                                                 @else
-                                                <option {{$attr}} value="{{$setVal->id}}">{{$name}}</option>
+                                                    @if($key == 'picture')
+                                                        <?php $attr = 'data-src='.$setVal->name; ?>
+                                                    @elseif($key == 'character')
+                                                        <?php $attr = 'data-text='.$setVal->name; ?>
+                                                    @endif
+                                                    <?php $name = $setVal->name ?>
                                                 @endif
-                                            @else
-                                                <option {{$attr}} value="{{$setVal->id}}">{{$name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    @if($key == 'picture')
-                                        <button type="button" class="open-picture btn blue">Open</button>
-                                    @elseif($key == 'character')
-                                        <button type="button" class="open-character btn blue">Open</button>
+                                                @if(isset($currentSettings->$key))
+                                                    @if($currentSettings->$key == $setVal->id)
+                                                    <option selected {{$attr}} value="{{$setVal->id}}">{{$name}}</option>
+                                                    @else
+                                                    <option {{$attr}} value="{{$setVal->id}}">{{$name}}</option>
+                                                    @endif
+                                                @else
+                                                    <option {{$attr}} value="{{$setVal->id}}">{{$name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @if($key == 'picture')
+                                            <button type="button" class="open-picture btn blue">Open</button>
+                                        @elseif($key == 'character')
+                                            <button type="button" class="open-character btn blue">Open</button>
+                                        @endif
                                     @endif
                                 </div>
                             </div>
