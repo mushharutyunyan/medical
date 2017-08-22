@@ -76,13 +76,10 @@
                                 @endif
 
                             </div>
-                            @if(isset($drug_settings->unit_price))
-                                <?php $unit_price = \App\Models\DrugUnitPrice::where('id',$drug_settings->unit_price)->first(); ?>
                                 <div class="product-price text-bold">
-                                    {{$unit_price->price}}
+                                    {{$drug->price}}
                                 </div>
 
-                            @endif
                             {{--<div class="product-rating">--}}
                                 {{--<div><span class="icon icon-xs mdi mdi-star"></span><span class="icon icon-xs mdi mdi-star"></span><span class="icon icon-xs mdi mdi-star"></span><span class="icon icon-xs mdi mdi-star"></span><span class="icon icon-xs mdi mdi-star text-gray-light"></span></div>--}}
                             {{--</div>--}}

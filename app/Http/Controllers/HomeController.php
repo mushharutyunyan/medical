@@ -50,7 +50,6 @@ class HomeController extends Controller
         }
 
         $drugs = DB::select('Call search("'.$search.'")');
-
         return view('search',['drugs' => $drugs,'organization_id' => $organization_id]);
     }
 
