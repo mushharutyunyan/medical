@@ -27,12 +27,14 @@ class HomeController extends Controller
     public function accountUpdate(Request $request,$id){
         $this->validate($request, [
             'name' => 'required|min:3',
-            'email' => 'required|email|unique:users,email,'.$id,
+            'email' => 'required|email|max:255|unique:users,email,'.$id,
+            'phone' => 'required|numeric|digits_between:8,8|unique:users,email,'.$id,
         ]);
         $data = $request->all();
         User::where('id',$id)->update(array(
            'name' => $data['name'],
            'email' => $data['email'],
+           'phone' => $data['phone'],
         ));
         return redirect('/account')->with(['success' => Lang::get('main.accountUpdate')]);
     }
@@ -55,6 +57,7 @@ class HomeController extends Controller
 
     public function searchByOrg(Request $request,$organization_id){
         $data = $request->all();
+        $request->session()->forget('search');
         if(!empty($data)){
             $storage = Storage::whereHas('drug', function ($q) use($data) {
                 $q->where('trade_name', 'like', "%".$data['search']."%")
@@ -62,9 +65,11 @@ class HomeController extends Controller
                     ->orWhere('trade_name_en','like',"%".$data['search']."%")
                     ->orWhere('code',$data['search']);
             })->where('organization_id',$organization_id)->get();
+
         }else{
             $storage = Storage::where('organization_id',$organization_id)->get();
         }
+        $organization = Organization::where('id',$organization_id)->first();
         $drugs = array();
         foreach($storage as $value){
             $row = new \stdClass();
@@ -78,8 +83,9 @@ class HomeController extends Controller
             $row->address = $value->organization->city." ".$value->organization->street." ".$value->organization->apartment;
             $row->phone = $value->organization->phone;
             $row->count = $value->count;
+            $row->price = $value->price->price;
             $drugs[] = $row;
         }
-        return view('search',['drugs' => $drugs,'organization_id' => $organization_id]);
+        return view('search',['drugs' => $drugs,'organization_id' => $organization_id,'organization' => $organization]);
     }
 }

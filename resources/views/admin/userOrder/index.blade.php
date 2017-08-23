@@ -65,10 +65,11 @@
                                             <span style="color:red">({{$count_unread_messages}})</span>
                                         @endif
                                     </a>
-                                    @if($order->status != \App\Models\UserOrder::CLOSED)
+                                    @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
                                     <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
                                     <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
-                                    <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Cancel</a>
+                                    <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
+                                    <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
                                     @endif
                                 </td>
                             </tr>

@@ -35,6 +35,8 @@
                     <input id="name" type="text" name="name" value="{{Input::old('name') ? Input::old('name') : Auth::user()['name']}}">
                     <label for="email" class="text-italic">{{Lang::get('main.email')}}:<span class="text-primary">*</span></label>
                     <input id="email" type="text" name="email" data-constraints="" value="{{Input::old('email') ? Input::old('email') : Auth::user()['email']}}">
+                    <label for="phone" class="text-italic">{{Lang::get('main.phone')}}:<span class="text-primary">*</span></label>
+                    <input id="phone" type="text" name="phone" data-constraints="" value="{{Input::old('phone') ? Input::old('phone') : Auth::user()['phone']}}">
                     <button class="btn btn-primary">{{Lang::get('main.send')}}</button>
                 </form>
             </div>

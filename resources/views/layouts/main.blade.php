@@ -117,7 +117,9 @@
                                     <a href="#" data-rd-navbar-toggle=".rd-navbar-message" class="text-middle icon icon-primary">
                                         <i class="fa fa-envelope"></i>
                                     </a>
-                                    <span class="text-middle shop-products-count label label-circle label-primary">{{count($messages)}}</span>
+                                    @if(count($messages))
+                                    <span class="text-middle label label-circle label-primary">{{count($messages)}}</span>
+                                    @endif
                                 </div>
                                 <div class="rd-navbar-message-panel shop-block-body">
                                     <h4>{{Lang::get('main.notifications')}}</h4>
@@ -257,8 +259,9 @@
                     <label class="error error-register"></label>
                     <input type="text" name="name" placeholder="{{Lang::get('main.name')}} *" class="form-control">
                     <input type="text" name="email" placeholder="{{Lang::get('main.email')}} *" class="form-control">
+                    <input type="text" name="phone" placeholder="{{Lang::get('main.phone')}} ({{Lang::get('main.example')}}: 93123456)*" class="form-control">
                     <input type="password" name="password" id="password" placeholder="{{Lang::get('main.password')}} *" class="form-control">
-                    <input type="password" name="password_confirmation" placeholder="{{Lang::get('main.confirmPassword')}} *" class="form-control">
+                    <input type="password" name="password_confirmation" placeholder="{{Lang::get('main.confirmpassword')}} *" class="form-control">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary offset-top-20">{{Lang::get('main.signup')}}</button>

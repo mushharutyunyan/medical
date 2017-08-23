@@ -20,7 +20,7 @@
                     <div class="cell-md-4">
                         <div class="form-group select-filter">
                             {!! Form::open(['url' => '/search/'.$organization_id,'method' => 'GET', 'class' => 'search rd-navbar-search-form']) !!}
-                            <input class="form-control" value="{{session('search') ? session('search') : Input::old('search')}}" placeholder="{{session('search') ? session('search') : Lang::get('main.searchFor')." ".$drugs[0]->name}}" name="search">
+                            <input class="form-control" value="{{session('search') ? session('search') : Input::old('search')}}" placeholder="{{session('search') ? session('search') : Lang::get('main.searchFor')." ".$organization->name}}" name="search">
                             {!! Form::close() !!}
 
                             {{--<select data-placeholder="Select an option" data-minimum-results-for-search="Infinity">--}}

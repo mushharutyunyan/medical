@@ -67,6 +67,7 @@ $(document).ready(function(){
                 },
                 error: function(data){
                     $('.error-register').html(JSON.parse(data.responseText).email);
+                    $('.error-register').html(JSON.parse(data.responseText).phone);
                     $('.error-register').show();
                 }
             })

@@ -27,10 +27,10 @@
                     @foreach($orders as $order)
                     <?php
                         $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$order->id)->where('read',0)->where('from','pharmacy')->count();
-                    ?>
+                        ?>
                         <tr style="text-align: left">
                             <td>{{$order->order}}</td>
-                            <td>{{$order->order_details[0]->storage->organization->name}}</td>
+                            <td>{{$order->organization->name}}</td>
                             <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
                             <td>{{$order->created_at}}</td>
                             <td>

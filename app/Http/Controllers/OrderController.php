@@ -120,7 +120,7 @@ class OrderController extends Controller
     public function details(){
         $page = 'searchOrder';
         if(Auth::check()){
-            $user_orders = UserOrder::where('user_id',Auth::user()['id'])->where('status','!=',UserOrder::CLOSED)->orderBy('id','DESC')->get();
+            $user_orders = UserOrder::where('user_id',Auth::user()['id'])->orderBy('id','DESC')->get();
             $page = 'historyOrder';
             return view($page,['orders' => $user_orders]);
         }
