@@ -22,10 +22,12 @@ class AdminsController extends Controller
     {
         if(Auth::guard('admin')->user()->role->id != 1){
             $admin_organizations = Auth::guard('admin')->user()->admin_organizations()->get();
+            $admins = '';
         }else{
             $admins = Admin::all();
+            $admin_organizations = '';
         }
-        return view('admin.manage.admins.index',compact('admin_organizations'));
+        return view('admin.manage.admins.index',['admin_organizations' => $admin_organizations, 'admins' => $admins]);
     }
 
     /**

@@ -320,6 +320,7 @@ $(document).ready(function(){
                     $(tr).find('.row-loading').parent().html('<button class="btn blue">Added</button>');
                     $(tr).find('.remove-storage-row').remove();
                     $(tr).find('input[name="count"]').attr('disabled','disabled');
+                    $(tr).removeClass('process');
                     $(tr).addClass('saved');
                 },
                 error: function(data){
