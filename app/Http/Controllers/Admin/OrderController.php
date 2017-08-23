@@ -289,7 +289,8 @@ class OrderController extends Controller
                    'organization_id' =>  Auth::guard('admin')->user()['organization_id'],
                     'drug_id' => $drug->storage->drug_id,
                     'drug_settings' => $drug->storage->drug_settings,
-                    'count' => $drug->count
+                    'count' => $drug->count,
+                    'price_id' => $drug->storage->price->id
                 ));
                 $count = $drug->count;
             }
