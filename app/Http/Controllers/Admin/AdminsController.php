@@ -71,7 +71,7 @@ class AdminsController extends Controller
         if(Auth::guard('admin')->user()->role->id != 1){
             $roles = Role::where('id','!=',1)->where('name','!=','admin')->get();
         }else{
-            $roles = Role::where('id',1)->orWhere('name','admin')->get();
+            $roles = Role::All();
         }
         $organizations = Organization::all();
         $currentAdmin = Admin::where('id',$id)->first();
