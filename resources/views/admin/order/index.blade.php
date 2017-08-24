@@ -84,7 +84,7 @@
                                             @if($order->from == Auth::guard("admin")->user()['organization_id'])
                                                 {!! Form::open(['url' => '/admin/order/changeStatus/received']) !!}
                                                 <input type="hidden" name="order_id" value="{{$order->id}}">
-                                                <button class="btn blue">Received</button>
+                                                <button class="btn blue received-order">Received</button>
                                                 {!! Form::close() !!}
                                             @endif
                                         @endif
@@ -185,6 +185,43 @@
                     <button class="btn blue send-order-message-button">Send</button>
                 </div>
                 {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+    <div id="received_modal" class="modal fade small" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Received Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                        <div class="row">
+                            <div class=" col-md-12 order-files-block">
+                                <table class="table table-striped table-bordered received-modal-list ">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Count</th>
+                                            <th>Settings</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form>
+                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <button type="button" class="btn btn-success received-order-modal">Received</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

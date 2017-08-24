@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\DrugUnitPrice;
 use App\Models\OrderFile;
 use App\Models\OrderInfo;
 use App\Models\OrderMessage;
@@ -277,11 +278,21 @@ class OrderController extends Controller
         $data = $request->all();
         $drugs = OrderInfo::where('order_id',$data['order_id'])->get();
         foreach($drugs as $drug){
+            $price = number_format($data[$drug->id],2,".","");
+            if(!DrugUnitPrice::where('drug_id',$drug->id)->where('price',$price)->count()){
+                $drug_unit_price = DrugUnitPrice::create(array(
+                    'drug_id' => $drug->id,
+                    'price' => $price
+                ));
+            }else{
+                $drug_unit_price = DrugUnitPrice::where('drug_id',$drug->id)->where('price',$price)->first();
+            }
             if($count = Storage::checkDrugExists($drug->storage->drug_id,$drug->storage->drug_settings)){
                 Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
                     ->where('drug_id',$drug->storage->drug_id)->where('drug_settings',$drug->storage->drug_settings)
                     ->update(array(
-                       'count' => ($count + $drug->count)
+                       'count' => ($count + $drug->count),
+                        'price_id' => $drug_unit_price->id
                     ));
                 $count = $drug->count;
             }else{
@@ -290,7 +301,7 @@ class OrderController extends Controller
                     'drug_id' => $drug->storage->drug_id,
                     'drug_settings' => $drug->storage->drug_settings,
                     'count' => $drug->count,
-                    'price_id' => $drug->storage->price->id
+                    'price_id' => $drug_unit_price->id
                 ));
                 $count = $drug->count;
             }
@@ -303,11 +314,42 @@ class OrderController extends Controller
         Order::where('id',$data['order_id'])->update(array(
             'status' => Order::RECEIVED
         ));
-        return redirect('/admin/order');
+        return response()->json(true);
     }
 
     public function changeOrganization(Request $request){
         return redirect()->back()->withInput();
+    }
+
+    public function getReceivedInfo(Request $request, Drug $drug){
+        $data = $request->all();
+        $infos = OrderInfo::where('order_id',$data['order_id'])->get();
+        $response = array();
+        foreach($infos as $info){
+            $settings = json_decode($info->storage->drug_settings);
+            $response_settings = array();
+            foreach($settings as $key => $setting){
+                foreach($info->storage->drug->$key as $drug_settings){
+                    if($drug_settings->id == $setting){
+                        if(preg_match('/date/',$key)){
+                            $response_settings[] = array($drug->setting_names[$key] => $drug_settings->date);
+                        }elseif(preg_match('/count/',$key) && $key != 'country'){
+                            $response_settings[] = array($drug->setting_names[$key] => $drug_settings->count);
+                        }else{
+                            $response_settings[] = array($drug->setting_names[$key] => $drug_settings->name);
+                        }
+                    }
+                }
+            }
+            $response[] = array(
+                'id' => $info->id,
+                'name' => $info->storage->drug->trade_name,
+                'count' => $info->count,
+                'price' => $info->storage->price->price,
+                'settings' => $response_settings
+            );
+        }
+        return response()->json($response);
     }
 
     public function excelFiles(Request $request){

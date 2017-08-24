@@ -122,7 +122,7 @@ class StorageController extends Controller
                 }
             }
         }
-        $price = $data['price'];
+        $price = number_format($data['price'],2,".","");
         if(!DrugUnitPrice::where('drug_id',$data['drug_id'])->where('price',$price)->count()){
             $drug_unit_price = DrugUnitPrice::create(array(
                 'drug_id' => $data['drug_id'],

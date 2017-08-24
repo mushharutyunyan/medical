@@ -197,4 +197,64 @@ $(document).ready(function(){
     $("#order_organization_list").on('change',function(){
         $(".change_organization_form").submit();
     })
+    $(".received-order").on("click",function(e){
+        e.preventDefault();
+        var order_id = $(this).parent().children('input[name="order_id"]').val();
+        var _token = $(this).parent().children('input[name="_token"]').val();
+        $.ajax({
+            url: '/admin/order/getReceivedInfo',
+            type: 'POST',
+            data: {order_id:order_id,_token:_token},
+            dataType: 'json',
+            success: function(data){
+                $.each(data,function(key,value){
+                    var settings = '';
+                    $.each(value.settings,function(key_settings,value_settings){
+                        $.each(value_settings,function(setting_name,setting_value){
+                            settings += "<p>"+setting_name+": "+setting_value+"</p>";
+                        })
+                    });
+                    $("#received_modal").find('.order-files-block tbody').append(
+                        '<tr>' +
+                        '<td>'+value.name+'</td>' +
+                        '<td>'+value.count+'</td>' +
+                        '<td>'+settings+'</td>' +
+                        '<td><input name="price" data-id="'+value.id+'" value="'+value.price+'" class="form-control"></td>' +
+                        '</tr>'
+                    )
+                })
+                $("#received_modal").modal('show');
+                $(".received-order-modal").attr('data-id',order_id);
+            }
+        })
+    })
+    $(".received-order-modal").on("click",function(){
+        // changeStatus/received
+        $data = {};
+        $("#received_modal").find('.order-files-block tbody tr').each(function(){
+            var price = $(this).find('input[name="price"]').val();
+            var order_info_id = $(this).find('input[name="price"]').attr('data-id');
+            if(price < 0 || price == ''){
+                $.alert({
+                    title: 'Warning!',
+                    content: 'Check Drug prices!',
+                });
+                access = false;
+            }
+            $data[order_info_id] = price;
+        });
+        $data['order_id'] = $(this).attr('data-id');
+        $data['_token'] = $(this).parent().children('input[name="_token"]').val();
+        $(this).html('Waiting ...')
+        $(this).attr('disabled','disabled')
+        $.ajax({
+            url: '/admin/order/changeStatus/received',
+            data: $data,
+            type: "POST",
+            dataType: 'json',
+            success: function(data){
+                location.replace('/admin/storage');
+            }
+        })
+    })
 });
