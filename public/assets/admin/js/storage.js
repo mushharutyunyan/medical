@@ -669,6 +669,8 @@ function storage_save($data,save_all_button,table,count){
                         confirm_message = 'This drug is already exists in your storage, count - '+data.count;
                     }
                 }
+                var $success_data = data;
+
                 $.confirm({
                     animation: 'bottom',
                     closeAnimation: 'bottom',
@@ -684,7 +686,9 @@ function storage_save($data,save_all_button,table,count){
                                     settings = JSON.stringify($data['info']);
                                     $("#search_drug").modal('hide');
                                     var info = '';
-                                    closest_tr.find('input[name="price"]').val(data.price.price)
+                                    if(!$data['is_order']){
+                                        closest_tr.find('input[name="price"]').val($success_data.price.price)
+                                    }
                                     $.each($data.data_info, function(key, value){
                                         info += '<p>'+key+': '+value+'</p>';
                                     });

@@ -40,22 +40,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <?php $i = 0 ?>
-                            @foreach($warning_drugs as $warning_drug)
-                                <tr class="odd gradeX saved">
-                                    <td>
-                                        {{$warning_drug->drug->trade_name}} <span class="error">({{$warning_drug->count}})</span>
-                                        <input type='hidden' class='row-storage-id' name='storage_id_{{$i}}' value='{{$warning_drug->id}}'>
-                                        <input type='hidden' class='row-count-in-storage' name='count_in_storage_{{$i}}' value='{{$warning_drug->count}}'>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="count" placeholder="Count">
-                                        <button class="btn green add-warning-drug">ADD</button>
-                                    </td>
-                                </tr>
-                                <?php $i++ ?>
-                            @endforeach
-                            @for($i = count($warning_drugs); $i <= 15; $i++)
+                            @for($i = 0; $i <= 15; $i++)
                                 <tr class="odd gradeX">
                                     <td><button type="button" data-id="{{$i}}" class="btn btn-success search-drug-button order">Search</button></td>
                                     <td><input type="text" class="form-control" name="count" placeholder="Count"></td>
