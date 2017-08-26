@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserOrder;
 use App\Models\UserOrderDetails;
 use App\Models\UserOrderMessage;
+use App\Models\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Session;
@@ -235,5 +236,26 @@ class OrderController extends Controller
             'take_time' => $take_time,
         ));
         return response()->json(true);
+    }
+
+    public function info(Request $request){
+        $data = $request->all();
+        $drug = Storage::where('id',$data['id'])->first();
+        $settings = json_decode($drug->drug_settings);
+        $response_settings = array();
+        foreach($settings as $key => $setting){
+            foreach($drug->drug->$key as $drug_settings){
+                if($drug_settings->id == $setting){
+                    if(preg_match('/date/',$key)){
+                        $response_settings[] = array("name" => $drug->drug->setting_names()[$key], "value" => $drug_settings->date);
+                    }elseif(preg_match('/count/',$key) && $key != 'country'){
+                        $response_settings[] = array("name" => $drug->drug->setting_names()[$key], "value" => $drug_settings->count);
+                    }else{
+                        $response_settings[] = array("name" => $drug->drug->setting_names()[$key], "value" => $drug_settings->name);
+                    }
+                }
+            }
+        }
+        return response()->json($response_settings);
     }
 }

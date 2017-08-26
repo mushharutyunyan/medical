@@ -65,15 +65,17 @@
                                         <span class="stepper-arrow down"></span>
                                     </div>
                                 </div>
-                                @if(App::getLocale() == 'am')
-                                <p class="big">{{$drug->trade_name}}<a href="single-product.html" class="text-base"> ({{$drug->name}})</a></p>
-                                @else
-                                    @if(App::getLocale() == 'ru')
-                                        <p class="big">{{$drug->trade_name_ru}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
-                                    @elseif(App::getLocale() == 'en')
-                                        <p class="big">{{$drug->trade_name_en}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
+                                <a href="javascript:;" data-id="{{$drug->storage_id}}" class="get-drug-info">
+                                    @if(App::getLocale() == 'am')
+                                    <p class="big">{{$drug->trade_name}}<a href="single-product.html" class="text-base"> ({{$drug->name}})</a></p>
+                                    @else
+                                        @if(App::getLocale() == 'ru')
+                                            <p class="big">{{$drug->trade_name_ru}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
+                                        @elseif(App::getLocale() == 'en')
+                                            <p class="big">{{$drug->trade_name_en}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
+                                        @endif
                                     @endif
-                                @endif
+                                </a>
 
                             </div>
                                 <div class="product-price text-bold">
@@ -89,6 +91,34 @@
                     @endforeach
                 </div>
                 <div class="text-md-left offset-top-45">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="drugInfoModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{Lang::get('main.drugInfo')}}</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped drug-info-modal-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
                 </div>
             </div>
         </div>

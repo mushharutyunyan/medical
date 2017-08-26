@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Support\Arrays;
+use Illuminate\Support\Facades\Lang;
+
 class Drug extends AbstractModel
 {
     protected $softDelete = true;
@@ -40,28 +42,32 @@ class Drug extends AbstractModel
         'character',
         'storage',
     );
-    public $setting_names = array(
-      'category' => 'Category',
-        'certificate_number' => 'Certificate Number',
-        'country' => 'Country',
-        'expiration_date' => 'Expiration Date',
-        'group' => 'Group',
-        'manufacturer' => 'Manufacturer',
-        'count' => 'Count',
-        'picture' => 'Picture',
-        'registration_certificate_holder' => 'Registration Certificate Holder',
-        'registration_date' => 'Registration Date',
-        'release_packaging' => 'Release Packaging',
-        'release_order' => 'Release Order',
-        'series' => 'Series',
-        'supplier' => 'Supplier',
-        'type' => 'Type',
-        'type_belonging' => 'Type Belonging',
-        'unit' => 'Unit',
-        'unit_price' => 'Unit Price',
-        'character' => 'Character',
-        'storage' => 'Storage',
-    );
+
+
+    public function setting_names(){
+        return array(
+        'category' => Lang::get('main.category'),
+        'certificate_number' => Lang::get('main.certificate_number'),
+        'country' => Lang::get('main.country'),
+        'expiration_date' => Lang::get('main.expiration_date'),
+        'group' => Lang::get('main.group'),
+        'manufacturer' => Lang::get('main.manufacturer'),
+        'count' => Lang::get('main.count'),
+        'picture' => Lang::get('main.picture'),
+        'registration_certificate_holder' => Lang::get('main.registration_certificate_holder'),
+        'registration_date' => Lang::get('main.registration_date'),
+        'release_packaging' => Lang::get('main.release_packaging'),
+        'release_order' => Lang::get('main.release_order'),
+        'series' => Lang::get('main.series'),
+        'supplier' => Lang::get('main.supplier'),
+        'type' => Lang::get('main.type'),
+        'type_belonging' => Lang::get('main.type_belonging'),
+        'unit' => Lang::get('main.unit'),
+        'unit_price' => Lang::get('main.unit_price'),
+        'character' => Lang::get('main.character'),
+        'storage' => Lang::get('main.storage'),
+        );
+    }
 
     public function category()
     {

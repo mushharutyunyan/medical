@@ -219,6 +219,27 @@ $(document).ready(function(){
             $(this).find('input[name="_token"]').val()
         )
     });
+    $(".get-drug-info").on("click",function(){
+       var id = $(this).attr('data-id');
+       $.ajax({
+           url: '/order/info',
+           type: 'GET',
+           data: {id:id},
+           dataType: 'json',
+           success: function(data){
+                $(".drug-info-modal-table tbody").html('');
+                $.each(data,function(key,value){
+                    $(".drug-info-modal-table tbody").append(
+                        '<tr style="text-align: left">' +
+                        '<td>'+value.name+'</td>' +
+                        '<td>'+value.value+'</td>' +
+                        '</tr>'
+                    )
+                })
+               $("#drugInfoModal").modal('show');
+           }
+       })
+    });
     if($("#orderFinishModal").length){
         $("#orderFinishModal").modal('show');
     }

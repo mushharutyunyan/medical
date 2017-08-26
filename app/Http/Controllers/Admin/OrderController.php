@@ -332,11 +332,11 @@ class OrderController extends Controller
                 foreach($info->storage->drug->$key as $drug_settings){
                     if($drug_settings->id == $setting){
                         if(preg_match('/date/',$key)){
-                            $response_settings[] = array($drug->setting_names[$key] => $drug_settings->date);
+                            $response_settings[] = array($drug->setting_names()[$key] => $drug_settings->date);
                         }elseif(preg_match('/count/',$key) && $key != 'country'){
-                            $response_settings[] = array($drug->setting_names[$key] => $drug_settings->count);
+                            $response_settings[] = array($drug->setting_names()[$key] => $drug_settings->count);
                         }else{
-                            $response_settings[] = array($drug->setting_names[$key] => $drug_settings->name);
+                            $response_settings[] = array($drug->setting_names()[$key] => $drug_settings->name);
                         }
                     }
                 }

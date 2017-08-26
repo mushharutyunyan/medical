@@ -36,6 +36,7 @@ Route::group(['middleware' => 'globalUser'],function(){
         Route::post('/createMessage','OrderController@createMessage');
         Route::post('/getMessages','OrderController@getMessages');
         Route::post('/pay','OrderController@pay');
+        Route::get('/info','OrderController@info');
     });
 
 
