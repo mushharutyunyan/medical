@@ -206,6 +206,7 @@
                                             <th>Count</th>
                                             <th>Settings</th>
                                             <th>Price</th>
+                                            <th>Procent</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -220,6 +220,7 @@ $(document).ready(function(){
                         '<td>'+value.count+'</td>' +
                         '<td>'+settings+'</td>' +
                         '<td><input name="price" data-id="'+value.id+'" value="'+value.price+'" class="form-control"></td>' +
+                        '<td><input name="procent" class="form-control">%</td>' +
                         '</tr>'
                     )
                 })
@@ -231,8 +232,10 @@ $(document).ready(function(){
     $(".received-order-modal").on("click",function(){
         // changeStatus/received
         $data = {};
+        var access = true;
         $("#received_modal").find('.order-files-block tbody tr').each(function(){
             var price = $(this).find('input[name="price"]').val();
+            var procent = $(this).find('input[name="procent"]').val();
             var order_info_id = $(this).find('input[name="price"]').attr('data-id');
             if(price < 0 || price == ''){
                 $.alert({
@@ -241,20 +244,27 @@ $(document).ready(function(){
                 });
                 access = false;
             }
+            if(procent > 0){
+                price = ((parseFloat(procent*price/100)) + parseFloat(price)).toFixed(2);
+                $(this).find('input[name="price"]').val(price);
+            }
             $data[order_info_id] = price;
         });
-        $data['order_id'] = $(this).attr('data-id');
-        $data['_token'] = $(this).parent().children('input[name="_token"]').val();
-        $(this).html('Waiting ...')
-        $(this).attr('disabled','disabled')
-        $.ajax({
-            url: '/admin/order/changeStatus/received',
-            data: $data,
-            type: "POST",
-            dataType: 'json',
-            success: function(data){
-                location.replace('/admin/storage');
-            }
-        })
+
+        if(access){
+            $data['order_id'] = $(this).attr('data-id');
+            $data['_token'] = $(this).parent().children('input[name="_token"]').val();
+            $(this).html('Waiting ...')
+            $(this).attr('disabled','disabled')
+            $.ajax({
+                url: '/admin/order/changeStatus/received',
+                data: $data,
+                type: "POST",
+                dataType: 'json',
+                success: function(data){
+                    location.replace('/admin/storage');
+                }
+            })
+        }
     })
 });
