@@ -17,10 +17,11 @@
 
 
                 <div class="range">
-                    {!! Form::open(['url' => '/search/'.$organization_id,'method' => 'GET', 'class' => 'search rd-navbar-search-form']) !!}
                     <div class="cell-md-4">
                         <div class="form-group select-filter">
+                            {!! Form::open(['url' => '/search/'.$organization_id,'method' => 'GET', 'class' => 'search rd-navbar-search-form search-form']) !!}
                             <input class="form-control" value="{{session('search') ? session('search') : Input::old('search')}}" placeholder="{{session('search') ? session('search') : Lang::get('main.searchFor')." ".$organization->name}}" name="search">
+                            {!! Form::close() !!}
 
                             {{--<select data-placeholder="Select an option" data-minimum-results-for-search="Infinity">--}}
                                 {{--<option>Default sorting</option>--}}
@@ -33,12 +34,11 @@
                         </div>
                     </div>
                     <div class="cell-md-2">
-                        <button class="btn btn-info pull-left">{{Lang::get('main.search')}}</button>
+                        <button class="btn btn-info pull-left search-button">{{Lang::get('main.search')}}</button>
                     </div>
                     <div class="cell-md-6 cell-middle text-md-right ">
                         <h6 class="">Showing all <span class='text-primary'>{{count($drugs)}} results</span></h6>
                     </div>
-                    {!! Form::close() !!}
                 </div>
                 <div class="range offset-top-30">
                     <!-- Product-->

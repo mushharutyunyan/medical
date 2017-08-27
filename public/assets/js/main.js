@@ -243,6 +243,9 @@ $(document).ready(function(){
     if($("#orderFinishModal").length){
         $("#orderFinishModal").modal('show');
     }
+    $(".search-button").on("click",function(){
+        $(".search-form").submit();
+    })
 });
 function send_order(method,type,order,address,take_time,_token){
     $.ajax({
