@@ -35,10 +35,10 @@
                     <div class="cell-md-2">
                         <button class="btn btn-info pull-left">{{Lang::get('main.search')}}</button>
                     </div>
-                    {!! Form::close() !!}
                     <div class="cell-md-6 cell-middle text-md-right ">
                         <h6 class="">Showing all <span class='text-primary'>{{count($drugs)}} results</span></h6>
                     </div>
+                    {!! Form::close() !!}
                 </div>
                 <div class="range offset-top-30">
                     <!-- Product-->
