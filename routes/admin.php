@@ -38,7 +38,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
         Route::get('/excel/get','OrderController@excelFiles');
         Route::get('/excel/download/{file}','OrderController@excelDownload');
         Route::post('/changeStatus/received','OrderController@receivedOrder');
-
+        Route::get('/release/{order_id}','OrderController@release');
     });
     Route::resource('/message','MessageController');
     Route::resource('/userOrder','UserOrderController');

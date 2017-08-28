@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\DrugUnitPrice;
+use App\Models\OrderBusy;
 use App\Models\OrderFile;
 use App\Models\OrderInfo;
 use App\Models\OrderMessage;
@@ -93,6 +94,13 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::where('id',$id)->first();
+        $checkBusy = $this->checkOrderBusy($order->id);
+        if(!$checkBusy){
+            return redirect()->back()->withErrors(['error' => 'This order has been taken by another user']);
+        }
+        if($order->to == Auth::guard("admin")->user()['organization_id']){
+            $this->orderBusy($order->id);
+        }
         if(Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id']){
             return redirect('/admin/order');
         }
@@ -251,6 +259,14 @@ class OrderController extends Controller
 
     public function changeStatusTo(Request $request){
         $data = $request->all();
+        $order = Order::where('id',$data['id'])->first();
+        $checkBusy = $this->checkOrderBusy($data['id']);
+        if(!$checkBusy){
+            return response()->json(['error' => 'This order has been taken by another user']);
+        }
+        if($order->to == Auth::guard("admin")->user()['organization_id']){
+            $this->orderBusy($order->id);
+        }
         $data_order = array();
         $data_order['status'] = $data['status'];
         if(!empty($data['delivery_date'])){
@@ -321,6 +337,36 @@ class OrderController extends Controller
         return redirect()->back()->withInput();
     }
 
+    private function orderBusy($order_id){
+        OrderBusy::where('order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->update(array(
+           'status' => 0
+        ));
+        if(OrderBusy::where('order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('admin_id',Auth::guard('admin')->user()['id'])->count()){
+            OrderBusy::where('order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('admin_id',Auth::guard('admin')->user()['id'])->update(array(
+                'status' => 1
+            ));
+        }else{
+            OrderBusy::create(array(
+               'order_id' => $order_id,
+                'organization_id' => Auth::guard('admin')->user()['organization_id'],
+                'admin_id' => Auth::guard('admin')->user()['id'],
+                'status' => 1
+            ));
+        }
+    }
+    private function checkOrderBusy($order_id){
+        if(OrderBusy::where('order_id',$order_id)->where('status',1)->where('admin_id','!=',Auth::guard('admin')->user()['id'])->count()){
+            return false;
+        }
+        return true;
+    }
+
+    public function release($order_id){
+        OrderBusy::where('order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('admin_id',Auth::guard('admin')->user()['id'])->update(array(
+            'status' => 0
+        ));
+        return redirect()->back();
+    }
     public function getReceivedInfo(Request $request, Drug $drug){
         $data = $request->all();
         $infos = OrderInfo::where('order_id',$data['order_id'])->get();

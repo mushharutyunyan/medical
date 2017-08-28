@@ -50,11 +50,11 @@
                                             @foreach($drug->storage->drug->$key as $key_setting => $setting)
                                                 @if($setting->id == $drug_setting)
                                                     @if(preg_match('/price/',$key))
-                                                    <p>{{$drug->storage->drug->setting_names[$key]}}: {{$setting->price}}</p>
+                                                    <p>{{$drug->storage->drug->setting_names()[$key]}}: {{$setting->price}}</p>
                                                     @elseif(preg_match('/count/',$key))
-                                                    <p>{{$drug->storage->drug->setting_names[$key]}}: {{$setting->count}}</p>
+                                                    <p>{{$drug->storage->drug->setting_names()[$key]}}: {{$setting->count}}</p>
                                                     @else
-                                                    <p>{{$drug->storage->drug->setting_names[$key]}}: {{$setting->name}}</p>
+                                                    <p>{{$drug->storage->drug->setting_names()[$key]}}: {{$setting->name}}</p>
                                                     @endif
                                                 @endif
                                             @endforeach

@@ -112,13 +112,18 @@ $(document).ready(function(){
                     }
                 },
                 submitHandler: function(form) {
+                    $("#change_order_status_to").find('span.error').html('');
                     $.ajax({
                         url: "/admin/order/changeStatusTo",
                         data: $(form).serialize(),
                         type: "POST",
                         dataType: "json",
                         success: function(data){
-                            location.replace('/admin/order')
+                            if(data.error){
+                                $("#change_order_status_to").find('span.error').html(data.error)
+                            }else{
+                                location.replace('/admin/order')
+                            }
                         }
                     })
                 }

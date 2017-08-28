@@ -51,13 +51,13 @@
             <nav data-layout="rd-navbar-fixed" data-sm-layout="rd-navbar-fullwidth" data-lg-layout="rd-navbar-static" class="rd-navbar" data-stick-up-offset="50" data-md-layout="rd-navbar-fullwidth">
                 <div class="rd-navbar-toppanel">
                     <div class="rd-navbar-toppanel-inner">
-                        <div class="rd-navbar-toppanel-submenu"><a href="#" data-rd-navbar-toggle=".rd-navbar-toppanel-submenu" class="rd-navbar-toppanel-submenu-toggle"></a>
+                        @if(Auth::check())
+                        <div class="rd-navbar-toppanel-submenu"><a href="#" data-rd-navbar-toggle=".rd-navbar-toppanel-submenu" style="margin-top: 11px;font-size: 20px;"><spam>{{Auth::user()['name']}}</spam></a>
                             <ul>
-                                @if(Auth::check())
                                 <li><a href="/account">{{Lang::get('main.myAccount')}}</a></li>
-                                @endif
                             </ul>
                         </div>
+                        @endif
 
                         <div class="rd-navbar-toppanel-wrapper">
                             <div class="rd-navbar-contact-info">

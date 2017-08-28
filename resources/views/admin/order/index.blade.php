@@ -16,6 +16,15 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul class="list-group">
+                                @foreach ($errors->all() as $error)
+                                    <li class="list-group-item">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="table-toolbar">
                         <div class="row">
                             <div class="col-md-6">
@@ -40,25 +49,31 @@
                         </thead>
                         <tbody>
                         @foreach($orders as $order)
+                            <?php
+                            $order_busy = \App\Models\OrderBusy::where('order_id',$order->id)->where('status',1)->first();
+                            ?>
                             <tr class="odd gradeX">
                                 <td>{{$order->organizationTo->name}}</td>
                                 <td>{{$order->organizationFrom->name}}</td>
                                 <td>
                                     @if($order->organizationTo->id == Auth::guard('admin')->user()['organization_id'])
                                         {{$status[$order->status]}}
-                                        @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED && $order->status != \App\Models\Order::PROCEEDFROM)
-                                        {!! Form::open(['id' => 'form_change_order_status','url' => '/admin/order/changeStatus']) !!}
-                                        <input type="hidden" value="{{$order->id}}" name="id">
-                                        <select class="form-control" name="status" id="order_table_status">
-                                            <option value="0"></option>
-                                            @foreach($status_to as $key => $value)
-                                                @if($status[$order->status] != $value)
-                                                    <option value="{{$key}}">{{$value}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
+                                        @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'])
+                                        @else
+                                            @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED && $order->status != \App\Models\Order::PROCEEDFROM)
+                                            {!! Form::open(['id' => 'form_change_order_status','url' => '/admin/order/changeStatus']) !!}
+                                            <input type="hidden" value="{{$order->id}}" name="id">
+                                            <select class="form-control" name="status" id="order_table_status">
+                                                <option value="0"></option>
+                                                @foreach($status_to as $key => $value)
+                                                    @if($status[$order->status] != $value)
+                                                        <option value="{{$key}}">{{$value}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            @endif
+                                            {!! Form::close() !!}
                                         @endif
-                                        {!! Form::close() !!}
                                     @else
                                         {{$status[$order->status]}}
                                     @endif
@@ -70,30 +85,38 @@
                                 </td>
                                 <td>{{$order->created_at}}</td>
                                 <td>
-                                    @if(\App\Models\Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id'])
-                                    <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+
+                                    @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'])
+                                        This order already take by another user
                                     @else
-                                        @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
-                                            @if($order->from == Auth::guard("admin")->user()['organization_id'] && ($order->status == \App\Models\Order::PROCEEDFROM || $order->status == \App\Models\Order::SAVED))
-                                            <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
-                                            @elseif($order->to == Auth::guard("admin")->user()['organization_id'] && $order->status != \App\Models\Order::PROCEEDFROM)
-                                            <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                        @if(\App\Models\Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id'])
+                                        <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+                                        @else
+                                            @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
+                                                @if($order->from == Auth::guard("admin")->user()['organization_id'] && ($order->status == \App\Models\Order::PROCEEDFROM || $order->status == \App\Models\Order::SAVED))
+                                                <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                @elseif($order->to == Auth::guard("admin")->user()['organization_id'] && $order->status != \App\Models\Order::PROCEEDFROM)
+                                                <a href="/admin/order/{{$order->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
+                                                @endif
                                             @endif
-                                        @endif
-                                        @if($order->status == \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
-                                            @if($order->from == Auth::guard("admin")->user()['organization_id'])
-                                                {!! Form::open(['url' => '/admin/order/changeStatus/received']) !!}
-                                                <input type="hidden" name="order_id" value="{{$order->id}}">
-                                                <button class="btn blue received-order">Received</button>
+                                            @if($order->status == \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
+                                                @if($order->from == Auth::guard("admin")->user()['organization_id'])
+                                                    {!! Form::open(['url' => '/admin/order/changeStatus/received']) !!}
+                                                    <input type="hidden" name="order_id" value="{{$order->id}}">
+                                                    <button class="btn blue received-order">Received</button>
+                                                    {!! Form::close() !!}
+                                                @endif
+                                            @endif
+                                            <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+                                            <a href="#" class="view-files" data-id="{{$order->id}}" title="Watch Files"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
+                                            @if($order->from == Auth::guard("admin")->user()['organization_id'] && !$order->status)
+                                                {!! Form::open(['class' => 'storage-save-all']) !!}
+                                                <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit in_table"><i class="fa fa-check"></i>Send</button>
                                                 {!! Form::close() !!}
                                             @endif
-                                        @endif
-                                        <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
-                                        <a href="#" class="view-files" data-id="{{$order->id}}" title="Watch Files"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
-                                        @if($order->from == Auth::guard("admin")->user()['organization_id'] && !$order->status)
-                                            {!! Form::open(['class' => 'storage-save-all']) !!}
-                                            <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit in_table"><i class="fa fa-check"></i>Send</button>
-                                            {!! Form::close() !!}
+                                            @if($order_busy && $order_busy->user_id != Auth::guard('admin')->user()['id'])
+                                                <a class="btn btn-danger" href="/admin/order/release/{{$order->id}}">Release order</a>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>
@@ -174,6 +197,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <span class="error"></span>
                                 <textarea class="change-order-status-to-message form-control" name="message" rows="10"></textarea>
                                 <input type="hidden" name="status" id="status">
                                 <input type="hidden" name="id" id="order_id">
