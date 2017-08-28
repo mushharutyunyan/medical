@@ -204,7 +204,8 @@ class StorageController extends Controller
         $currentDrug->unit;
         $currentDrug->unit_price;
         $currentDrug->character;
-        return response()->json(['currentDrug' => $currentDrug,'storage' => $storage,'setting_names' => $drug->setting_names,'settings' => $drug->settings]);
+
+        return response()->json(['currentDrug' => $currentDrug,'storage' => $storage,'setting_names' => $drug->setting_names(),'settings' => $drug->settings]);
 
     }
     public function checkDrug(Request $request){
