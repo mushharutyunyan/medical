@@ -168,8 +168,11 @@ $(document).ready(function(){
         $('div[data-toggle="'+tog+'"][data-title="'+sel+'"]').show();
     });
     $('.pay-order').on("click",function(){
-        $("#chooseMethodPayModal").find(".modal-body").children('button').attr('data-order',$(this).attr('data-order'));
-        $("#chooseMethodPayModal").modal('show');
+        // $("#chooseMethodPayModal").find(".modal-body").children('button').attr('data-order',$(this).attr('data-order'));
+        // $("#chooseMethodPayModal").modal('show');
+
+        $("#chooseTypePayModal").find(".modal-body").find('button').attr('data-order',$(this).attr('data-order'));
+        $("#chooseTypePayModal").modal('show');
     });
     $(".choose-pay-method").on("click",function(){
         $("#chooseTypePayModal").find(".modal-body").find('button').attr('data-order',$(this).attr('data-order'));

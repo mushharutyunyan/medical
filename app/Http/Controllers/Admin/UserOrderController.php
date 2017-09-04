@@ -63,4 +63,43 @@ class UserOrderController extends Controller
         ));
         return redirect()->back();
     }
+
+    public function finishOrderDetails(Request $request){
+        $data = $request->all();
+        $order = UserOrder::where('id',$data['id'])->first();
+        if($order->pay_type == UserOrder::DELIVERY){
+            $pay_type = 'delivery_address';
+            $take_time_delivery = $order->delivery_address;
+        }else{
+            $pay_type = 'take_time';
+            $take_time_delivery = $order->take_time;
+        }
+        $response = array(
+            'id' => $order->id,
+            'pay_type_id' => $order->pay_type,
+            'pay_type' => $pay_type,
+            'take_time_delivery' => $take_time_delivery
+        );
+        return $response;
+    }
+
+    public function finishOrder(Request $request, $user_type){
+        $data = $request->all();
+        if($user_type == 'pharmacy'){
+            if(UserOrder::where('id',$data['order_id'])->where('pay_type',$data['pay_type'])->where('take_time',$data['take_time'])->where('delivery_address',$data['delivery_address'])->count()){
+                $status = UserOrder::CHANGEDBYPHARMACY;
+            }else{
+                $status = UserOrder::APPROVEDBYPHARMACY;
+            }
+        }
+        $data['status'] = $status;
+        $id = $data['order_id'];
+        unset($data['_token']);
+        unset($data['order_id']);
+        if(empty($data['take_time'])){
+            $data['take_time'] = null;
+        }
+        UserOrder::where('id',$id)->update($data);
+        return response()->json(true);
+    }
 }

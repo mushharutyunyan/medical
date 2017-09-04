@@ -258,4 +258,15 @@ class OrderController extends Controller
         }
         return response()->json($response_settings);
     }
+
+    public function canceled(Request $request){
+        $data = $request->all();
+        if($data['status'] == 'canceled'){
+            $status = UserOrder::CANCELEDBYUSER;
+        }else{
+            $status = UserOrder::CLOSEDBYUSER;
+        }
+        UserOrder::where('id',$data['id'])->update(array('status' => $status));
+        return response()->json(true);
+    }
 }

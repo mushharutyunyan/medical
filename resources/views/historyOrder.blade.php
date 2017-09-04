@@ -34,15 +34,25 @@
                             <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
                             <td>{{$order->created_at}}</td>
                             <td>
+                                <form id="canceled_by_user">
                                 @if($order->status == \App\Models\UserOrder::APPROVED && !$order->pay_method)
-                                    <button class="btn btn-success pay-order" data-order="{{$order->order}}">{{Lang::get('main.pay')}}</button>
+                                    <button class="btn btn-success pay-order" type="button" data-order="{{$order->order}}">{{Lang::get('main.pay')}}</button>
                                 @endif
                                 <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history btn btn-info">{{Lang::get('main.details')}}</a>
-                                    <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages btn btn-info">{{Lang::get('main.messages')}}
-                                        @if($count_unread_messages)
-                                        <span style="color:red">({{$count_unread_messages}})</span>
-                                        @endif
-                                    </a>
+                                <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages btn btn-info">{{Lang::get('main.messages')}}
+                                    @if($count_unread_messages)
+                                    <span style="color:red">({{$count_unread_messages}})</span>
+                                    @endif
+                                </a>
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="id" value="{{$order->id}}">
+                                @if($order->status != \App\Models\UserOrder::CANCELED && $order->status != \App\Models\UserOrder::CANCELEDBYUSER && $order->status != \App\Models\UserOrder::CLOSEDBYUSER)
+                                    <button class="btn btn-blue canceled_closed_by_user canceled">{{Lang::get('main.cancel')}}</button>
+                                    @if($order->status >= \App\Models\UserOrder::APPROVEDBYPHARMACY)
+                                        <button class="btn btn-blue canceled_closed_by_user closed">{{Lang::get('main.close')}}</button>
+                                    @endif
+                                @endif
+                                </form>
                             </td>
                         </tr>
                     @endforeach

@@ -157,5 +157,51 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+
+    $(".finish-order").on("click",function(e){
+        e.preventDefault();
+        $.ajax({
+            url: '/admin/userOrder/details/finishOrder',
+            type: 'GET',
+            data: {id:$(this).attr('data-id')},
+            dataType: 'json',
+            success: function(data){
+                $("#order_finish_form input").show();
+                $("#order_finish_form select option").each(function(key,value){
+                    if($(this).val() == data.pay_type_id){
+                        $("select[name='pay_type']").val($(this).val())
+                    }
+                })
+                $("#order_finish_form input").each(function(key,value){
+                    if($(this).attr('name') != data.pay_type){
+                        $(this).hide();
+                    }else{
+                        $(this).val(data.take_time_delivery)
+                    }
+                });
+                $("#order_finish_form input[name='order_id']").val(data.id)
+                $("#order_finish_form input[name='take_time']").datetimepicker();
+                $("#userOrderFinish").modal('show');
+            }
+        })
+    })
+    $("#order_finish_form").validate({
+        rules:{
+            take_time: {
+                required: true,
+            }
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                url: '/admin/userOrder/finish/pharmacy',
+                type: 'POST',
+                data: $(form).serialize(),
+                dataType: 'json',
+                success: function(){
+                    location.reload();
+                }
+            })
+        }
     })
 });

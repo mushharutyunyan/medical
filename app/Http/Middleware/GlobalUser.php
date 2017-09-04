@@ -23,6 +23,8 @@ class GlobalUser
             view()->composer('layouts.main', function($view) {
                 $orders = UserOrder::where('status',UserOrder::RESEND)
                     ->orWhere('status',UserOrder::APPROVED)
+                    ->orWhere('status',UserOrder::CHANGEDBYPHARMACY)
+                    ->orWhere('status',UserOrder::APPROVEDBYPHARMACY)
                     ->where('pay_method',null)->get();
                 $messages = array();
                 foreach ($orders as $order){

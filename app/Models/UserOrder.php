@@ -17,13 +17,29 @@ class UserOrder extends Model
         'take_time',
     ];
     // statuses
-    public static $status = array(1 => 'orderStatusSended','orderStatusResend','orderStatusApproved','orderStatusClosed','orderStatusCanceled');
+    public static $status = array(
+        1 => 'orderStatusSended',
+        'orderStatusResend',
+        'orderStatusApproved',
+        'orderStatusClosed',
+        'orderStatusCanceled',
+        'orderStatusApprovedByPharmacy',
+        'orderStatusChangedByPharmacy',
+        'orderStatusApprovedByUser',
+        'orderStatusCanceledByUser',
+        'orderStatusClosedByUser',
+    );
 
     const SENDED = 1;
     const RESEND = 2;
     const APPROVED = 3;
     const CLOSED = 4;
     const CANCELED = 5;
+    const APPROVEDBYPHARMACY = 6;
+    const CHANGEDBYPHARMACY = 7;
+    const APPROVEDBYUSER = 8;
+    const CANCELEDBYUSER = 9;
+    const CLOSEDBYUSER = 10;
 
     // pay methods
     public static $pay_methods = array(1 => 'Credit','In place');

@@ -67,7 +67,17 @@
                             @if($count_unread_messages)
                                 <span style="color:red">Unread Messages ({{$count_unread_messages}}) </span>
                             @endif
-                            <button href="javascript:;" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
+                            <form id="canceled_by_user">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="id" value="{{$details->id}}">
+                                <button type="button" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
+                                @if($order->status != \App\Models\UserOrder::CANCELED && $order->status != \App\Models\UserOrder::CANCELEDBYUSER && $order->status != \App\Models\UserOrder::CLOSEDBYUSER)
+                                <button class="btn btn-blue canceled_closed_by_user canceled">{{Lang::get('main.cancel')}}</button>
+                                @if($details->status >= \App\Models\UserOrder::APPROVEDBYPHARMACY)
+                                    <button class="btn btn-blue canceled_closed_by_user closed">{{Lang::get('main.close')}}</button>
+                                @endif
+                                @endif
+                            </form>
                         </td>
                     </tr>
                 </tbody>

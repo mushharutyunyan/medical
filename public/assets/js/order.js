@@ -173,5 +173,27 @@ $(document).ready(function(){
             }
         })
     })
-
+    $(".canceled_closed_by_user").on("click",function(e){
+        e.preventDefault();
+        $("#confirmationModal").modal('show');
+        var data = '';
+        if($(this).hasClass('canceled')){
+            data = 'status=canceled';
+        }else{
+            data = 'status=closed';
+        }
+        data += '&_token='+$(this).closest('form').children('input[name="_token"]').val()+'&id='+$(this).closest('form').children('input[name="id"]').val();
+        $("#confirmationModal .accept-confirm").attr('data-serialize',data);
+    })
+    $(".accept-confirm").on('click',function(){
+        $.ajax({
+            url: '/order/canceled',
+            data: $(this).attr('data-serialize'),
+            type: "POST",
+            dataType: 'json',
+            success: function(){
+                location.reload();
+            }
+        })
+    })
 });

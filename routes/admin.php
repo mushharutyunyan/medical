@@ -42,8 +42,13 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
     });
     Route::resource('/message','MessageController');
     Route::resource('/userOrder','UserOrderController');
-    Route::get('/userOrder/details/delete','UserOrderController@deleteDetail');
-    Route::post('/userOrder/details/save','UserOrderController@saveDetails');
-    Route::get('/userOrder/{order_id}/{status}','UserOrderController@changeStatus');
+    Route::group(['prefix' => 'userOrder'],function(){
+
+        Route::get('/details/delete','UserOrderController@deleteDetail');
+        Route::post('/details/save','UserOrderController@saveDetails');
+        Route::get('/details/finishOrder','UserOrderController@finishOrderDetails');
+        Route::get('/{order_id}/{status}','UserOrderController@changeStatus');
+        Route::post('/finish/{user_type}','UserOrderController@finishOrder');
+    });
 
 });

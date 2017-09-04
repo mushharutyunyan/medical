@@ -53,9 +53,9 @@
                                 <td>{{$order->pay_method ? \App\Models\UserOrder::$pay_methods[$order->pay_method] : ''}}</td>
                                 <td>{{$order->pay_type ? \App\Models\UserOrder::$pay_types[$order->pay_type] : ''}}</td>
                                 @if($order->pay_type == \App\Models\UserOrder::DELIVERY)
-                                <td>{{$order->delivery_address}}</td>
+                                <td class="pay_type">{{$order->delivery_address}}</td>
                                 @else
-                                <td>{{$order->take_time}}</td>
+                                <td class="pay_type">{{$order->take_time}}</td>
                                 @endif
                                 <td>{{$order->created_at}}</td>
                                 <td>
@@ -66,10 +66,16 @@
                                         @endif
                                     </a>
                                     @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
-                                    <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
-                                    <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
-                                    <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
-                                    <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
+                                        @if(empty($order->pay_method))
+                                            <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
+                                            <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
+                                            <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
+                                        @else
+                                            @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
+                                                <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
+                                            @endif
+                                        @endif
+                                            <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
                                     @endif
                                 </td>
                             </tr>
@@ -137,5 +143,32 @@
 
         </div>
     </div>
+    <div id="userOrderFinish" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Order Finish</h4>
+                </div>
+                <form id="order_finish_form">
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <div class="modal-body">
+                            <select class="form-control" name="pay_type">
+                                @foreach(\App\Models\UserOrder::$pay_types as $key => $type)
+                                <option value="{{$key}}">{{$type}}</option>
+                                @endforeach
+                            </select>
+                            <input type="text" class="form-control" name="take_time">
+                            <input type="hidden" class="form-control" name="order_id">
+                            <input type="text" class="form-control" name="delivery_address">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success">Finish</button>
+                    </div>
+                </form>
+            </div>
 
+        </div>
+    </div>
 @endsection
