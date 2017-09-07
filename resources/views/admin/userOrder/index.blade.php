@@ -59,24 +59,33 @@
                                 @endif
                                 <td>{{$order->created_at}}</td>
                                 <td>
+                                    @if($order->status != \App\Models\UserOrder::DELIVERED)
+                                        @if($order->status == \App\Models\UserOrder::APPROVED && empty($order->pay_method))
+                                            <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
+                                            <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
+                                        @else
+                                        @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
+                                            @if(empty($order->pay_method))
+                                                <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
+                                                <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
+                                                <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
+                                            @else
+                                                @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
+                                                    <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
+                                                @else
+                                                    <a href="javascript:;" class="finished_delivery" data-id="{{$order->id}}" style="color: green;">Delivery</a>
+                                                @endif
+                                            @endif
+                                                <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
+                                        @endif
+                                        @endif
+                                    @endif
                                     <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>
                                     <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages">{{Lang::get('main.messages')}}
                                         @if($count_unread_messages)
                                             <span style="color:red">({{$count_unread_messages}})</span>
                                         @endif
                                     </a>
-                                    @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
-                                        @if(empty($order->pay_method))
-                                            <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
-                                            <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
-                                            <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
-                                        @else
-                                            @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
-                                                <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
-                                            @endif
-                                        @endif
-                                            <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
-                                    @endif
                                 </td>
                             </tr>
                         @endforeach

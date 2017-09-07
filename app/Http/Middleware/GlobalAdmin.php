@@ -44,7 +44,7 @@ class GlobalAdmin
 
             $userOrders = UserOrder::where('status',UserOrder::SENDED)
                 ->orWhere('status',UserOrder::CANCELEDBYUSER)
-                ->orWhere('status',UserOrder::CLOSEDBYUSER)
+//                ->orWhere('status',UserOrder::CLOSEDBYUSER)
                 ->orWhere('status',UserOrder::APPROVED)
                 ->where('pay_method','!=',null)->get();
             $user_notifications = array();

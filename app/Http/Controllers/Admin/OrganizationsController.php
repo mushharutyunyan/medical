@@ -20,7 +20,16 @@ class OrganizationsController extends Controller
      */
     public function index()
     {
-        $organizations = Organization::all();
+        if(Auth::guard('admin')->user()->role->id != 1){
+            $admin_organizations = Auth::guard('admin')->user()->admin_organizations()->get();
+            $organization_ids = array();
+            foreach($admin_organizations as $organization){
+                $organization_ids[] = $organization->organization_id;
+            }
+            $organizations = Organization::whereIn('id',$organization_ids)->get();
+        }else{
+            $organizations = Organization::all();
+        }
         $status = Organization::STATUS;
         return view('admin.manage.organizations.index',['status' => $status, 'organizations' => $organizations]);
     }

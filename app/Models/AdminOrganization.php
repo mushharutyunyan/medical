@@ -18,4 +18,8 @@ class AdminOrganization extends Model
     {
         return $this->hasMany('App\Models\Admin', 'organization_id','organization_id');
     }
+    public function organization()
+    {
+        return $this->belongsTo('App\Models\Organization');
+    }
 }

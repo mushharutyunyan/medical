@@ -42,7 +42,16 @@ class AdminsController extends Controller
         }else{
             $roles = Role::where('id',1)->orWhere('name','admin')->get();
         }
-        $organizations = Organization::all();
+        if(Auth::guard('admin')->user()->role->id != 1){
+            $admin_organizations = Auth::guard('admin')->user()->admin_organizations()->get();
+            $organization_ids = array();
+            foreach($admin_organizations as $organization){
+                $organization_ids[] = $organization->organization_id;
+            }
+            $organizations = Organization::whereIn('id',$organization_ids)->get();
+        }else{
+            $organizations = Organization::all();
+        }
         return view('admin.manage.admins.create',['roles' => $roles, 'organizations' => $organizations]);
     }
 

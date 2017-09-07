@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Add ({{Auth::guard('admin')->user()->organization->name}})
+                        <i class="fa fa-user"></i>Add ({{Request::session()->get('organization_name')}})
                     </div>
                 </div>
                 <div class="portlet-body">

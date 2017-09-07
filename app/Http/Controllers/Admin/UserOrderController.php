@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Storage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\UserOrder;
 use App\Models\UserOrderDetails;
 use App\Models\UserOrderMessage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserOrderController extends Controller
 {
@@ -86,7 +89,13 @@ class UserOrderController extends Controller
     public function finishOrder(Request $request, $user_type){
         $data = $request->all();
         if($user_type == 'pharmacy'){
-            if(UserOrder::where('id',$data['order_id'])->where('pay_type',$data['pay_type'])->where('take_time',$data['take_time'])->where('delivery_address',$data['delivery_address'])->count()){
+            if(empty($data['take_time'])){
+                $data['take_time'] = null;
+            }
+            if(empty($data['delivery_address'])){
+                $data['delivery_address'] = null;
+            }
+            if(!UserOrder::where('id',$data['order_id'])->where('pay_type',$data['pay_type'])->where('take_time',$data['take_time'])->where('delivery_address',$data['delivery_address'])->count()){
                 $status = UserOrder::CHANGEDBYPHARMACY;
             }else{
                 $status = UserOrder::APPROVEDBYPHARMACY;
@@ -100,6 +109,19 @@ class UserOrderController extends Controller
             $data['take_time'] = null;
         }
         UserOrder::where('id',$id)->update($data);
+        return response()->json(true);
+    }
+
+    public function delivery($id){
+        $order_details = UserOrderDetails::where('user_order_id', $id)->get();
+        foreach($order_details as $key => $details){
+            $storage = $details->storage;
+            $storage->count -= $details->count;
+            $storage->save();
+        }
+        UserOrder::where('id',$id)->update(array(
+            'status' => UserOrder::DELIVERED
+        ));
         return response()->json(true);
     }
 }

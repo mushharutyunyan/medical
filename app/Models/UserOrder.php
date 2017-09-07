@@ -27,7 +27,7 @@ class UserOrder extends Model
         'orderStatusChangedByPharmacy',
         'orderStatusApprovedByUser',
         'orderStatusCanceledByUser',
-        'orderStatusClosedByUser',
+        'orderStatusDelivered',
     );
 
     const SENDED = 1;
@@ -39,7 +39,7 @@ class UserOrder extends Model
     const CHANGEDBYPHARMACY = 7;
     const APPROVEDBYUSER = 8;
     const CANCELEDBYUSER = 9;
-    const CLOSEDBYUSER = 10;
+    const DELIVERED = 10;
 
     // pay methods
     public static $pay_methods = array(1 => 'Credit','In place');

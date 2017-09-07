@@ -43,10 +43,10 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
     Route::resource('/message','MessageController');
     Route::resource('/userOrder','UserOrderController');
     Route::group(['prefix' => 'userOrder'],function(){
-
         Route::get('/details/delete','UserOrderController@deleteDetail');
         Route::post('/details/save','UserOrderController@saveDetails');
         Route::get('/details/finishOrder','UserOrderController@finishOrderDetails');
+        Route::get('/{order_id}/finish/delivery','UserOrderController@delivery');
         Route::get('/{order_id}/{status}','UserOrderController@changeStatus');
         Route::post('/finish/{user_type}','UserOrderController@finishOrder');
     });

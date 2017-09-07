@@ -47,6 +47,8 @@
                         <th>{{Lang::get('main.id')}}</th>
                         <th>{{Lang::get('main.organization')}}</th>
                         <th >{{Lang::get('main.status')}}</th>
+                        <th >{{Lang::get('main.pay_type')}}</th>
+                        <th >{{Lang::get('main.delivery_address_take_time')}}</th>
                         <th>{{Lang::get('main.createdAt')}}</th>
                         <th>{{Lang::get('main.details')}}</th>
                     </tr>
@@ -59,23 +61,26 @@
                         <td>{{$details->order}}</td>
                         <td>{{$details->order_details[0]->storage->organization->name}}</td>
                         <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$details->status])}}</td>
+                        <td>{{$details->pay_type ? \App\Models\UserOrder::$pay_types[$details->pay_type] : ''}}</td>
+                        @if($details->pay_type == \App\Models\UserOrder::DELIVERY)
+                            <td class="pay_type">{{$details->delivery_address}}</td>
+                        @else
+                            <td class="pay_type">{{$details->take_time}}</td>
+                        @endif
                         <td>{{$details->created_at}}</td>
                         <td>
+                            <form id="canceled_by_user">
                             @if($details->status == \App\Models\UserOrder::APPROVED && !$details->pay_method)
-                                <button class="btn btn-success pay-order" data-order="{{$details->order}}">{{Lang::get('main.pay')}}</button>
+                                <button class="btn btn-success pay-order" type="button" data-order="{{$details->order}}">{{Lang::get('main.pay')}}</button>
                             @endif
                             @if($count_unread_messages)
                                 <span style="color:red">Unread Messages ({{$count_unread_messages}}) </span>
                             @endif
-                            <form id="canceled_by_user">
                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                                 <input type="hidden" name="id" value="{{$details->id}}">
                                 <button type="button" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
-                                @if($order->status != \App\Models\UserOrder::CANCELED && $order->status != \App\Models\UserOrder::CANCELEDBYUSER && $order->status != \App\Models\UserOrder::CLOSEDBYUSER)
+                                @if($details->status != \App\Models\UserOrder::CANCELED && $details->status != \App\Models\UserOrder::CANCELEDBYUSER)
                                 <button class="btn btn-blue canceled_closed_by_user canceled">{{Lang::get('main.cancel')}}</button>
-                                @if($details->status >= \App\Models\UserOrder::APPROVEDBYPHARMACY)
-                                    <button class="btn btn-blue canceled_closed_by_user closed">{{Lang::get('main.close')}}</button>
-                                @endif
                                 @endif
                             </form>
                         </td>

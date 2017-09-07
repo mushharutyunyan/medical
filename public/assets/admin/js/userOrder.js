@@ -204,4 +204,15 @@ $(document).ready(function(){
             })
         }
     })
+    $(".finished_delivery").on("click",function(){
+        $.ajax({
+            url: '/admin/userOrder/'+$(this).attr('data-id')+'/finish/delivery',
+            type: 'GET',
+            dataType: 'json',
+            success: function(){
+                location.reload();
+            }
+
+        })
+    })
 });

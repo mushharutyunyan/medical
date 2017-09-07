@@ -46,7 +46,7 @@
                                 </a>
                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                                 <input type="hidden" name="id" value="{{$order->id}}">
-                                @if($order->status != \App\Models\UserOrder::CANCELED && $order->status != \App\Models\UserOrder::CANCELEDBYUSER && $order->status != \App\Models\UserOrder::CLOSEDBYUSER)
+                                @if($order->status != \App\Models\UserOrder::CANCELED && $order->status != \App\Models\UserOrder::CANCELEDBYUSER)
                                     <button class="btn btn-blue canceled_closed_by_user canceled">{{Lang::get('main.cancel')}}</button>
                                     @if($order->status >= \App\Models\UserOrder::APPROVEDBYPHARMACY)
                                         <button class="btn btn-blue canceled_closed_by_user closed">{{Lang::get('main.close')}}</button>

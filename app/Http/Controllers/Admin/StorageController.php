@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Drug;
 use App\Models\DrugUnitPrice;
 use App\Models\OrderInfo;
+use App\Models\Organization;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -20,14 +21,25 @@ class StorageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if(Auth::guard('admin')->user()['organization_id']){
+        if(Auth::guard('admin')->user()->role->id != 1 && Auth::guard('admin')->user()->role->id != 2){ // not superadmin and admin
             $storage = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])->paginate(15);
+            $view = 'admin.storage.index';
+            $admin_organizations = '';
+            $list = false;
+            $organization_name = Auth::guard('admin')->user()->organization->name;
+            $request->session()->put('organization_id',Auth::guard('admin')->user()->organization->id);
+            $request->session()->put('organization_name',$organization_name);
         }else{
+            $admin_organizations = Auth::guard('admin')->user()->admin_organizations()->get();
             $storage = Storage::paginate(15);
+            $view = 'admin.storage.list';
+            $list = true;
+            $organization_name = '';
         }
-        return view('admin.storage.index',['storages' => $storage]);
+        $status = Organization::STATUS;
+        return view($view,['storages' => $storage,'admin_organizations' => $admin_organizations,'status' => $status, 'list' => $list, 'organization_name' => $organization_name]);
     }
 
     /**
@@ -41,7 +53,19 @@ class StorageController extends Controller
         return view('admin.storage.create');
     }
 
-    public function show($id){
+    public function show($id,Request $request){
+        if(!$request->ajax()){
+            $storage = Storage::where('organization_id',$id)->paginate(15);
+            $view = 'admin.storage.index';
+            $admin_organizations = '';
+            $list = true;
+            $status = Organization::STATUS;
+            $organization = Organization::where('id',$id)->first();
+            $organization_name = $organization->name;
+            $request->session()->put('organization_id',$organization->id);
+            $request->session()->put('organization_name',$organization_name);
+            return view($view,['storages' => $storage,'admin_organizations' => $admin_organizations,'status' => $status, 'list' => $list, 'organization_name' => $organization_name]);
+        }
         $storage = Storage::find($id);
         $storage->price;
         $currentDrug = Drug::find($storage->drug_id);
@@ -112,6 +136,7 @@ class StorageController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        $organization_id = $request->session()->get('organization_id');
         unset($data['_method']);
         unset($data['_token']);
         $settings = array();
@@ -134,7 +159,7 @@ class StorageController extends Controller
         unset($data['price']);
         $data['price_id'] = $drug_unit_price->id;
         $drug_settings = json_encode($settings);
-        $checkDrug = Storage::where('id','!=',$id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('drug_id',$data['drug_id'])->where('drug_settings',$drug_settings)->first();
+        $checkDrug = Storage::where('id','!=',$id)->where('organization_id',$organization_id)->where('drug_id',$data['drug_id'])->where('drug_settings',$drug_settings)->first();
         if($checkDrug){
             return response()->json(array('exist' => $checkDrug->id));
         }
@@ -210,6 +235,7 @@ class StorageController extends Controller
     }
     public function checkDrug(Request $request){
         $data = $request->all();
+        $organization_id = $request->session()->get('organization_id');
         if($data['is_order']){
             $checked_drug = Storage::where('id',$data['storage_id'])->first();
             $drug_id = $checked_drug->drug_id;
@@ -226,11 +252,11 @@ class StorageController extends Controller
             $settings = json_encode($data['info']);
             $drug_id = $data['drug_id'];
         }
-        $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
+        $exist_drug = Storage::where('organization_id',$organization_id)
             ->where('drug_id',$drug_id)
             ->where('drug_settings',$settings)->count();
         if($exist_drug){
-            $exist_drug = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
+            $exist_drug = Storage::where('organization_id',$organization_id)
                 ->where('drug_id',$drug_id)
                 ->where('drug_settings',$settings)->first();
             $exist_drug->price;
@@ -247,6 +273,7 @@ class StorageController extends Controller
     }
 
     public function save(Request $request, $data = null){
+        $organization_id = $request->session()->get('organization_id');
         if(!$data){
             $data = Input::all();
             $this->validate($request, [
@@ -266,10 +293,10 @@ class StorageController extends Controller
             $drug_unit_price = DrugUnitPrice::where('drug_id',$data['drug_id'])->where('price',$price)->first();
         }
         if($data['exist']){
-            $exist = Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
+            $exist = Storage::where('organization_id',$organization_id)
                 ->where('drug_id',$data['drug_id'])
                 ->where('drug_settings',$drug_settings)->first();
-            Storage::where('organization_id',Auth::guard('admin')->user()['organization_id'])
+            Storage::where('organization_id',$organization_id)
                 ->where('drug_id',$data['drug_id'])
                 ->where('drug_settings',$drug_settings)->update(array('count'=>($data['count'] + $exist->count),
                                                                       'price_id' => $drug_unit_price->id));
@@ -278,7 +305,7 @@ class StorageController extends Controller
         Storage::create(array(
             'drug_settings' => $data['settings'],
             'drug_id' => $data['drug_id'],
-            'organization_id' => Auth::guard('admin')->user()['organization_id'],
+            'organization_id' => $organization_id,
             'count' => $data['count'],
             'price_id' => $drug_unit_price->id,
         ));
