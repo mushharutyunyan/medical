@@ -56,8 +56,13 @@
                 <tbody>
                 <?php
                     $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$details->id)->where('read',0)->where('from','pharmacy')->count();
+                    $style = 'text-align: left';
                 ?>
-                    <tr style="text-align: left">
+                @if($details->status == \App\Models\UserOrder::DELIVERED)
+                    <?php $style = 'text-align:left;background-color:#7fcbc9'; ?>
+                @endif
+
+                    <tr style="{{$style}}">
                         <td>{{$details->order}}</td>
                         <td>{{$details->order_details[0]->storage->organization->name}}</td>
                         <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$details->status])}}</td>

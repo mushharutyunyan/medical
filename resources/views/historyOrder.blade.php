@@ -19,6 +19,8 @@
                     <th>{{Lang::get('main.id')}}</th>
                     <th>{{Lang::get('main.organization')}}</th>
                     <th >{{Lang::get('main.status')}}</th>
+                    <th >{{Lang::get('main.pay_type')}}</th>
+                    <th >{{Lang::get('main.delivery_address_take_time')}}</th>
                     <th>{{Lang::get('main.createdAt')}}</th>
                     <th>{{Lang::get('main.show')}}</th>
                 </tr>
@@ -28,10 +30,23 @@
                     <?php
                         $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$order->id)->where('read',0)->where('from','pharmacy')->count();
                         ?>
-                        <tr style="text-align: left">
+                    <?php
+                    $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$details->id)->where('read',0)->where('from','pharmacy')->count();
+                    $style = 'text-align: left';
+                    ?>
+                    @if($details->status == \App\Models\UserOrder::DELIVERED)
+                        <?php $style = 'text-align:left;background-color:#7fcbc9'; ?>
+                    @endif
+                        <tr style="{{$style}}">
                             <td>{{$order->order}}</td>
                             <td>{{$order->organization->name}}</td>
                             <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
+                            <td>{{$order->pay_type ? \App\Models\UserOrder::$pay_types[$details->pay_type] : ''}}</td>
+                            @if($order->pay_type == \App\Models\UserOrder::DELIVERY)
+                                <td class="pay_type">{{$order->delivery_address}}</td>
+                            @else
+                                <td class="pay_type">{{$order->take_time}}</td>
+                            @endif
                             <td>{{$order->created_at}}</td>
                             <td>
                                 <form id="canceled_by_user">
