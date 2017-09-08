@@ -167,6 +167,7 @@ $(document).ready(function(){
             data: {id:$(this).attr('data-id')},
             dataType: 'json',
             success: function(data){
+                $("#delivery_time").remove();
                 $("#order_finish_form input").show();
                 $("#order_finish_form select option").each(function(key,value){
                     if($(this).val() == data.pay_type_id){
@@ -178,6 +179,10 @@ $(document).ready(function(){
                         $(this).hide();
                     }else{
                         $(this).val(data.take_time_delivery)
+                        if(data.delivery){
+                            $(this).parent().append('<input type="text" class="form-control" name="delivery_time" id="delivery_time" placeholder="delivery time">');
+                            $("#delivery_time").datetimepicker();
+                        }
                     }
                 });
                 $("#order_finish_form input[name='order_id']").val(data.id)
@@ -189,6 +194,9 @@ $(document).ready(function(){
     $("#order_finish_form").validate({
         rules:{
             take_time: {
+                required: true,
+            },
+            delivery_time: {
                 required: true,
             }
         },

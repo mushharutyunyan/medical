@@ -15,6 +15,8 @@ class UserOrder extends Model
         'pay_type',
         'delivery_address',
         'take_time',
+        'delivery_time',
+        'stars',
     ];
     // statuses
     public static $status = array(

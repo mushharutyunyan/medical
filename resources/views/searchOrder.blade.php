@@ -49,6 +49,7 @@
                         <th >{{Lang::get('main.status')}}</th>
                         <th >{{Lang::get('main.pay_type')}}</th>
                         <th >{{Lang::get('main.delivery_address_take_time')}}</th>
+                        <th >{{Lang::get('main.delivery_address_time')}}</th>
                         <th>{{Lang::get('main.createdAt')}}</th>
                         <th>{{Lang::get('main.details')}}</th>
                     </tr>
@@ -72,22 +73,27 @@
                         @else
                             <td class="pay_type">{{$details->take_time}}</td>
                         @endif
-                        <td>{{$details->created_at}}</td>
+                        <td class="pay_type">{{date("Y-m-d H:i:s",strtotime($details->delivery_time . ' +4 hour'))}}</td>
+                        <td>{{date("Y-m-d H:i:s",strtotime($details->created_at . ' +4 hour'))}}</td>
                         <td>
-                            <form id="canceled_by_user">
-                            @if($details->status == \App\Models\UserOrder::APPROVED && !$details->pay_method)
-                                <button class="btn btn-success pay-order" type="button" data-order="{{$details->order}}">{{Lang::get('main.pay')}}</button>
-                            @endif
-                            @if($count_unread_messages)
-                                <span style="color:red">Unread Messages ({{$count_unread_messages}}) </span>
-                            @endif
-                                <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                <input type="hidden" name="id" value="{{$details->id}}">
-                                <button type="button" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
-                                @if($details->status != \App\Models\UserOrder::CANCELED && $details->status != \App\Models\UserOrder::CANCELEDBYUSER)
-                                <button class="btn btn-blue canceled_closed_by_user canceled">{{Lang::get('main.cancel')}}</button>
+                            @if($details->status == \App\Models\UserOrder::DELIVERED)
+                                <div class="rateYo" data-id="{{$details->id}}" data-rate="{{$details->stars}}"></div>
+                            @else
+                                <form id="canceled_by_user">
+                                @if($details->status == \App\Models\UserOrder::APPROVED && !$details->pay_method)
+                                    <button class="btn btn-success pay-order" type="button" data-order="{{$details->order}}">{{Lang::get('main.pay')}}</button>
                                 @endif
-                            </form>
+                                @if($count_unread_messages)
+                                    <span style="color:red">Unread Messages ({{$count_unread_messages}}) </span>
+                                @endif
+                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                    <input type="hidden" name="id" value="{{$details->id}}">
+                                    <button type="button" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
+                                    @if($details->status != \App\Models\UserOrder::CANCELED && $details->status != \App\Models\UserOrder::CANCELEDBYUSER)
+                                    <button class="btn btn-blue canceled_closed_by_user canceled">{{Lang::get('main.cancel')}}</button>
+                                    @endif
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 </tbody>
@@ -142,6 +148,7 @@
                         <th>{{Lang::get('main.name')}}</th>
                         <th>{{Lang::get('main.count')}}</th>
                         <th>{{Lang::get('main.price')}}</th>
+                        <th>{{Lang::get('main.sum')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -155,6 +162,7 @@
                             <td>{{$drugs->storage->drug->trade_name_en}}</td>
                             @endif
                             <td>{{$drugs->count}}</td>
+                            <td>{{$drugs->price}}</td>
                             <td>{{$drugs->price*$drugs->count}}</td>
                         </tr>
                     @endforeach

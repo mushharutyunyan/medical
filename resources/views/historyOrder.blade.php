@@ -21,6 +21,7 @@
                     <th >{{Lang::get('main.status')}}</th>
                     <th >{{Lang::get('main.pay_type')}}</th>
                     <th >{{Lang::get('main.delivery_address_take_time')}}</th>
+                    <th >{{Lang::get('main.delivery_address_time')}}</th>
                     <th>{{Lang::get('main.createdAt')}}</th>
                     <th>{{Lang::get('main.show')}}</th>
                 </tr>
@@ -47,7 +48,9 @@
                             @else
                                 <td class="pay_type">{{$order->take_time}}</td>
                             @endif
-                            <td>{{$order->created_at}}</td>
+                            <td class="pay_type">{{date("Y-m-d H:i:s",strtotime($order->delivery_time . ' +4 hour'))}}</td>
+
+                            <td>{{date("Y-m-d H:i:s",strtotime($order->created_at . ' +4 hour'))}}</td>
                             <td>
                                 <form id="canceled_by_user">
                                 @if($order->status == \App\Models\UserOrder::APPROVED && !$order->pay_method)
@@ -90,6 +93,7 @@
                         <th>{{Lang::get('main.name')}}</th>
                         <th>{{Lang::get('main.count')}}</th>
                         <th>{{Lang::get('main.price')}}</th>
+                        <th>{{Lang::get('main.sum')}}</th>
                     </tr>
                     </thead>
                     <tbody>

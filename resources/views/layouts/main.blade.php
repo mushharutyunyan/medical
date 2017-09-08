@@ -11,6 +11,7 @@
     <!-- Stylesheets-->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic%7CRoboto:400,300,100,700,300italic,400italic,700italic%7CMontserrat:400,700">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/jquery.rateyo.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/clockface/css/clockface.css"/>
     <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-datepicker/css/datepicker3.css"/>
     <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
@@ -470,6 +471,24 @@
         </div>
     </div>
 </div>
+<div id="thankYouForRatingModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.thankYou')}}</h4>
+            </div>
+            <div class="modal-body">
+                <span>{{Lang::get('main.thankYouForRating')}}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Java script-->
 <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
         type="text/javascript"></script>
@@ -487,5 +506,6 @@
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>
+<script src="/assets/js/jquery.rateyo.min.js"></script>
 </body>
 </html>

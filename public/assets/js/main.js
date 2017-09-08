@@ -249,6 +249,40 @@ $(document).ready(function(){
     $(".search-button").on("click",function(){
         $(".search-form").submit();
     })
+
+
+    // RANK STARS ORDER
+    if($(".rateYo").length){
+        $(".rateYo").each(function(){
+            var rate = 0;
+            if($(this).attr('data-rate') != ''){
+                rate = $(this).attr('data-rate');
+            }
+            $(this).rateYo({
+                rating: rate,
+                onSet: function (rating, rateYoInstance) {
+                    if($(this).attr('data-rate') == ''){
+                        $(this).next().val(rating);
+                        $(this).off('click');
+                        $.ajax({
+                            url: '/order/rank/stars',
+                            type: 'GET',
+                            data: {rating:rating,id:$(this).attr('data-id')},
+                            dataType: 'json',
+                            success: function(data){
+                                $("#thankYouForRatingModal").modal('show')
+                            }
+                        })
+                    }else{
+                        $(this).off('click');
+                    }
+                },
+            });
+            if($(this).attr('data-rate') != ''){
+                $(this).off('click');
+            }
+        });
+    }
 });
 function send_order(method,type,order,address,take_time,_token){
     $.ajax({

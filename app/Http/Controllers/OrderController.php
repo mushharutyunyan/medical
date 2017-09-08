@@ -28,7 +28,7 @@ class OrderController extends Controller
         $data = array();
         foreach ($organizations as $organization){
             if(OrganizationLocation::where('organization_id',$organization->id)->count()){
-                $data[] = [$organization->name,$organization->location[0]->latitude,$organization->location[0]->longitude,$organization->id];
+                $data[] = [$organization->name,$organization->location[0]->latitude,$organization->location[0]->longitude,$organization->id,$organization->city.' '.$organization->street.' '.$organization->appartment,$organization->phone];
             }
         }
         $position = Location::get($request->ip());
@@ -155,16 +155,17 @@ class OrderController extends Controller
             $details = array();
             foreach($user_order->order_details as $drugs){
                 if(App::getLocale('am')){
-                    $details['trade_name'] = $drugs->storage->drug->trade_name;
+                    $detail['trade_name'] = $drugs->storage->drug->trade_name;
                 }elseif(App::getLocale('ru')){
-                    $details['trade_name'] = $drugs->storage->drug->trade_name_ru;
+                    $detail['trade_name'] = $drugs->storage->drug->trade_name_ru;
                 }elseif(App::getLocale('en')){
-                    $details['trade_name'] = $drugs->storage->drug->trade_name_en;
+                    $detail['trade_name'] = $drugs->storage->drug->trade_name_en;
                 }
-                $details['count'] = $drugs->count;
-                $details['price'] = $drugs->price;
+                $detail['count'] = $drugs->count;
+                $detail['price'] = $drugs->price;
+                $details[] = $detail;
             }
-            return response()->json(['details' => array($details)]);
+            return response()->json(['details' => $details]);
         }
     }
 
@@ -267,6 +268,16 @@ class OrderController extends Controller
             $status = UserOrder::CLOSEDBYUSER;
         }
         UserOrder::where('id',$data['id'])->update(array('status' => $status));
+        return response()->json(true);
+    }
+
+    public function rank(Request $request){
+        $data = $request->all();
+        $order = UserOrder::find($data['id']);
+        if(!$order->stars){
+            $order->stars = $data['rating'];
+            $order->save();
+        }
         return response()->json(true);
     }
 }

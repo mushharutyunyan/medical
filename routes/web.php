@@ -38,6 +38,7 @@ Route::group(['middleware' => 'globalUser'],function(){
         Route::post('/pay','OrderController@pay');
         Route::get('/info','OrderController@info');
         Route::post('/canceled','OrderController@canceled');
+        Route::get('/rank/stars','OrderController@rank');
     });
 
 

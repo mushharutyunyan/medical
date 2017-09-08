@@ -73,15 +73,18 @@ class UserOrderController extends Controller
         if($order->pay_type == UserOrder::DELIVERY){
             $pay_type = 'delivery_address';
             $take_time_delivery = $order->delivery_address;
+            $delivery = true;
         }else{
             $pay_type = 'take_time';
             $take_time_delivery = $order->take_time;
+            $delivery = false;
         }
         $response = array(
             'id' => $order->id,
             'pay_type_id' => $order->pay_type,
             'pay_type' => $pay_type,
-            'take_time_delivery' => $take_time_delivery
+            'take_time_delivery' => $take_time_delivery,
+            'delivery' => $delivery
         );
         return $response;
     }

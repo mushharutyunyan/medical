@@ -81,11 +81,12 @@ $(document).ready(function(){
                 });
 
                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
+
                     return function() {
-                        infowindow.setContent(locations[i][0]);
+                        infowindow.setContent(locations[i][0]+'<br>'+locations[i][4]+'<br>'+locations[i][5]);
                         infowindow.open(map, marker);
                         $("#acceptOrganizationModal").modal('show');
-                        $("#acceptOrganizationModal").find('.organization-name').html(locations[i][0])
+                        $("#acceptOrganizationModal").find('.organization-name').html(locations[i][0]+'<br>'+locations[i][4]+'<br>'+locations[i][5])
                         $("#acceptOrganizationModal").find('.continue-button').attr('href','search/'+locations[i][3])
                     }
                 })(marker, i));
@@ -140,6 +141,7 @@ $(document).ready(function(){
                             '<tr style="text-align: left">' +
                                 '<td>'+value.trade_name+'</td>' +
                                 '<td>'+value.count+'</td>' +
+                                '<td>'+(value.price)+'</td>' +
                                 '<td>'+(value.price*value.count)+'</td>' +
                             '</tr>'
                         )
