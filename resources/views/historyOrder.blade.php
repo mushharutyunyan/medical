@@ -32,7 +32,6 @@
                         $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$order->id)->where('read',0)->where('from','pharmacy')->count();
                         ?>
                     <?php
-                    $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$details->id)->where('read',0)->where('from','pharmacy')->count();
                     $style = 'text-align: left';
                     ?>
                     @if($details->status == \App\Models\UserOrder::DELIVERED)
@@ -42,7 +41,7 @@
                             <td>{{$order->order}}</td>
                             <td>{{$order->organization->name}}</td>
                             <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
-                            <td>{{$order->pay_type ? \App\Models\UserOrder::$pay_types[$details->pay_type] : ''}}</td>
+                            <td>{{$order->pay_type ? \App\Models\UserOrder::$pay_types[$order->pay_type] : ''}}</td>
                             @if($order->pay_type == \App\Models\UserOrder::DELIVERY)
                                 <td class="pay_type">{{$order->delivery_address}}</td>
                             @else
