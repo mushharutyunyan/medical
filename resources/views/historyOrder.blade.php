@@ -34,7 +34,7 @@
                     <?php
                     $style = 'text-align: left';
                     ?>
-                    @if($details->status == \App\Models\UserOrder::DELIVERED)
+                    @if($order->status == \App\Models\UserOrder::DELIVERED)
                         <?php $style = 'text-align:left;background-color:#7fcbc9'; ?>
                     @endif
                         <tr style="{{$style}}">
