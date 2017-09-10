@@ -19,27 +19,16 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>
-                                Order
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                            <th>
-                                Pay method
-                            </th>
-                            <th>
-                                Pay type
-                            </th>
-                            <th>
-                                Delivery address / Take time
-                            </th>
-                            <th>
-                                Created At
-                            </th>
-                            <th>
-                                Actions
-                            </th>
+                            <th>Order</th>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Pay method</th>
+                            <th>Pay type</th>
+                            <th>Delivery address / Take time</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -50,6 +39,15 @@
                             <tr style="text-align: left">
                                 <td>{{$order->order}}</td>
                                 <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
+                                @if($order->user)
+                                <td>{{$order->user->name}}</td>
+                                <td>{{$order->user->email}}</td>
+                                <td>{{$order->user->phone}}</td>
+                                @else
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                @endif
                                 <td>{{$order->pay_method ? \App\Models\UserOrder::$pay_methods[$order->pay_method] : ''}}</td>
                                 <td>{{$order->pay_type ? \App\Models\UserOrder::$pay_types[$order->pay_type] : ''}}</td>
                                 @if($order->pay_type == \App\Models\UserOrder::DELIVERY)

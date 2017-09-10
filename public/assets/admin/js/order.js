@@ -212,6 +212,7 @@ $(document).ready(function(){
             data: {order_id:order_id,_token:_token},
             dataType: 'json',
             success: function(data){
+                $("#received_modal").find('.order-files-block tbody').html("");
                 $.each(data,function(key,value){
                     var settings = '';
                     $.each(value.settings,function(key_settings,value_settings){
@@ -267,7 +268,7 @@ $(document).ready(function(){
                 type: "POST",
                 dataType: 'json',
                 success: function(data){
-                    location.replace('/admin/storage');
+                    location.replace('/admin/order');
                 }
             })
         }

@@ -116,14 +116,17 @@
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <i class="icon-bell"></i>
+                            @if(isset($user_notifications))
                             @if(count($user_notifications))
                                 <span class="badge badge-default">{{count($user_notifications)}}</span>
+                            @endif
                             @endif
                         </a>
                         <ul class="dropdown-menu">
 
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
+                                    @if(isset($user_notifications))
                                     @if(count($user_notifications))
                                     @foreach($user_notifications as $user_notification)
                                     <li>
@@ -138,6 +141,7 @@
                                     </li>
                                     @endforeach
                                     @endif
+                                    @endif
                                 </ul>
                             </li>
                         </ul>
@@ -148,21 +152,26 @@
                     <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <i class="icon-envelope-open"></i>
+                            @if(isset($unread_messages))
                             @if(count($unread_messages))
                             <span class="badge badge-default">{{count($unread_messages)}}</span>
+                            @endif
                             @endif
                         </a>
                         <ul class="dropdown-menu">
                             <li class="external">
+                                @if(isset($unread_messages))
                                 @if(count($unread_messages))
                                 <h3>You have <span class="bold">{{count($unread_messages)}} New</span> Messages</h3>
                                 @else
                                 <h3>You don't have new Messages</h3>
                                 @endif
+                                @endif
                                 <a href="/admin/message">view all</a>
                             </li>
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
+                                    @if(isset($unread_messages))
                                     @if(count($unread_messages))
                                         @foreach($unread_messages as $unread_message)
                                             <li>
@@ -177,6 +186,7 @@
                                             </li>
                                         @endforeach
                                     @endif
+                                    @endif
                                 </ul>
                             </li>
                         </ul>
@@ -187,19 +197,24 @@
                     <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <i class="icon-calendar"></i>
+                            @if(isset($orders))
                             @if($orders->count())
                             <span class="badge badge-default">{{$orders->count()}}</span>
+                            @endif
                             @endif
                         </a>
                         <ul class="dropdown-menu extended tasks">
                             <li class="external">
+                                @if(isset($orders))
                                 @if($orders->count())
                                 <h3>You have <span class="bold">{{$orders->count()}} pending</span> orders</h3>
                                 <a href="/admin/order">view all</a>
                                 @endif
+                                @endif
                             </li>
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
+                                    @if(isset($orders))
                                     @if($orders->count())
                                         @foreach($orders as $order)
                                             <li>
@@ -219,6 +234,7 @@
                                                 </a>
                                             </li>
                                         @endforeach
+                                    @endif
                                     @endif
                                 </ul>
                             </li>

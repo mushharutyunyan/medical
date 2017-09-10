@@ -355,7 +355,7 @@ class OrderController extends Controller
         }
     }
     private function checkOrderBusy($order_id){
-        if(OrderBusy::where('order_id',$order_id)->where('status',1)->where('admin_id','!=',Auth::guard('admin')->user()['id'])->count()){
+        if(OrderBusy::where('order_id',$order_id)->where('status',1)->where('admin_id','!=',Auth::guard('admin')->user()['id'])->where('organization_id',Auth::guard('admin')->user()['organization_id'])->count()){
             return false;
         }
         return true;

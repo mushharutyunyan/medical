@@ -68,4 +68,9 @@ class UserOrder extends Model
         return $this->belongsTo('App\Models\Organization');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
 }

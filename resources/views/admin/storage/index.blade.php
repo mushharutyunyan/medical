@@ -54,7 +54,7 @@
                                 <td>{{$storage->drug->trade_name}}</td>
                                 <td>{{$storage->price->price}}</td>
                                 <td>{{$storage->count}}</td>
-                                <td>{{$storage->created_at}}</td>
+                                <td>{{$storage->updated_at}}</td>
                                 <td>
                                     <a href="/admin/storage/{{$storage->id}}/edit" title="Edit"><i class="fa fa-pencil"></i></a>
                                     <a href="#" class="view-edit-drug view" data-storage-id="{{$storage->id}}" title="View"><i class="fa fa-eye"></i></a>
