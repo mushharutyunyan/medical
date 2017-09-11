@@ -33,6 +33,7 @@ Route::group(['middleware' => 'globalUser'],function(){
         Route::get('/checkout','OrderController@checkout');
         Route::get('/details','OrderController@details');
         Route::post('/details','OrderController@getDetails');
+        Route::post('/details/search','OrderController@details');
         Route::post('/createMessage','OrderController@createMessage');
         Route::post('/getMessages','OrderController@getMessages');
         Route::post('/pay','OrderController@pay');

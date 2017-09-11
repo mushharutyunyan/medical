@@ -118,12 +118,29 @@ class OrderController extends Controller
         }
     }
 
-    public function details(){
+    public function details(Request $request){
         $page = 'searchOrder';
         if(Auth::check()){
-            $user_orders = UserOrder::where('user_id',Auth::user()['id'])->orderBy('id','DESC')->get();
+            if($request->isMethod('post')){
+                $data = $request->all();
+                if(empty($data['search'])){
+                    return redirect()->back();
+                }
+                $user_orders = UserOrder::where('user_id',Auth::user()['id'])
+                    ->whereHas('organization', function ($q) use($data) {
+                        $q->where('name', 'like', '%'.$data['search'].'%');
+                    })
+                    ->orWhere('order','like','%'.$data['search'].'%')
+                    ->orWhere('delivery_time','like','%'.$data['search'].'%')
+                    ->orWhere('updated_at','like','%'.$data['search'].'%')
+                    ->orderBy('id','DESC')->paginate(10);
+                $search = $data['search'];
+            }else{
+                $user_orders = UserOrder::where('user_id',Auth::user()['id'])->orderBy('id','DESC')->paginate(10);
+                $search = '';
+            }
             $page = 'historyOrder';
-            return view($page,['orders' => $user_orders]);
+            return view($page,['orders' => $user_orders,'search' => $search]);
         }
         return view($page);
     }
@@ -235,6 +252,8 @@ class OrderController extends Controller
             'pay_type' => $data['type'],
             'delivery_address' => $data['address'],
             'take_time' => $take_time,
+            'unknown_user_name' => $data['unknown_user_name'],
+            'unknown_user_phone' => $data['unknown_user_phone'],
         ));
         return response()->json(true);
     }

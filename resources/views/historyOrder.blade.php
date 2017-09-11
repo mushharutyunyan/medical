@@ -12,8 +12,19 @@
         </div>
     </div>
     <div class="shell section-bottom-60 offset-top-4">
+        <div class="row section-bottom-60">
+            <form action="/order/details/search" method="POST">
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <div class="col-sm-4">
+                    <input type="text" name="search" value="{{$search ? $search : ''}}" class="form-control" placeholder="{{Lang::get('main.search')}}">
+                </div>
+                <div class="col-sm-4">
+                    <button class="btn btn-default pull-left">{{Lang::get('main.search')}}</button>
+                </div>
+            </form>
+        </div>
         <div class="table-responsive section-bottom-60">
-            <table class="table table-striped">
+            <table class="table datatable table-striped">
                 <thead>
                 <tr>
                     <th>{{Lang::get('main.id')}}</th>
@@ -75,6 +86,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{$orders->links()}}
         </div>
     </div>
     <div id="showOrderDetailsModal" class="modal fade" role="dialog">

@@ -142,7 +142,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">{{Lang::get('main.orderDetails')}}</h4>
                 </div>
-                <table class="table table-striped">
+                <table class="table  table-striped">
                     <thead>
                     <tr>
                         <th>{{Lang::get('main.name')}}</th>

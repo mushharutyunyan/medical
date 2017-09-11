@@ -16,16 +16,12 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <table class="table table-striped table-bordered table-hover">
+                    <table class="table datatable table-striped table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Order</th>
-                            <th>Status</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Pay method</th>
-                            <th>Pay type</th>
+                            <th>Order (Status)</th>
+                            <th>User Info</th>
+                            <th>Pay method ,  Pay type</th>
                             <th>Delivery address / Take time</th>
                             <th>Created At</th>
                             <th>Actions</th>
@@ -37,19 +33,13 @@
                             $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$order->id)->where('read',0)->where('from','user')->count();
                         ?>
                             <tr style="text-align: left">
-                                <td>{{$order->order}}</td>
-                                <td>{{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}}</td>
+                                <td>{{$order->order}} ({{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}})</td>
                                 @if($order->user)
-                                <td>{{$order->user->name}}</td>
-                                <td>{{$order->user->email}}</td>
-                                <td>{{$order->user->phone}}</td>
+                                <td>{{$order->user->name}} {{$order->user->email}} {{$order->user->phone}}</td>
                                 @else
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                <td>{{$order->unknown_user_name}} {{$order->unknown_user_email}} {{$order->unknown_user_phone}}</td>
                                 @endif
-                                <td>{{$order->pay_method ? \App\Models\UserOrder::$pay_methods[$order->pay_method] : ''}}</td>
-                                <td>{{$order->pay_type ? \App\Models\UserOrder::$pay_types[$order->pay_type] : ''}}</td>
+                                <td>{{$order->pay_method ? \App\Models\UserOrder::$pay_methods[$order->pay_method] : ''}} , {{$order->pay_type ? \App\Models\UserOrder::$pay_types[$order->pay_type] : ''}}</td>
                                 @if($order->pay_type == \App\Models\UserOrder::DELIVERY)
                                 <td class="pay_type">{{$order->delivery_address}}</td>
                                 @else

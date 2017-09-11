@@ -18,6 +18,8 @@
     <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-colorpicker/css/colorpicker.css"/>
     <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
     <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/assets/admin/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+
     <style>
         #map {
             height: 400px;
@@ -318,7 +320,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">{{Lang::get('main.deliveryAddress')}}</h4>
+                <h4 class="modal-title-delivery-address">{{Lang::get('main.enterDeliveryAddress')}}</h4>
+                <h4 class="modal-title-take-time">{{Lang::get('main.enterTakeTime')}}</h4>
             </div>
             <div class="modal-body">
                 <form id="delivery_address_form">
@@ -326,9 +329,15 @@
                     <input type="hidden" name="payment_method" value="{{\App\Models\UserOrder::INPLACE}}">
                     <input type="hidden" name="payment_type" value="">
                     <input type="hidden" value="" name="type">
+                    @if(!Auth::check())
+                        <input type="text" class="form-control" name="unknown_user_name" placeholder="{{Lang::get('main.name')}}">
+                        <input type="text" class="form-control" name="unknown_user_phone" placeholder="{{Lang::get('main.phone')}} (+374)">
+                    @endif
                     <input type="text" class="form-control" id="delivery_address" name="delivery_address" placeholder="{{Lang::get('main.enterDeliveryAddress')}}">
-                    <input type="text" class="form-control" id="order_take_time" name="order_take_time" placeholder="{{Lang::get('main.enterTakeTime')}}">
-                    <button class="btn btn-default">{{Lang::get('main.send')}}</button>
+                    <input type="text" class="form-control" id="order_take_time" name="order_take_time" placeholder="{{Lang::get('main.enterTakeTime')}} ">
+                    <div>
+                        <button class="btn btn-default">{{Lang::get('main.send')}}</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -502,7 +511,8 @@
 <script type="text/javascript" src="/assets/admin/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
 <script type="text/javascript" src="/assets/admin/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
-
+<script type="text/javascript" src="/assets/admin/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/assets/admin/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/cart.js"></script>
 <script src="/assets/js/order.js"></script>

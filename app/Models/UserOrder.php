@@ -16,6 +16,9 @@ class UserOrder extends Model
         'delivery_address',
         'take_time',
         'delivery_time',
+        'unknown_user_name',
+        'unknown_user_phone',
+        'unknown_user_email',
         'stars',
     ];
     // statuses
