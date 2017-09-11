@@ -87,7 +87,7 @@
                                 <td>
 
                                     @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                        This order already take by another user {{$order_busy->admin_id }}
+                                        This order already take by another user
                                     @else
                                         @if(\App\Models\Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id'])
                                         <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
@@ -114,8 +114,8 @@
                                                 <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit in_table"><i class="fa fa-check"></i>Send</button>
                                                 {!! Form::close() !!}
                                             @endif
-                                            @if($order_busy && $order_busy->user_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                                <a class="btn btn-danger" href="/admin/order/release/{{$order->id}}">Release order</a>
+                                            @if($order_busy && $order_busy->admin_id == Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
+                                                <a class="btn btn-danger" href="/admin/userOrder/release/{{$order->id}}">Release order</a>
                                             @endif
                                         @endif
                                     @endif

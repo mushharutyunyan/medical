@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class UserOrder extends Model
 {
@@ -20,6 +21,7 @@ class UserOrder extends Model
         'unknown_user_phone',
         'unknown_user_email',
         'stars',
+        'busy_admin_id',
     ];
     // statuses
     public static $status = array(
@@ -75,5 +77,6 @@ class UserOrder extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
 
 }

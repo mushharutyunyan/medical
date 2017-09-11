@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Storage;
+use App\Models\UserOrderBusy;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\UserOrder;
@@ -20,6 +21,10 @@ class UserOrderController extends Controller
     }
 
     public function edit($id){
+        if(!$this->checkOrderBusy($id)){
+            return redirect()->back();
+        }
+        $this->orderBusy($id);
         $details = UserOrderDetails::where('user_order_id',$id)->get();
         $user_order = UserOrder::where('id',$id)->first();
         return view('admin.userOrder.edit',['details' => $details,'user_order' => $user_order]);
@@ -126,5 +131,37 @@ class UserOrderController extends Controller
             'status' => UserOrder::DELIVERED
         ));
         return response()->json(true);
+    }
+
+    public function release($order_id){
+        UserOrderBusy::where('user_order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('admin_id',Auth::guard('admin')->user()['id'])->update(array(
+            'status' => 0
+        ));
+        return redirect()->back();
+    }
+
+    private function orderBusy($order_id){
+        UserOrderBusy::where('user_order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->update(array(
+            'status' => 0
+        ));
+        if(UserOrderBusy::where('user_order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('admin_id',Auth::guard('admin')->user()['id'])->count()){
+            UserOrderBusy::where('user_order_id',$order_id)->where('organization_id',Auth::guard('admin')->user()['organization_id'])->where('admin_id',Auth::guard('admin')->user()['id'])->update(array(
+                'status' => 1
+            ));
+        }else{
+            UserOrderBusy::create(array(
+                'user_order_id' => $order_id,
+                'organization_id' => Auth::guard('admin')->user()['organization_id'],
+                'admin_id' => Auth::guard('admin')->user()['id'],
+                'status' => 1
+            ));
+        }
+    }
+
+    private function checkOrderBusy($order_id){
+        if(UserOrderBusy::where('user_order_id',$order_id)->where('status',1)->where('admin_id','!=',Auth::guard('admin')->user()['id'])->where('organization_id',Auth::guard('admin')->user()['organization_id'])->count()){
+            return false;
+        }
+        return true;
     }
 }

@@ -43,6 +43,9 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
     Route::resource('/message','MessageController');
     Route::resource('/userOrder','UserOrderController');
     Route::group(['prefix' => 'userOrder'],function(){
+        Route::group(['prefix' => 'release'],function(){
+            Route::get('/{order_id}','UserOrderController@release');
+        });
         Route::get('/details/delete','UserOrderController@deleteDetail');
         Route::post('/details/save','UserOrderController@saveDetails');
         Route::get('/details/finishOrder','UserOrderController@finishOrderDetails');

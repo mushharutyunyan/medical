@@ -29,8 +29,10 @@
                         </thead>
                         <tbody>
                         @foreach($orders as $order)
+
                         <?php
                             $count_unread_messages = \App\Models\UserOrderMessage::where('user_order_id',$order->id)->where('read',0)->where('from','user')->count();
+                            $order_busy = \App\Models\UserOrderBusy::where('user_order_id',$order->id)->where('status',1)->first();
                         ?>
                             <tr style="text-align: left">
                                 <td>{{$order->order}} ({{Lang::get('main.'.\App\Models\UserOrder::$status[$order->status])}})</td>
@@ -47,33 +49,40 @@
                                 @endif
                                 <td>{{$order->created_at}}</td>
                                 <td>
-                                    @if($order->status != \App\Models\UserOrder::DELIVERED)
-                                        @if($order->status == \App\Models\UserOrder::APPROVED && empty($order->pay_method))
-                                            <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
-                                            <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
-                                        @else
-                                        @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
-                                            @if(empty($order->pay_method))
-                                                <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
-                                                <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
+                                    @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
+                                        This order already take by another user
+                                    @else
+                                        @if($order->status != \App\Models\UserOrder::DELIVERED)
+                                            @if($order->status == \App\Models\UserOrder::APPROVED && empty($order->pay_method))
                                                 <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
-                                            @else
-                                                @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
-                                                    <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
-                                                @else
-                                                    <a href="javascript:;" class="finished_delivery" data-id="{{$order->id}}" style="color: green;">Delivery</a>
-                                                @endif
-                                            @endif
                                                 <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
+                                            @else
+                                            @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
+                                                @if(empty($order->pay_method))
+                                                    <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
+                                                    <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
+                                                    <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
+                                                @else
+                                                    @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
+                                                        <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
+                                                    @else
+                                                        <a href="javascript:;" class="finished_delivery" data-id="{{$order->id}}" style="color: green;">Delivery</a>
+                                                    @endif
+                                                @endif
+                                                    <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
+                                            @endif
+                                            @endif
                                         @endif
-                                        @endif
+                                        <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>
+                                        <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages">{{Lang::get('main.messages')}}
+                                            @if($count_unread_messages)
+                                                <span style="color:red">({{$count_unread_messages}})</span>
+                                            @endif
+                                        </a>
                                     @endif
-                                    <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>
-                                    <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages">{{Lang::get('main.messages')}}
-                                        @if($count_unread_messages)
-                                            <span style="color:red">({{$count_unread_messages}})</span>
-                                        @endif
-                                    </a>
+                                    @if($order_busy && $order_busy->admin_id == Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
+                                        <a class="btn btn-danger" href="/admin/userOrder/release/{{$order->id}}">Release order</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
