@@ -73,7 +73,11 @@
                         @else
                             <td class="pay_type">{{$details->take_time}}</td>
                         @endif
-                        <td class="pay_type">{{date("Y-m-d H:i:s",strtotime($details->delivery_time . ' +4 hour'))}}</td>
+                        <td class="pay_type">
+                            @if($details->delivery_time)
+                            {{date("Y-m-d H:i:s",strtotime($details->delivery_time . ' +4 hour'))}}
+                            @endif
+                        </td>
                         <td>{{date("Y-m-d H:i:s",strtotime($details->created_at . ' +4 hour'))}}</td>
                         <td>
                             @if($details->status == \App\Models\UserOrder::DELIVERED)
