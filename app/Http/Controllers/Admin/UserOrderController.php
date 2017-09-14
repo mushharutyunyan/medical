@@ -98,10 +98,10 @@ class UserOrderController extends Controller
         $data = $request->all();
         if($user_type == 'pharmacy'){
             if(empty($data['take_time'])){
-                $data['take_time'] = null;
+                $data['take_time'] = '';
             }
             if(empty($data['delivery_address'])){
-                $data['delivery_address'] = null;
+                $data['delivery_address'] = '';
             }
             if(!UserOrder::where('id',$data['order_id'])->where('pay_type',$data['pay_type'])->where('take_time',$data['take_time'])->where('delivery_address',$data['delivery_address'])->count()){
                 $status = UserOrder::CHANGEDBYPHARMACY;
