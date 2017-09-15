@@ -115,7 +115,7 @@
                                                 {!! Form::close() !!}
                                             @endif
                                             @if($order_busy && $order_busy->admin_id == Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                                <a class="btn btn-danger" href="/admin/userOrder/release/{{$order->id}}">Release order</a>
+                                                <a class="btn btn-danger" href="/admin/order/release/{{$order->id}}">Release order</a>
                                             @endif
                                         @endif
                                     @endif
@@ -137,7 +137,7 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
+                    <div class="scroller" style="height:300px;overflow-y: auto" data-always-visible="1" data-rail-visible1="1">
                         <div class="row">
                             <div class="portlet light ">
                                 <div class="portlet-title">

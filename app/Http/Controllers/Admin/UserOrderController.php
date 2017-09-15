@@ -69,6 +69,7 @@ class UserOrderController extends Controller
         UserOrder::where('id',$order_id)->update(array(
            'status' => $status
         ));
+        $this->orderBusy($order_id);
         return redirect()->back();
     }
 

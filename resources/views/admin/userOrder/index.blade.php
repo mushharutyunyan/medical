@@ -22,7 +22,7 @@
                             <th>Order (Status)</th>
                             <th>User Info</th>
                             <th>Pay method ,  Pay type</th>
-                            <th>Delivery address / Take time</th>
+                            <th>Delivery address and time / Take time</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
@@ -43,10 +43,16 @@
                                 @endif
                                 <td>{{$order->pay_method ? \App\Models\UserOrder::$pay_methods[$order->pay_method] : ''}} , {{$order->pay_type ? \App\Models\UserOrder::$pay_types[$order->pay_type] : ''}}</td>
                                 @if($order->pay_type == \App\Models\UserOrder::DELIVERY)
-                                <td class="pay_type">{{$order->delivery_address}}</td>
+                                <td class="pay_type">
+                                    {{$order->delivery_address}}<br>
+                                    @if($order->delivery_time)
+                                        {{$order->delivery_time}}
+                                    @endif
+                                </td>
                                 @else
                                 <td class="pay_type">{{$order->take_time}}</td>
                                 @endif
+
                                 <td>{{$order->created_at}}</td>
                                 <td>
                                     @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
