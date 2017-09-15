@@ -274,4 +274,51 @@ $(document).ready(function(){
             })
         }
     })
+    $(".order-discount-button").on("click",function(){
+        var pharmacy = $(this).attr('data-pharmacy');
+        var order_id = $(this).attr('data-id');
+        $.ajax({
+            url: '/admin/order/discount/info',
+            type: 'GET',
+            data: {pharmacy:pharmacy},
+            dataType: 'json',
+            success: function(data){
+                $("#view_order_discount").find('.discount-form').find('input[name="discount"]').val("")
+                if(data != ''){
+                    $("#view_order_discount").find('.discount-form').find('input[name="discount"]').val(data.discount)
+                }
+                $("#view_order_discount").find('.discount-form').find('input[name="pharmacy"]').val(pharmacy);
+                $("#view_order_discount").find('.discount-form').find('input[name="order_id"]').val(order_id);
+                $("#view_order_discount").modal('show');
+            }
+        })
+    });
+    $.validator.addMethod('minStrict', function (value, el, param) {
+        return value > param;
+    });
+    $(".discount-form").validate({
+        rules:{
+            discount: {
+                required: true,
+                number: true,
+                minStrict: 0,
+            }
+        },
+        messages: {
+            discount: {
+                minStrict: 'Must be greather then 0'
+            }
+        },
+        submitHandler: function(form){
+            $.ajax({
+                url: '/admin/order/discount/update',
+                type: 'POST',
+                data: $(form).serialize(),
+                dataType: 'json',
+                success: function(data){
+                    $("#view_order_discount").modal('hide');
+                }
+            })
+        }
+    })
 });

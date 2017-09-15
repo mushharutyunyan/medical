@@ -23,6 +23,7 @@ class Order extends Model
         'date',
         'delivery_address',
         'delivery_date',
+        'discount'
     ];
 
     public function organizationTo()

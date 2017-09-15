@@ -54,7 +54,7 @@
                             $order_unread_messages = 0;
                             ?>
                             @foreach($order->messages as $unread_messages)
-                                @if(!$unread_messages->read && $unread_messages->from != Auth::guard('web')->user()['id'])
+                                @if(!$unread_messages->read && $unread_messages->from != Auth::guard('admin')->user()['id'])
                                 <?php
                                     $order_unread_messages++;
                                 ?>
@@ -130,6 +130,11 @@
                                             @endif
                                             @if($order_busy && $order_busy->admin_id == Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
                                                 <a class="btn btn-danger" href="/admin/order/release/{{$order->id}}">Release order</a>
+                                            @endif
+                                            @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
+                                                @if($order->to == Auth::guard('admin')->user()['id'])
+                                                    <button class="order-discount-button btn btn-warning" data-id="{{$order->id}}" data-pharmacy="{{$order->from}}">Order Discount</button>
+                                                @endif
                                             @endif
                                         @endif
                                     @endif
@@ -280,6 +285,32 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="view_order_discount" class="modal fade small" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Discount Order</h4>
+                </div>
+                <form class="discount-form">
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <input type="hidden" name="pharmacy" value="">
+                    <input type="hidden" name="order_id" value="">
+                    <div class="modal-body">
+                        <div class="scroller" data-always-visible="1" data-rail-visible1="1">
+                            <div class="form-group">
+                                <label>Discount proceent</label>
+                                <input type="text" name="discount" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-info">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

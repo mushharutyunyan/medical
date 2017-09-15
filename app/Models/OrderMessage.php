@@ -13,8 +13,4 @@ class OrderMessage extends Model
         'message'
     ];
 
-    public function organizationTo()
-    {
-        return $this->belongsTo('App\Models\Organization','to');
-    }
 }

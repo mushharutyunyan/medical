@@ -35,6 +35,8 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
         Route::post('/changeStatusTo','OrderController@changeStatusTo');
         Route::post('/changeOrganization','OrderController@changeOrganization');
         Route::post('/getReceivedInfo','OrderController@getReceivedInfo');
+        Route::get('/discount/info','OrderController@discountInfo');
+        Route::post('/discount/update','OrderController@discountUpdate');
         Route::get('/excel/get','OrderController@excelFiles');
         Route::get('/excel/download/{file}','OrderController@excelDownload');
         Route::post('/changeStatus/received','OrderController@receivedOrder');

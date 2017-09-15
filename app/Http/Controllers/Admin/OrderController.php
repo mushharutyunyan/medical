@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\DrugUnitPrice;
 use App\Models\OrderBusy;
+use App\Models\OrderDiscount;
 use App\Models\OrderFile;
 use App\Models\OrderInfo;
 use App\Models\OrderMessage;
@@ -64,7 +65,7 @@ class OrderController extends Controller
             $drugs = json_decode($data['data']);
             OrderMessage::create(array(
                 'order_id' => $order->id,
-                'from' => Auth::guard('admin')->user()['organization_id'],
+                'from' => Auth::guard('admin')->user()['id'],
                 'message' => $data['message']
             ));
             foreach($drugs as $drug){
@@ -162,7 +163,7 @@ class OrderController extends Controller
             $drugs = json_decode($data['data']);
             OrderMessage::create(array(
                 'order_id' => $id,
-                'from' => Auth::guard('admin')->user()['organization_id'],
+                'from' => Auth::guard('admin')->user()['id'],
                 'message' => $data['message']
             ));
             if(!empty($drugs)){
@@ -283,7 +284,7 @@ class OrderController extends Controller
 
         OrderMessage::create(array(
            'order_id' => $data['id'],
-            'from' => Auth::guard('admin')->user()['organization_id'],
+            'from' => Auth::guard('admin')->user()['id'],
             'message' => $data['message']
         ));
         if($data['status'] == Order::APPROVED){
@@ -399,6 +400,33 @@ class OrderController extends Controller
             );
         }
         return response()->json($response);
+    }
+
+    public function discountInfo(Request $request){
+        $data = $request->all();
+        $discount = OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['id'])->first();
+        return response()->json($discount);
+    }
+
+    public function discountUpdate(Request $request){
+        $data = $request->all();
+        if(OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['id'])->count()){
+            OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['id'])
+                ->update(array(
+                   'discount' => $data['discount']
+                ));
+        }else{
+            OrderDiscount::create(array(
+                'pharmacy' => $data['pharmacy'],
+                'whole_sale' => Auth::guard('admin')->user()['id'],
+                'discount' => $data['discount']
+            ));
+        }
+        Order::where('id',$data['order_id'])->update(
+            array(
+                'discount' => $data['discount']
+            )
+        );
     }
 
     public function excelFiles(Request $request){

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateOrderMessagesTable extends Migration
+class UpdateOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class UpdateOrderMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::table('order_messages', function (Blueprint $table) {
-            $table->dropForeign('order_messages_from_foreign');
-            $table->integer('read')->after('message')->default(0);
+        Schema::table('orders', function (Blueprint $table) {
+            $table->integer('discount')->after('delivery_address')->default(0);
         });
     }
 
@@ -26,8 +25,8 @@ class UpdateOrderMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::table('order_messages', function (Blueprint $table) {
-            $table->dropColumn('read');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('discount');
         });
     }
 }
