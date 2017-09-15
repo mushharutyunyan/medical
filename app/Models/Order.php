@@ -45,4 +45,9 @@ class Order extends Model
         return $this->hasMany('App\Models\OrderInfo','order_id');
     }
 
+    public function messages()
+    {
+        return $this->hasMany('App\Models\OrderMessage','order_id');
+    }
+
 }

@@ -230,6 +230,9 @@ class OrderController extends Controller
     }
     public function messages($id){
         $messages = OrderMessage::where('order_id',$id)->get();
+        OrderMessage::where('order_id',$id)->update(array(
+            'read' => 1
+        ));
         return response()->json($messages);
     }
 

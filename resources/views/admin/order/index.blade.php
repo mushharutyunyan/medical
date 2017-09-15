@@ -51,7 +51,15 @@
                         @foreach($orders as $order)
                             <?php
                             $order_busy = \App\Models\OrderBusy::where('order_id',$order->id)->where('status',1)->first();
+                            $order_unread_messages = 0;
                             ?>
+                            @foreach($order->messages as $unread_messages)
+                                @if(!$unread_messages->read && $unread_messages->from != Auth::guard('web')->user()['id'])
+                                <?php
+                                    $order_unread_messages++;
+                                ?>
+                                @endif
+                            @endforeach
                             <tr class="odd gradeX">
                                 <td>{{$order->organizationTo->name}}</td>
                                 <td>{{$order->organizationFrom->name}}</td>
@@ -107,7 +115,13 @@
                                                     {!! Form::close() !!}
                                                 @endif
                                             @endif
-                                            <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
+                                            <a href="#" class="view-messages" data-id="{{$order->id}}" title="View">
+                                                @if($order_unread_messages)
+                                                <span style="color: red"><i class="fa fa-envelope" ></i> + {{$order_unread_messages}}</span>
+                                                @else
+                                                <i class="fa fa-envelope"></i>
+                                                @endif
+                                            </a>
                                             <a href="#" class="view-files" data-id="{{$order->id}}" title="Watch Files"><i class="fa fa-file-excel-o" aria-hidden="true"></i></a>
                                             @if($order->from == Auth::guard("admin")->user()['organization_id'] && !$order->status)
                                                 {!! Form::open(['class' => 'storage-save-all']) !!}

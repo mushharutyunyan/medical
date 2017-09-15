@@ -82,6 +82,7 @@ $(document).ready(function(){
     });
     $(".view-messages").on("click",function(e){
         e.preventDefault();
+        $(this).html('<i class="fa fa-envelope"></i>');
         $("#view_order_message").find(".chats").html('');
         $.ajax({
             url:'/admin/order/messages/'+$(this).attr('data-id'),
