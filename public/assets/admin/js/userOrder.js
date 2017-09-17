@@ -223,4 +223,6 @@ $(document).ready(function(){
 
         })
     })
+
+    $(".user_order_datatable").dataTable();
 });

@@ -15,6 +15,9 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
                 Route::resource('/drugs','DrugsController');
                 Route::resource('/organizations','OrganizationsController');
                 Route::get('/admins/{id}/changePassword','AdminsController@changePassword');
+                Route::group(['prefix' => 'circulation'],function(){
+                    Route::get('/','CirculationController@index');
+                });
             });
         });
     });
@@ -55,5 +58,6 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
         Route::get('/{order_id}/{status}','UserOrderController@changeStatus');
         Route::post('/finish/{user_type}','UserOrderController@finishOrder');
     });
+
 
 });

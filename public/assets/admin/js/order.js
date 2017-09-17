@@ -321,4 +321,6 @@ $(document).ready(function(){
             })
         }
     })
+    $(".order_datatable").dataTable();
+
 });

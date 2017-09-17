@@ -353,6 +353,13 @@
                             @endif
                                 <a href="/admin/manage/organizations">Organizations</a>
                             </li>
+                            @if(Request::segment(2) == 'manage' && Request::segment(3) == 'circulation')
+                                <li class="active">
+                            @else
+                                <li>
+                            @endif
+                                    <a href="/admin/manage/circulation">Circulation</a>
+                                </li>
                         </ul>
                     </li>
                     @if(Request::segment(2) == 'storage')
