@@ -80,6 +80,7 @@ class DrugsController extends Controller
     public function store(DrugRequest $request)
     {
         $data = $request->all();
+
         $expiration_date = false;
         for($i = 1; $i <= $data['expiration_date']; $i++){
             if(!empty($data['expiration_date_'.$i])){
@@ -238,6 +239,7 @@ class DrugsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Drug::where('id',$id)->delete();
+        return redirect()->back()->with('status', 'Drug deleted successfully');
     }
 }

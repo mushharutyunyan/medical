@@ -30,9 +30,9 @@
                         <div class="form-group">
                             <label class="control-label col-md-6">Trade Name - торговое название (Առևտրային անվանում)</label>
                             <div class="col-md-4">
-                                {{Form::text('trade_name','',['class' => 'form-control'])}}
-                                {{Form::text('trade_name_ru','',['class' => 'form-control','placeholder' => 'russian name'])}}
-                                {{Form::text('trade_name_en','',['class' => 'form-control','placeholder' => 'english name'])}}
+                                {{Form::text('trade_name',old('trade_name'),['class' => 'form-control'])}}
+                                {{Form::text('trade_name_ru',old('trade_name_ru'),['class' => 'form-control','placeholder' => 'russian name'])}}
+                                {{Form::text('trade_name_en',old('trade_name_en'),['class' => 'form-control','placeholder' => 'english name'])}}
                             </div>
 
                         </div>

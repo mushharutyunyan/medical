@@ -56,7 +56,7 @@
                                 <td>{{$order->created_at}}</td>
                                 <td>
                                     @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                        This order already take by another user
+                                        This order already relased by {{$order_busy->admin->name}}
                                     @else
                                         @if($order->status != \App\Models\UserOrder::DELIVERED)
                                             @if($order->status == \App\Models\UserOrder::APPROVED && empty($order->pay_method))

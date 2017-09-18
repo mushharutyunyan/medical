@@ -24,7 +24,9 @@ class DrugRequest extends FormRequest
     public function rules()
     {
         return [
-            'trade_name' => 'required',
+            'trade_name' => 'required|unique:drugs,trade_name',
+            'trade_name_ru' => 'required|unique:drugs,trade_name_ru',
+            'trade_name_en' => 'required|unique:drugs,trade_name_en',
         ];
     }
 }

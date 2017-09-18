@@ -4,10 +4,11 @@ namespace App\Models;
 
 use App\Support\Arrays;
 use Illuminate\Support\Facades\Lang;
-
-class Drug extends AbstractModel
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+class Drug extends Model
 {
-    protected $softDelete = true;
+    use SoftDeletes;
 
     protected $fillable = [
         'id',

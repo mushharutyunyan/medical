@@ -68,6 +68,12 @@
                             <td>
                                 @if($order->status == \App\Models\UserOrder::DELIVERED)
                                     <div class="rateYo" data-id="{{$order->id}}" data-rate="{{$order->stars}}"></div>
+                                    <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history btn btn-info">{{Lang::get('main.details')}}</a>
+                                    <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages btn btn-info">{{Lang::get('main.messages')}}
+                                        @if($count_unread_messages)
+                                            <span style="color:red">({{$count_unread_messages}})</span>
+                                        @endif
+                                    </a>
                                 @else
                                     <form id="canceled_by_user">
                                     @if($order->status == \App\Models\UserOrder::APPROVED && !$order->pay_method)

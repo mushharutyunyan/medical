@@ -82,6 +82,7 @@
                         <td>
                             @if($details->status == \App\Models\UserOrder::DELIVERED)
                                 <div class="rateYo" data-id="{{$details->id}}" data-rate="{{$details->stars}}"></div>
+                                <button type="button" class="show-order-details btn btn-blue">{{Lang::get('main.show')}}</button>
                             @else
                                 <form id="canceled_by_user">
                                 @if($details->status == \App\Models\UserOrder::APPROVED && !$details->pay_method)

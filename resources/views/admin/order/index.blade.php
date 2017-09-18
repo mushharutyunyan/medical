@@ -95,7 +95,7 @@
                                 <td>
 
                                     @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                        This order already take by another user
+                                        This order already relased by {{$order_busy->admin->name}}
                                     @else
                                         @if(\App\Models\Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id'])
                                         <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>
@@ -133,7 +133,7 @@
                                             @endif
                                             @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
                                                 @if($order->to == Auth::guard('admin')->user()['organization_id'])
-                                                    
+
                                                     <button class="order-discount-button btn btn-warning" data-id="{{$order->id}}" data-pharmacy="{{$order->from}}">Order Discount</button>
                                                 @endif
                                             @endif

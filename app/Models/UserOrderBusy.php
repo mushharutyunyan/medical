@@ -12,4 +12,9 @@ class UserOrderBusy extends Model
         'organization_id',
         'status'
     ];
+
+    public function admin()
+    {
+        return $this->belongsTo('App\Models\Admin');
+    }
 }
