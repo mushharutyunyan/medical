@@ -12,6 +12,8 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
             Route::group(['prefix' => 'manage'],function(){
                 Route::resource('/admins','AdminsController');
                 Route::resource('/roles','RolesController');
+                Route::get('/drugs/search','DrugsController@search');
+                Route::post('/drugs/search','DrugsController@search');
                 Route::resource('/drugs','DrugsController');
                 Route::resource('/organizations','OrganizationsController');
                 Route::get('/admins/{id}/changePassword','AdminsController@changePassword');

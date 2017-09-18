@@ -214,19 +214,21 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(data){
                 $("#received_modal").find('.order-files-block tbody').html("");
-                $.each(data,function(key,value){
+                $("#received_modal").find('.received-modal-price-field').html('Price (Discount - '+data.discount+' %)')
+                $.each(data.info,function(key,value){
                     var settings = '';
                     $.each(value.settings,function(key_settings,value_settings){
                         $.each(value_settings,function(setting_name,setting_value){
                             settings += "<p>"+setting_name+": "+setting_value+"</p>";
                         })
                     });
+                    var price = value.price - value.price*data. discount/100;
                     $("#received_modal").find('.order-files-block tbody').append(
                         '<tr>' +
                         '<td>'+value.name+'</td>' +
                         '<td>'+value.count+'</td>' +
                         '<td>'+settings+'</td>' +
-                        '<td><input name="price" data-id="'+value.id+'" value="'+value.price+'" class="form-control"></td>' +
+                        '<td><input name="price" data-id="'+value.id+'" value="'+price+'" class="form-control"></td>' +
                         '<td><input name="procent" class="form-control">%</td>' +
                         '</tr>'
                     )

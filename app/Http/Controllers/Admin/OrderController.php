@@ -87,7 +87,7 @@ class OrderController extends Controller
         }
 
         if($status == Order::PROCEEDTO){
-            $this->generateExcel($order->id);
+            $this->generateExcel($order->id,false);
         }
 
         return response()->json(true);
@@ -221,7 +221,11 @@ class OrderController extends Controller
         Order::where('id',$id)->update($order_data);
         if(isset($data['status'])){
             if($data['status'] != Order::CANCELED){
-                $file = $this->generateExcel($id);
+                $add_discount = false;
+                if($data['status'] == Order::APPROVED){
+                    $add_discount = true;
+                }
+                $file = $this->generateExcel($id, $add_discount);
                 if($data['status'] == Order::APPROVED){
                     Order::where('id',$id)->update(array('file' => $file));
                 }
@@ -239,10 +243,10 @@ class OrderController extends Controller
 
     public function changeStatus(Request $request){
         $data = $request->all();
+
         Order::where('id',$data['id'])->update(array(
            'status' => $data['status']
         ));
-
         return redirect('/admin/order');
     }
 
@@ -264,6 +268,11 @@ class OrderController extends Controller
     public function changeStatusTo(Request $request){
         $data = $request->all();
         $order = Order::where('id',$data['id'])->first();
+        if($data['status'] == Order::APPROVED){
+            $file = OrderFile::where('order_id',$data['id'])->orderBy('id','Desc')->first();
+            $filename = $this->generateExcel($data['id'],true);
+            Order::where('id',$data['id'])->update(array('file' => $filename));
+        }
         $checkBusy = $this->checkOrderBusy($data['id']);
         if(!$checkBusy){
             return response()->json(['error' => 'This order has been taken by another user']);
@@ -287,10 +296,7 @@ class OrderController extends Controller
             'from' => Auth::guard('admin')->user()['id'],
             'message' => $data['message']
         ));
-        if($data['status'] == Order::APPROVED){
-            $file = OrderFile::where('order_id',$data['id'])->orderBy('id','Desc')->first();
-            Order::where('id',$data['id'])->update(array('file' => $file->file));
-        }
+
         return response()->json(true);
     }
 
@@ -373,7 +379,11 @@ class OrderController extends Controller
     }
     public function getReceivedInfo(Request $request, Drug $drug){
         $data = $request->all();
+
+        $order = Order::where('id',$data['order_id'])->first();
         $infos = OrderInfo::where('order_id',$data['order_id'])->get();
+        $discount = OrderDiscount::where('whole_sale',$order->to)->where('pharmacy',$order->from)->first();
+
         $response = array();
         foreach($infos as $info){
             $settings = json_decode($info->storage->drug_settings);
@@ -399,26 +409,26 @@ class OrderController extends Controller
                 'settings' => $response_settings
             );
         }
-        return response()->json($response);
+        return response()->json(['info' => $response,'discount' => $discount->discount]);
     }
 
     public function discountInfo(Request $request){
         $data = $request->all();
-        $discount = OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['id'])->first();
+        $discount = OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['organization_id'])->first();
         return response()->json($discount);
     }
 
     public function discountUpdate(Request $request){
         $data = $request->all();
-        if(OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['id'])->count()){
-            OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['id'])
+        if(OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['organization_id'])->count()){
+            OrderDiscount::where('pharmacy',$data['pharmacy'])->where('whole_sale',Auth::guard('admin')->user()['organization_id'])
                 ->update(array(
                    'discount' => $data['discount']
                 ));
         }else{
             OrderDiscount::create(array(
                 'pharmacy' => $data['pharmacy'],
-                'whole_sale' => Auth::guard('admin')->user()['id'],
+                'whole_sale' => Auth::guard('admin')->user()['organization_id'],
                 'discount' => $data['discount']
             ));
         }
@@ -448,7 +458,7 @@ class OrderController extends Controller
         return response()->download(storage_path().'/exports/'.$file.'.xls');
     }
 
-    public function generateExcel($order_id = null){
+    public function generateExcel($order_id = null, $add_discount){
         $order = Order::where('id',$order_id)->first();
         if($order->delivery_status->id == 1){
             $delivery_status = 'ՏԵղում';
@@ -488,6 +498,10 @@ class OrderController extends Controller
             'C19' => $order->organizationTo->phone,
             'C20' => $order->organizationTo->email,
         );
+        if($add_discount){
+            $discount = OrderDiscount::where('whole_sale',Auth::guard('admin')->user()['organization_id'])->where('pharmacy',$order->from)->first();
+            $order_details['C2'] = 'Զեղչ - '.$discount->discount.' %';
+        }
         $drugs = OrderInfo::where('order_id',$order_id)->get();
         $i = 1;
         $data_drugs = array();
@@ -495,8 +509,12 @@ class OrderController extends Controller
             $settings = json_decode($drug->drug_settings);
             $unit_price = '';
             $price = '';
-            if(isset($drug->unit_price)){
-                $unit_price = $drug->unit_price;
+            if(isset($drug->storage->price->price)){
+                if($add_discount){
+                    $unit_price = $drug->storage->price->price - $drug->storage->price->price*$discount->discount/100;
+                }else{
+                    $unit_price = $drug->storage->price->price;
+                }
                 $price = $drug->count * $unit_price;
             }
             $data_drugs[] = array($i,$drug->storage->drug->trade_name,'',$drug->count,$unit_price,$price,'','','');
@@ -519,6 +537,10 @@ class OrderController extends Controller
                     'I'     =>  10,
                 ));
                 $sheet->cell('B2', function($cell) {
+                    $cell->setFontSize(16);
+                    $cell->setAlignment('center');
+                });
+                $sheet->cell('C2', function($cell) {
                     $cell->setFontSize(16);
                     $cell->setAlignment('center');
                 });
@@ -607,7 +629,7 @@ class OrderController extends Controller
                     $cell->setAlignment('center');
                 });
                 $sheet->cell('E22', function($cell) {
-                    $cell->setValue('Միավորի գինը');
+                    $cell->setValue('Միավորի գինը (Զեղչված)');
                     $cell->setAlignment('center');
                 });
                 $sheet->cell('F22', function($cell) {

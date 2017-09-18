@@ -25,6 +25,17 @@
                                     </a>
                                 </div>
                             </div>
+                            <form action="/admin/manage/drugs/search" method="POST">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" value="{{session('search')}}" placeholder="Search" name="search">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                        <button class="btn btn-info">Search</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover">

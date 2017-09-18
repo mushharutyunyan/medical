@@ -55,8 +55,9 @@ class DrugsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $data = $request->all();
         $drugs = Drug::paginate(15);
         return view('admin.manage.drugs.index',['drugs' => $drugs]);
     }
@@ -127,7 +128,7 @@ class DrugsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
 
     }
@@ -241,5 +242,21 @@ class DrugsController extends Controller
     {
         Drug::where('id',$id)->delete();
         return redirect()->back()->with('status', 'Drug deleted successfully');
+    }
+
+    public function search(Request $request){
+        $data = $request->all();
+        if(isset($data['page'])){
+            $search = $request->session()->get('search');
+        }else{
+            $search = $data['search'];
+        }
+        $drugs = Drug::where('trade_name', 'like', "%".$search."%")
+            ->orWhere('trade_name_ru','like',"%".$search."%")
+            ->orWhere('trade_name_en','like',"%".$search."%")
+            ->orWhere('code',$search)->paginate(15);
+        $request->session()->put(['search' => $search]);
+        $request->session()->save();
+        return view('admin.manage.drugs.index',['drugs' => $drugs]);
     }
 }

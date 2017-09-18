@@ -249,7 +249,7 @@
                                             <th>Name</th>
                                             <th>Count</th>
                                             <th>Settings</th>
-                                            <th>Price</th>
+                                            <th class="received-modal-price-field">Price (Discounted)</th>
                                             <th>Procent</th>
                                         </tr>
                                     </thead>
