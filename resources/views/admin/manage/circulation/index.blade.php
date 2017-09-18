@@ -122,7 +122,7 @@
                                     @if($order->orderInfo)
                                         @foreach($order->orderInfo as $orderInfo)
                                             <?php
-                                            $order_sum += $order_detail->storage->price->price * $order_detail->count;
+                                            $order_sum += $orderInfo->storage->price->price * $orderInfo->count;
                                             ?>
                                         @endforeach
                                         <?php
