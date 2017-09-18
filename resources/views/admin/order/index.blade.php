@@ -133,6 +133,7 @@
                                             @endif
                                             @if($order->status != \App\Models\Order::APPROVED && $order->status != \App\Models\Order::RECEIVED)
                                                 @if($order->to == Auth::guard('admin')->user()['organization_id'])
+                                                    
                                                     <button class="order-discount-button btn btn-warning" data-id="{{$order->id}}" data-pharmacy="{{$order->from}}">Order Discount</button>
                                                 @endif
                                             @endif
