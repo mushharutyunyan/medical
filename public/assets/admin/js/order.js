@@ -323,6 +323,9 @@ $(document).ready(function(){
             })
         }
     })
-    $(".order_datatable").dataTable();
+   $(".order_datatable").dataTable();
+    $("#circulation_users").on("change",function(){
+        $(this).parent().submit()
+    })
 
 });

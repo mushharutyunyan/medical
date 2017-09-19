@@ -23,6 +23,23 @@
 
                     <div class="tab-content">
                         <div id="user_order" class="tab-pane fade in active">
+                            @if(Auth::guard('admin')->user()['role_id'] == 1)
+                            <form method="POST">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <select name="circulation_users" id="circulation_users" class="form-control">
+                                    <option></option>
+                                    @foreach($users as $user)
+                                        @if($user->user)
+                                            @if(isset($data['circulation_users']) && $data['circulation_users'] == $user->user_id)
+                                            <option selected value="{{$user->user->id}}">{{$user->user->name}}</option>
+                                            @else
+                                            <option value="{{$user->user->id}}">{{$user->user->name}}</option>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </form>
+                            @endif
                             <table class="table table-striped table-bordered table-hover user_order_datatable">
                                 <thead>
                                     <tr>
@@ -89,6 +106,22 @@
                             </div>
                         </div>
                         <div id="order" class="tab-pane fade">
+                            @if(Auth::guard('admin')->user()['role_id'] == 1)
+                                <form method="POST">
+                                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+
+                                    <select name="circulation_organizations" id="circulation_organizations" class="form-control">
+                                        <option></option>
+                                        @foreach($organizations as $organization)
+                                            @if(isset($data['circulation_organizations']) && $data['circulation_organizations'] == $organization->id)
+                                                <option selected value="{{$organization->id}}">{{$organization->name}}</option>
+                                            @else
+                                                <option value="{{$organization->id}}">{{$organization->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </form>
+                            @endif
                             <table class="table table-striped table-bordered table-hover order_datatable">
                                 <thead>
                                     <tr>
@@ -122,6 +155,9 @@
                                     @if($order->orderInfo)
                                         @foreach($order->orderInfo as $orderInfo)
                                             <?php
+                                            if(!$orderInfo->storage){
+                                                continue;
+                                            }
                                             $order_sum += $orderInfo->storage->price->price * $orderInfo->count;
                                             ?>
                                         @endforeach
@@ -143,7 +179,7 @@
                                                 {{$order->delivery_status->name}}
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="circulation-order-sum-field" data-discounted-price="{{$order_discounted_sum}}">
                                             {{$order_sum}}, With Discount: {{$order_discounted_sum}}
                                         </td>
                                         <td>

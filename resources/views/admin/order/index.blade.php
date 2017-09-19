@@ -95,7 +95,7 @@
                                 <td>
 
                                     @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                        This order already relased by {{$order_busy->admin->name}}
+                                        This order already relased by {{$order_busy->admin->firstname ." ". $order_busy->admin->lastname}}
                                     @else
                                         @if(\App\Models\Order::CANCELED == $order->status && $order->from == Auth::guard("admin")->user()['organization_id'])
                                         <a href="#" class="view-messages" data-id="{{$order->id}}" title="View"><i class="fa fa-envelope"></i></a>

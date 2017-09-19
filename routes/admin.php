@@ -19,6 +19,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
                 Route::get('/admins/{id}/changePassword','AdminsController@changePassword');
                 Route::group(['prefix' => 'circulation'],function(){
                     Route::get('/','CirculationController@index');
+                    Route::post('/','CirculationController@index');
                 });
             });
         });

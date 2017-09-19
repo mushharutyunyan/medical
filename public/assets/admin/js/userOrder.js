@@ -225,4 +225,7 @@ $(document).ready(function(){
     })
 
     $(".user_order_datatable").dataTable();
+    $("#circulation_organizations").on("change",function(){
+        $(this).parent().submit()
+    })
 });

@@ -56,27 +56,27 @@
                                 <td>{{$order->created_at}}</td>
                                 <td>
                                     @if($order_busy && $order_busy->admin_id != Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                        This order already relased by {{$order_busy->admin->name}}
+                                        This order already relased by {{$order_busy->admin->firstname ." ". $order_busy->admin->lastname}}
                                     @else
-                                        @if($order->status != \App\Models\UserOrder::DELIVERED)
+                                        @if($order->status != \App\Models\UserOrder::DELIVERED && $order->status != \App\Models\UserOrder::CANCELEDBYUSER && $order->status != \App\Models\UserOrder::CANCELED)
                                             @if($order->status == \App\Models\UserOrder::APPROVED && empty($order->pay_method))
                                                 <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
                                                 <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
                                             @else
-                                            @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
-                                                @if(empty($order->pay_method))
-                                                    <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
-                                                    <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
-                                                    <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
-                                                @else
-                                                    @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
-                                                        <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
+                                                @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
+                                                    @if(empty($order->pay_method))
+                                                        <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
+                                                        <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
+                                                        <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
                                                     @else
-                                                        <a href="javascript:;" class="finished_delivery" data-id="{{$order->id}}" style="color: green;">Delivery</a>
+                                                        @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
+                                                            <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
+                                                        @else
+                                                            <a href="javascript:;" class="finished_delivery" data-id="{{$order->id}}" style="color: green;">Delivery</a>
+                                                        @endif
                                                     @endif
+                                                        <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
                                                 @endif
-                                                    <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
-                                            @endif
                                             @endif
                                         @endif
                                         <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>
