@@ -499,8 +499,13 @@ class OrderController extends Controller
             'C20' => $order->organizationTo->email,
         );
         if($add_discount){
-            $discount = OrderDiscount::where('whole_sale',Auth::guard('admin')->user()['organization_id'])->where('pharmacy',$order->from)->first();
-            $order_details['C2'] = 'Զեղչ - '.$discount->discount.' %';
+            if(OrderDiscount::where('whole_sale',Auth::guard('admin')->user()['organization_id'])->where('pharmacy',$order->from)->count()){
+                $discount = OrderDiscount::where('whole_sale',Auth::guard('admin')->user()['organization_id'])->where('pharmacy',$order->from)->first();
+                $discount_price = $discount->discount;
+            }else{
+                $discount_price = 0;
+            }
+            $order_details['C2'] = 'Զեղչ - '.$discount_price.' %';
         }
         $drugs = OrderInfo::where('order_id',$order_id)->get();
         $i = 1;

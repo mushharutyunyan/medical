@@ -189,6 +189,8 @@ class OrderController extends Controller
     public function createMessage(Request $request){
         $data = $request->all();
         if(UserOrder::where('order',$data['order'])->where('id',$data['id'])->count()){
+            $order = UserOrder::where('order',$data['order'])->where('id',$data['id'])->first();
+
             if(Auth::check() || (isset($data['user']) && $data['user'] == 'anonymus')){
                 $from = 'user';
                 $status = UserOrder::SENDED;
@@ -201,9 +203,11 @@ class OrderController extends Controller
                 'from' => $from,
                 'message' => $data['message']
             ));
-            UserOrder::where('order',$data['order'])->update(array(
-               'status' => $status
-            ));
+            if($order->status != UserOrder::CANCELED && $order->status != UserOrder::CANCELEDBYUSER){
+                UserOrder::where('order',$data['order'])->update(array(
+                   'status' => $status
+                ));
+            }
             $data = array(
                 'message' => $message->message,
                 'date' => date("Y-m-d",strtotime($message->created_at . "+ 4 hour")),
