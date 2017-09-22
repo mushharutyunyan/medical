@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Drug;
 use App\Models\DrugUnitPrice;
+use App\Models\OrderDiscount;
 use App\Models\OrderInfo;
 use App\Models\Organization;
 use GuzzleHttp\Psr7\Response;
@@ -244,8 +245,18 @@ class StorageController extends Controller
             foreach($orders as $order){
                 if(OrderInfo::where('order_id',$order->id)->where('storage_id',$data['storage_id'])->count()){
                     $exist_drug = OrderInfo::where('order_id',$order->id)->where('storage_id',$data['storage_id'])->first();
-                    return response()->json(array('error' => 'This drug has already in your order list',
-                        'count' => $exist_drug->count));
+                    $storage = Storage::where('id',$data['storage_id'])->first();
+                    $discount = OrderDiscount::where('whole_sale',$storage->organization_id)->where('pharmacy',Auth::guard('admin')->user()['organization_id'])->first();
+                    $discount_proceent = 0;
+                    if($discount){
+                        $discount_proceent = $discount->discount;
+                    }
+                    return response()->json(array(
+                        'error' => 'This drug has already in your order list',
+                        'count' => $exist_drug->count,
+                        'price' => $storage->price->price,
+                        'discount' => $discount_proceent
+                    ));
                 }
             }
         }else{
@@ -261,6 +272,7 @@ class StorageController extends Controller
                 ->where('drug_settings',$settings)->first();
             $exist_drug->price;
         }
+
         return response()->json($exist_drug);
     }
 

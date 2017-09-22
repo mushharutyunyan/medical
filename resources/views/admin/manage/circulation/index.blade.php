@@ -17,12 +17,12 @@
                         </div>
                     @endif
                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#user_order">User Order</a></li>
-                        <li><a data-toggle="tab" href="#order">Order</a></li>
+                        <li class="{{isset($data['circulation_organizations']) ? '' : 'active'}}"><a data-toggle="tab" href="#user_order">User Order</a></li>
+                        <li class="{{isset($data['circulation_organizations']) ? 'active' : ''}}"><a data-toggle="tab" href="#order">Order</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div id="user_order" class="tab-pane fade in active">
+                        <div id="user_order" class="tab-pane fade  {{isset($data['circulation_organizations']) ? '' : 'in active'}}">
                             @if(Auth::guard('admin')->user()['role_id'] == 1)
                             <form method="POST">
                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -105,7 +105,7 @@
                                 <input type="text" class="form-control" disabled="disabled" value="{{$user_order_all_sum}}">
                             </div>
                         </div>
-                        <div id="order" class="tab-pane fade">
+                        <div id="order" class="tab-pane fade {{isset($data['circulation_organizations']) ? 'in active' : ''}}">
                             @if(Auth::guard('admin')->user()['role_id'] == 1)
                                 <form method="POST">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">

@@ -281,7 +281,10 @@ $(document).ready(function(){
     })
 
     $(document).on('click','.remove-storage-row',function(){
+        $(this).parent().next().find('.price_information').remove();
+
         $(this).parent().parent().removeClass('process');
+
         count = $('.save-all-storage').attr('data-count');
         var search_button_class = '';
         if($(this).hasClass('order')){
@@ -699,6 +702,16 @@ function storage_save($data,save_all_button,table,count){
                                         params = "<input type='hidden' class='row-settings' name='settings_"+count+"' value='"+settings+"'>" +
                                             "<input type='hidden' class='row-drug-id' name='drug_id_"+count+"' value='"+$data.drug_id+"'>";
                                     }
+                                    if($data['is_order']){
+                                        var discounted_price = parseFloat(data.price) - parseFloat(data.price) * parseFloat(data.discount)/100;
+                                        $(this).parent().next().append(
+                                            '<ul class="price_information list-group">' +
+                                                '<li class="list-group-item">Price: '+data.price+'</li>' +
+                                                '<li class="list-group-item">Discount: '+data.discount+'</li>' +
+                                                '<li class="list-group-item">Discounted Price: '+discounted_price+'</li>' +
+                                            '</ul>'
+                                        )
+                                    }
                                     $(this).parent().html(
                                         "<button class='remove-storage-row btn btn-warning "+clear_button_class+"' data-id='"+$(value).attr('data-id')+"'>Clear</button>"
                                         + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+
@@ -721,6 +734,7 @@ function storage_save($data,save_all_button,table,count){
                     }
                 });
             }else{
+
                 $(table + ' tr').find('.search-drug-button').each(function(key,value){
                     if($(value).attr('data-id') == $('.search-drug').attr('data-id')){
                         var closest_tr = $(this).parent().parent();
@@ -748,9 +762,35 @@ function storage_save($data,save_all_button,table,count){
                             }
                             info += '<p>'+key+': '+value+'</p>';
                         });
-                        $(this).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+
-                            params +
-                            "<input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>" + info);
+                        if($data['is_order']){
+                            var self = this
+                            $.ajax({
+                                url: '/admin/order/priceAndDiscount/get',
+                                type: 'GET',
+                                data: {storage_id:$data.storage_id},
+                                dataType: 'json',
+                                success: function(data){
+                                    console.log($(self).parent())
+                                    var discounted_price = parseFloat(data.price) - parseFloat(data.price) * parseFloat(data.discount)/100;
+                                    $(self).parent().next().append(
+                                        '<ul class="price_information list-group">' +
+                                        '<li class="list-group-item">Price: '+data.price+'</li>' +
+                                        '<li class="list-group-item">Discount: '+data.discount+'</li>' +
+                                        '<li class="list-group-item">Discounted Price: '+discounted_price+'</li>' +
+                                        '</ul>'
+                                    )
+                                    $(self).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+
+                                        params +
+                                        "<input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>" + info);
+                                    return false;
+                                }
+                            })
+                        }else{
+                            $(this).parent().html("<button data-id='"+$(value).attr('data-id')+"' class='remove-storage-row btn btn-warning "+clear_button_class+"'>Clear</button>" + $('.drug-search-results').children('option[value="'+$('.drug-search-results').val()+'"]').html()+
+                                params +
+                                "<input type='hidden' class='row-exist' name='exist_"+count+"' value='0'>" + info);
+                        }
+
 
                         return false;
                     }

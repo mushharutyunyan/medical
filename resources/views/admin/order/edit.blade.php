@@ -62,6 +62,11 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" value="{{$drug->count}}" name="count" placeholder="Count">
+                                        <ul class="price_information list-group">
+                                            <li class="list-group-item">Price: {{$drug->storage->price->price}}</li>
+                                            <li class="list-group-item">Discount: {{$drug->storage->discount}}</li>
+                                            <li class="list-group-item">Discounted Price: {{$drug->storage->price->price - $drug->storage->price->price*$drug->storage->discount/100}}</li>
+                                        </ul>
                                     </td>
                                 </tr>
                                 <?php $i++ ?>

@@ -439,6 +439,20 @@ class OrderController extends Controller
         );
     }
 
+    public function getPriceAndDiscount(Request $request){
+        $data = $request->all();
+        $storage = Storage::where('id',$data['storage_id'])->first();
+        $discount = OrderDiscount::where('whole_sale',$storage->organization_id)->where('pharmacy',Auth::guard('admin')->user()['organization_id'])->first();
+        $discount_proceent = 0;
+        if($discount){
+            $discount_proceent = $discount->discount;
+        }
+        return response()->json(array(
+            'price' => $storage->price->price,
+            'discount' => $discount_proceent
+        ));
+    }
+
     public function excelFiles(Request $request){
         $data = $request->all();
         $order = Order::where('id',$data['order_id'])->first();

@@ -17,13 +17,21 @@ class CirculationController extends Controller
         if($request->isMethod('post')){
             $data = $request->all();
             if(isset($data['circulation_users'])){
-                $user_orders = UserOrder::where('status',10)->where('user_id',$data['circulation_users'])->get();
-                $users = $user_orders->unique('user_id');
+                if(!empty($data['circulation_users'])){
+                    $user_orders = UserOrder::where('status',10)->where('user_id',$data['circulation_users'])->get();
+                }else{
+                    $user_orders = UserOrder::where('status',10)->get();
+                }
+                $users = UserOrder::where('status',10)->get()->unique('user_id');
                 $orders = Order::where('status',5)->get();
             }elseif(isset($data['circulation_organizations'])){
                 $user_orders = UserOrder::where('status',10)->get();
                 $users = $user_orders->unique('user_id');
-                $orders = Order::where('status',5)->where('to',$data['circulation_organizations'])->get();
+                if(!empty($data['circulation_organizations'])){
+                    $orders = Order::where('status',5)->where('to',$data['circulation_organizations'])->get();
+                }else{
+                    $orders = Order::where('status',5)->get();
+                }
             }
             $organizations = Organization::all();
         }else{
