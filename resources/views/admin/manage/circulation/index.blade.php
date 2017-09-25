@@ -17,27 +17,45 @@
                         </div>
                     @endif
                     <ul class="nav nav-tabs">
-                        <li class="{{isset($data['circulation_organizations']) ? '' : 'active'}}"><a data-toggle="tab" href="#user_order">User Order</a></li>
-                        <li class="{{isset($data['circulation_organizations']) ? 'active' : ''}}"><a data-toggle="tab" href="#order">Order</a></li>
+                        <li class="{{isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy']) ? '' : 'active'}}"><a data-toggle="tab" href="#user_order">User Order</a></li>
+                        <li class="{{isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy']) ? 'active' : ''}}"><a data-toggle="tab" href="#order">Order</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div id="user_order" class="tab-pane fade  {{isset($data['circulation_organizations']) ? '' : 'in active'}}">
+                        <div id="user_order" class="tab-pane fade  {{(isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy'])) ? '' : 'in active'}}">
                             @if(Auth::guard('admin')->user()['role_id'] == 1)
                             <form method="POST">
                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
-                                <select name="circulation_users" id="circulation_users" class="form-control">
-                                    <option></option>
-                                    @foreach($users as $user)
-                                        @if($user->user)
-                                            @if(isset($data['circulation_users']) && $data['circulation_users'] == $user->user_id)
-                                            <option selected value="{{$user->user->id}}">{{$user->user->name}}</option>
-                                            @else
-                                            <option value="{{$user->user->id}}">{{$user->user->name}}</option>
+                                <div class="form-group col-md-6">
+                                    <label>By User:</label>
+                                    <select name="circulation_users" id="circulation_users" class="form-control">
+                                        <option></option>
+                                        @foreach($users as $user)
+                                            @if($user->user)
+                                                @if(isset($data['circulation_users']) && $data['circulation_users'] == $user->user_id)
+                                                <option selected value="{{$user->user->id}}">{{$user->user->name}}</option>
+                                                @else
+                                                <option value="{{$user->user->id}}">{{$user->user->name}}</option>
+                                                @endif
                                             @endif
-                                        @endif
-                                    @endforeach
-                                </select>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>By Organization:</label>
+                                    <select name="user_order_organizations" id="user_order_organizations" class="form-control">
+                                        <option></option>
+                                        @foreach($user_order_organizations as $user_order_organization)
+                                            @if($user_order_organization->organization)
+                                                @if(isset($data['user_order_organizations']) && $data['user_order_organizations'] == $user_order_organization->organization_id)
+                                                    <option selected value="{{$user_order_organization->organization->id}}">{{$user_order_organization->organization->name}}</option>
+                                                @else
+                                                    <option value="{{$user_order_organization->organization->id}}">{{$user_order_organization->organization->name}}</option>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
                             </form>
                             @endif
                             <table class="table table-striped table-bordered table-hover user_order_datatable">
@@ -105,21 +123,40 @@
                                 <input type="text" class="form-control" disabled="disabled" value="{{$user_order_all_sum}}">
                             </div>
                         </div>
-                        <div id="order" class="tab-pane fade {{isset($data['circulation_organizations']) ? 'in active' : ''}}">
+                        <div id="order" class="tab-pane fade {{(isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy'])) ? 'in active' : ''}}">
                             @if(Auth::guard('admin')->user()['role_id'] == 1)
                                 <form method="POST">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
-
-                                    <select name="circulation_organizations" id="circulation_organizations" class="form-control">
-                                        <option></option>
-                                        @foreach($organizations as $organization)
-                                            @if(isset($data['circulation_organizations']) && $data['circulation_organizations'] == $organization->id)
-                                                <option selected value="{{$organization->id}}">{{$organization->name}}</option>
-                                            @else
-                                                <option value="{{$organization->id}}">{{$organization->name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
+                                    <div class="form-group col-md-6">
+                                        <label>Whole Sale:</label>
+                                        <select name="circulation_order_whole_sale" id="circulation_order_whole_sale" class="form-control">
+                                            <option></option>
+                                            @foreach($organizations as $organization)
+                                                @if($organization->status == \App\Models\Organization::WHOLESALE)
+                                                    @if(isset($data['circulation_order_whole_sale']) && $data['circulation_order_whole_sale'] == $organization->id)
+                                                        <option selected value="{{$organization->id}}">{{$organization->name}}</option>
+                                                    @else
+                                                        <option value="{{$organization->id}}">{{$organization->name}}</option>
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>Pharmacy (other):</label>
+                                        <select name="circulation_order_pharmacy" id="circulation_order_pharmacy" class="form-control">
+                                            <option></option>
+                                            @foreach($organizations as $organization)
+                                                @if($organization->status != \App\Models\Organization::WHOLESALE)
+                                                    @if(isset($data['circulation_order_pharmacy']) && $data['circulation_order_pharmacy'] == $organization->id)
+                                                        <option selected value="{{$organization->id}}">{{$organization->name}}</option>
+                                                    @else
+                                                        <option value="{{$organization->id}}">{{$organization->name}}</option>
+                                                    @endif
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </form>
                             @endif
                             <table class="table table-striped table-bordered table-hover order_datatable">

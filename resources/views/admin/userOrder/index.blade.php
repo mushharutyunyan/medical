@@ -79,8 +79,8 @@
                                                 @endif
                                             @endif
                                         @endif
-                                        <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history">{{Lang::get('main.details')}}</a>
-                                        <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages">{{Lang::get('main.messages')}}
+                                        <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-history" onclick="show_order_details_history(this)">{{Lang::get('main.details')}}</a>
+                                        <a href="javascript:;" data-id="{{$order->id}}" data-token="{{csrf_token()}}" class="show-order-details-messages" onclick="show_order_details_messages(this)">{{Lang::get('main.messages')}}
                                             @if($count_unread_messages)
                                                 <span style="color:red">({{$count_unread_messages}})</span>
                                             @endif

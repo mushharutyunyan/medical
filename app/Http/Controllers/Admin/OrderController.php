@@ -95,6 +95,11 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::where('id',$id)->first();
+        $discount_row = OrderDiscount::where('whole_sale',$order->to)->where('pharmacy',$order->from)->first();
+        $discount = 0;
+        if($discount_row){
+            $discount = $discount_row->discount;
+        }
         $checkBusy = $this->checkOrderBusy($order->id);
         if(!$checkBusy){
             return redirect()->back()->withErrors(['error' => 'This order has been taken by another user']);
@@ -119,7 +124,7 @@ class OrderController extends Controller
         if($order->to == Auth::guard("admin")->user()['organization_id']){
             $answer_order = true;
         }
-        return view('admin.order.edit',['drugs' => $drugs,'order' => $order,'answer_order' => $answer_order]);
+        return view('admin.order.edit',['drugs' => $drugs,'order' => $order,'answer_order' => $answer_order, 'discount' => $discount]);
     }
 
     public function show(Request $request,$id){
@@ -495,18 +500,18 @@ class OrderController extends Controller
         }
         $order_details = array(
             'B2' => $order->id.". ".$order->created_at.", ".$delivery_status."",
-            'C4' => $organization_status. " (".$order->organizationTo->name.")",
-            'C5' => $order->organizationFrom->admin[0]->firstname." ".$order->organizationTo->admin[0]->lastname." (".$order->organizationTo->admin[0]->email.")",
-            'C6' => $order->organizationFrom->admin[0]->city." ".$order->organizationTo->admin[0]->street." ".$order->organizationTo->admin[0]->apartment,
+            'C4' => $organization_from_status. " (".$order->organizationFrom->name.")",
+            'C5' => $order->organizationFrom->admin[0]->firstname." ".$order->organizationFrom->admin[0]->lastname." (".$order->organizationFrom->admin[0]->email.")",
+            'C6' => $order->organizationFrom->admin[0]->city." ".$order->organizationFrom->admin[0]->street." ".$order->organizationFrom->admin[0]->apartment,
             'C7' => $order->organizationFrom->identification_number,
             'C8' => $order->organizationFrom->bank_account_number,
             'C9' => $order->organizationFrom->phone,
             'C10' => $order->organizationFrom->email,
             'C11' => $order->delivery_address,
-            'C12' => $order->delivery_date,
-            'C14' => $organization_from_status. " (".$order->organizationFrom->name.")",
-            'C15' => $order->organizationTo->admin[0]->firstname." ".$order->organizationFrom->admin[0]->lastname." (".$order->organizationFrom->admin[0]->email.")",
-            'C16' => $order->organizationTo->admin[0]->city." ".$order->organizationFrom->admin[0]->street." ".$order->organizationFrom->admin[0]->apartment,
+            'C12' => $order->date,
+            'C14' => $organization_status. " (".$order->organizationTo->name.")",
+            'C15' => $order->organizationTo->admin[0]->firstname." ".$order->organizationTo->admin[0]->lastname." (".$order->organizationTo->admin[0]->email.")",
+            'C16' => $order->organizationTo->admin[0]->city." ".$order->organizationTo->admin[0]->street." ".$order->organizationTo->admin[0]->apartment,
             'C17' => $order->organizationTo->identification_number,
             'C18' => $order->organizationTo->bank_account_number,
             'C19' => $order->organizationTo->phone,

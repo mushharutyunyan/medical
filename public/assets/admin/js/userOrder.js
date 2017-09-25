@@ -1,27 +1,5 @@
 $(document).ready(function(){
-    $(".show-order-details-history").on("click",function(){
-        $.ajax({
-            url: '/order/details',
-            data: {_token:$(this).attr('data-token'),id:$(this).attr('data-id')},
-            type: 'POST',
-            dataType: 'json',
-            success: function(data){
-                if(!data.error){
-                    $('.order-details-modal-table tbody').html('');
-                    $.each(data.details,function(key,value){
-                        $('.order-details-modal-table tbody').append(
-                            '<tr style="text-align: left">' +
-                            '<td>'+value.trade_name+'</td>' +
-                            '<td>'+value.count+'</td>' +
-                            '<td>'+(value.price*value.count)+'</td>' +
-                            '</tr>'
-                        )
-                    });
-                    $("#showOrderDetailsModal").modal("show");
-                }
-            }
-        })
-    });
+
     $(".add-order-message").on('submit',function(e){
         e.preventDefault();
         var self = this;
@@ -47,30 +25,7 @@ $(document).ready(function(){
             }
         })
     });
-    $(".show-order-details-messages").on("click",function(){
-        $.ajax({
-            url: '/order/getMessages',
-            data: {_token:$(this).attr('data-token'),id:$(this).attr('data-id')},
-            type: 'POST',
-            dataType: 'json',
-            success: function(data){
-                if(!data.error){
-                    $("#showOrderMessagesModal").find('.chat').html('');
-                    $.each(data.messages,function(key,value){
-                        $("#showOrderMessagesModal").find('.chat').append(
-                            '<div class="message">' +
-                            '<span>'+value.from+': ('+value.date+')</span>' +
-                            '<p>'+value.message+'</p>' +
-                            '</div>'
-                        );
-                    });
-                    $("#showOrderMessagesModal").find('.add-order-message').find('input[name="order"]').val(data.order.order);
-                    $("#showOrderMessagesModal").find('.add-order-message').find('input[name="id"]').val(data.order.id);
-                    $("#showOrderMessagesModal").modal("show");
-                }
-            }
-        })
-    });
+
 
     $(".delete-order-detail").on("click",function(){
         var self = this;
@@ -225,7 +180,60 @@ $(document).ready(function(){
     })
 
     $(".user_order_datatable").dataTable();
-    $("#circulation_organizations").on("change",function(){
-        $(this).parent().submit()
+    $("#circulation_order_whole_sale").on("change",function(){
+        $(this).parent().parent().submit()
     })
+    $("#circulation_order_pharmacy").on("change",function(){
+        $(this).parent().parent().submit()
+    })
+
 });
+
+function show_order_details_history(self){
+    $.ajax({
+        url: '/order/details',
+        data: {_token:$(self).attr('data-token'),id:$(self).attr('data-id')},
+        type: 'POST',
+        dataType: 'json',
+        success: function(data){
+            if(!data.error){
+                $('.order-details-modal-table tbody').html('');
+                $.each(data.details,function(key,value){
+                    $('.order-details-modal-table tbody').append(
+                        '<tr style="text-align: left">' +
+                        '<td>'+value.trade_name+'</td>' +
+                        '<td>'+value.count+'</td>' +
+                        '<td>'+(value.price)+'</td>' +
+                        '<td>'+(value.price*value.count)+'</td>' +
+                        '</tr>'
+                    )
+                });
+                $("#showOrderDetailsModal").modal("show");
+            }
+        }
+    })
+}
+function show_order_details_messages(self){
+    $.ajax({
+        url: '/order/getMessages',
+        data: {_token:$(self).attr('data-token'),id:$(self).attr('data-id')},
+        type: 'POST',
+        dataType: 'json',
+        success: function(data){
+            if(!data.error){
+                $("#showOrderMessagesModal").find('.chat').html('');
+                $.each(data.messages,function(key,value){
+                    $("#showOrderMessagesModal").find('.chat').append(
+                        '<div class="message">' +
+                        '<span>'+value.from+': ('+value.date+')</span>' +
+                        '<p>'+value.message+'</p>' +
+                        '</div>'
+                    );
+                });
+                $("#showOrderMessagesModal").find('.add-order-message').find('input[name="order"]').val(data.order.order);
+                $("#showOrderMessagesModal").find('.add-order-message').find('input[name="id"]').val(data.order.id);
+                $("#showOrderMessagesModal").modal("show");
+            }
+        }
+    })
+}

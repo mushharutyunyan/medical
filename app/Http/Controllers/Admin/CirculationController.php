@@ -16,21 +16,39 @@ class CirculationController extends Controller
     public function index(Request $request){
         if($request->isMethod('post')){
             $data = $request->all();
-            if(isset($data['circulation_users'])){
+            if(isset($data['circulation_users']) || isset($data['user_order_organizations'])){
+
                 if(!empty($data['circulation_users'])){
-                    $user_orders = UserOrder::where('status',10)->where('user_id',$data['circulation_users'])->get();
+                    if(!empty($data['user_order_organizations'])){
+                        $user_orders = UserOrder::where('status',10)->where('user_id',$data['circulation_users'])->where('organization_id',$data['user_order_organizations'])->get();
+                    }else{
+                        $user_orders = UserOrder::where('status',10)->where('user_id',$data['circulation_users'])->get();
+                    }
+                }elseif(!empty($data['user_order_organizations'])){
+                    $user_orders = UserOrder::where('status',10)->where('organization_id',$data['user_order_organizations'])->get();
                 }else{
                     $user_orders = UserOrder::where('status',10)->get();
                 }
+
                 $users = UserOrder::where('status',10)->get()->unique('user_id');
+                $user_order_organizations = UserOrder::where('status',10)->get()->unique('organization_id');
                 $orders = Order::where('status',5)->get();
-            }elseif(isset($data['circulation_organizations'])){
+            }elseif(isset($data['circulation_order_whole_sale']) || isset($data['circulation_order_pharmacy'])){
                 $user_orders = UserOrder::where('status',10)->get();
                 $users = $user_orders->unique('user_id');
-                if(!empty($data['circulation_organizations'])){
-                    $orders = Order::where('status',5)->where('to',$data['circulation_organizations'])->get();
+                $user_order_organizations = $user_orders->unique('organization_id');
+
+                if(!empty($data['circulation_order_whole_sale'])){
+                    if(!empty($data['circulation_order_pharmacy'])){
+                        $orders = Order::where('status',5)->where('to',$data['circulation_order_whole_sale'])->where('from',$data['circulation_order_pharmacy'])->get();
+                    }else{
+                        $orders = Order::where('status',5)->where('to',$data['circulation_order_whole_sale'])->get();
+                    }
+                }elseif(!empty($data['circulation_order_pharmacy'])){
+                    $orders = Order::where('status',5)->where('from',$data['circulation_order_pharmacy'])->get();
                 }else{
                     $orders = Order::where('status',5)->get();
+
                 }
             }
             $organizations = Organization::all();
@@ -39,11 +57,13 @@ class CirculationController extends Controller
             if(Auth::guard('admin')->user()['role_id'] == 1){// SuperAdmin
                 $user_orders = UserOrder::where('status',10)->get();
                 $users = $user_orders->unique('user_id');
+                $user_order_organizations = $user_orders->unique('organization_id');
                 $orders = Order::where('status',5)->get();
                 $organizations = Organization::all();
             }else{
                 $users = array();
                 $organizations = array();
+                $user_order_organizations = array();
                 $organizations = AdminOrganization::where('admin_id',Auth::guard('admin')->user()['id'])->get();
                 $organizationIds = array();
                 foreach($organizations as $organization){
@@ -58,7 +78,8 @@ class CirculationController extends Controller
             'orders' => $orders,
             'users' => $users,
             'organizations' => $organizations,
-            'data' => $data
+            'data' => $data,
+            'user_order_organizations' => $user_order_organizations
         ]);
 //        if(Auth::guard('admin')->user()->organization->status == Organization::WHOLESALE){
 //

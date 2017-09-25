@@ -18,8 +18,8 @@ $(document).ready(function(){
     $(document).on("change",'.order-send-statuses',function(){
         var val = $(this).val();
         if(val == 3){//approved
-            $('.order-send-statuses').parent().append('<input class="form-control datepicker" id="order_delivery_date" name="delivery_date" placeholder="Auto 3 hours later" data-date-format="yyyy-mm-dd">')
-            $('.datepicker').datepicker();
+            $('.order-send-statuses').parent().append('<input class="form-control datepicker" id="order_delivery_date" name="delivery_date" placeholder="Auto 3 hours later">')
+            $('.datepicker').datetimepicker();
         }else{
             $("#order_delivery_date").remove();
         }
@@ -102,8 +102,8 @@ $(document).ready(function(){
             $("#change_order_status_to").find("#status").val($(this).val())
             $("#change_order_status_to").find("#order_id").val($(this).parent().children('input[name="id"]').val());
             if($(this).val() == 3){//approved
-                $('.change-order-status-to-message').parent().prepend('<input class="form-control datepicker" id="order_delivery_date" name="delivery_date" placeholder="Auto 3 hours later" data-date-format="yyyy-mm-dd">')
-                $('.datepicker').datepicker();
+                $('.change-order-status-to-message').parent().prepend('<input class="form-control datepicker" id="order_delivery_date" name="delivery_date" placeholder="Auto 3 hours later">')
+                $('.datepicker').datetimepicker();
             }
             $("#change_order_status_to").validate({
                 rules: {
@@ -325,7 +325,10 @@ $(document).ready(function(){
     })
    $(".order_datatable").dataTable();
     $("#circulation_users").on("change",function(){
-        $(this).parent().submit()
-    })
+        $(this).closest('form').submit()
+    });
+    $("#user_order_organizations").on("change",function(){
+        $(this).closest('form').submit()
+    });
 
 });
