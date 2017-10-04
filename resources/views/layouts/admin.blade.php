@@ -360,6 +360,13 @@
                             @endif
                                     <a href="/admin/manage/circulation">Circulation</a>
                                 </li>
+                            @if(Request::segment(2) == 'manage' && Request::segment(3) == 'topRated')
+                                <li class="active">
+                            @else
+                                <li>
+                                    @endif
+                                    <a href="/admin/manage/topRated">Top Rated Drugs</a>
+                                </li>
                         </ul>
                     </li>
                     @if(Request::segment(2) == 'storage')
@@ -393,6 +400,17 @@
                             <a href="/admin/userOrder">
                                 <i class="icon-basket"></i>
                                 <span class="title">User Order</span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                    @if(Request::segment(2) == 'tickets')
+                        <li class="active">
+                    @else
+                        <li>
+                            @endif
+                            <a href="/admin/tickets">
+                                <i class="icon-basket"></i>
+                                <span class="title">Tickets</span>
                                 <span class="arrow "></span>
                             </a>
                         </li>
@@ -622,11 +640,13 @@
 <script src="/assets/admin/js/order.js"></script>
 <script src="/assets/admin/js/message.js"></script>
 <script src="/assets/admin/js/userOrder.js"></script>
+<script src="/assets/admin/js/organization.js"></script>
+<script src="/assets/admin/js/topRated.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
         type="text/javascript"></script>
-<script src="/assets/admin/js/organization.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
+    $(".ticket-table").dataTable();
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core componets
         Layout.init(); // init layout

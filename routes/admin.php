@@ -12,6 +12,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
             Route::group(['prefix' => 'manage'],function(){
                 Route::resource('/admins','AdminsController');
                 Route::resource('/roles','RolesController');
+                Route::resource('/topRated','TopRatedDrugs');
                 Route::get('/drugs/search','DrugsController@search');
                 Route::post('/drugs/search','DrugsController@search');
                 Route::resource('/drugs','DrugsController');
@@ -62,6 +63,7 @@ Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'global
         Route::get('/{order_id}/{status}','UserOrderController@changeStatus');
         Route::post('/finish/{user_type}','UserOrderController@finishOrder');
     });
+    Route::get('/tickets/','HomeController@tickets');
 
 
 });

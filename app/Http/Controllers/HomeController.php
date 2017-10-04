@@ -11,13 +11,18 @@ use App;
 use App\Models\Drug;
 use App\Models\Organization;
 use App\Models\Storage;
+use App\Models\UserOrderDetails;
+use App\Models\TopRatedDrug;
 use Illuminate\Support\Facades\Session;
 use Location;
 class HomeController extends Controller
 {
     public function index(Request $request){
-//
-        return view('home');
+        $drugs = UserOrderDetails::select(DB::raw('sum(count) as count, storage_id'))
+            ->groupBy('storage_id')->orderBy('count','DESC')->take(1)->get();
+        $new_products = Storage::select(DB::raw('id,drug_id,price_id'))->orderBy('created_at','DESC')->take(3)->get();
+        $top_rated = TopRatedDrug::orderBy('id','DESC')->take(3)->get();
+        return view('home',['drugs' => $drugs,'new_products' => $new_products, 'top_rated' => $top_rated]);
     }
 
     public function account(){
@@ -87,5 +92,24 @@ class HomeController extends Controller
             $drugs[] = $row;
         }
         return view('search',['drugs' => $drugs,'organization_id' => $organization_id,'organization' => $organization]);
+    }
+
+    public function contact(){
+        return view('contacts');
+    }
+    
+    public function createTicket(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'message' => 'required|min:10',
+        ]);
+        $data = $request->all();
+        App\Models\Tiket::create(array(
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'message' => $data['message']
+        ));
+        return redirect('/')->with('ticket', 'Your Ticket Created Successfully');
     }
 }

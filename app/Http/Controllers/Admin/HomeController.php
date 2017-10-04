@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Tiket;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -19,5 +20,10 @@ class HomeController extends Controller
 
     public function notFound(){
         return view('errors/404admin');
+    }
+
+    public function tickets(){
+        $tickets = Tiket::all();
+        return view('admin.tickets',['tickets' => $tickets]);
     }
 }

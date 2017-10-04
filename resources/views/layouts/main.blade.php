@@ -193,6 +193,7 @@
                             @if(Auth::check())
                             <li class="veil rd-navbar-fixed--visible"><a href="/logout">{{Lang::get('main.logout')}}</a></li>
                             @endif
+                            <li><a href="/contacts">Contacts</a></li>
                         </ul>
                     </div>
                 </div>
@@ -498,6 +499,35 @@
         </div>
     </div>
 </div>
+<div id="drugInfoModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{Lang::get('main.drugInfo')}}</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped drug-info-modal-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Info</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Lang::get('main.close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Java script-->
 <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&key=AIzaSyBgAEkAL2phbCyMlJVqPYzhcG9cg4gIItU"
         type="text/javascript"></script>

@@ -2,6 +2,9 @@ $(document).ready(function(){
     if($("#errorModal").length){
         $("#errorModal").modal('show');
     }
+    if($("#createTicketSuccessfully").length){
+        $("#createTicketSuccessfully").modal('show');
+    }
     $('.sign-in-button').on("click",function(){
        $("#signIn").modal('show')
     });

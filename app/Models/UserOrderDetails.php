@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class UserOrderDetails extends Model
 {
@@ -21,4 +22,5 @@ class UserOrderDetails extends Model
     {
         return $this->belongsTo('App\Models\UserOrder');
     }
+
 }

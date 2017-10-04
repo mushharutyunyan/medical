@@ -15,6 +15,8 @@ Route::get('logout', 'Auth\LoginController@logout');
 Route::group(['middleware' => 'globalUser'],function(){
     Route::get('/','HomeController@index');
     Route::get('/search','HomeController@search');
+    Route::get('/contacts','HomeController@contact');
+    Route::post('/ticket','HomeController@createTicket');
     Route::get('/search/{organization_id}','HomeController@searchByOrg');
     Route::get('/language/{language}',['as'=>'lang.switch', 'uses'=>'LanguageController@switchLang']);
 
