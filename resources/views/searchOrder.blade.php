@@ -6,7 +6,7 @@
         <div>
             <ol class="breadcrumb">
                 <li><a href="/" class="icon icon-sm fa-home text-primary"></a></li>
-                <li class="active">Search Order
+                <li class="active">{{Lang::get('main.search_order')}}
                 </li>
             </ol>
         </div>

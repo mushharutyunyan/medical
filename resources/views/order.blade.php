@@ -21,7 +21,7 @@
         <div>
             <ol class="breadcrumb">
                 <li><a href="/" class="icon icon-sm fa-home text-primary"></a></li>
-                <li class="active">Select Pharmacy
+                <li class="active">{{Lang::get('main.select_pharmacy')}}
                 </li>
             </ol>
         </div>
@@ -32,8 +32,8 @@
                 <div class="col-sm-7 col-md-7">
                     <div class="input-group">
                         <div id="radioBtn" class="btn-group">
-                            <a class="btn btn-primary btn-sm active" data-toggle="typeOrg" data-title="select">IN MAP</a>
-                            <a class="btn btn-primary btn-sm notActive" data-toggle="typeOrg" data-title="choose">IN LIST</a>
+                            <a class="btn btn-primary btn-sm active" data-toggle="typeOrg" data-title="select">{{Lang::get('main.in_map')}}</a>
+                            <a class="btn btn-primary btn-sm notActive" data-toggle="typeOrg" data-title="choose">{{Lang::get('main.in_list')}}</a>
                         </div>
                         <input type="hidden" name="typeOrg" id="typeOrg">
                     </div>

@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'socialError' => 'Your Social Email already exists in our system.',
-    'accountUpdate' => 'Your Account has been updated successfully.',
+    'failed' => 'Эти учетные данные не соответствуют нашим записям.',
+    'throttle' => 'Слишком много попыток входа в систему. Повторите попытку через :seconds seconds.',
+    'socialError' => 'Ваша социальная почта уже существует в нашей системе.',
+    'accountUpdate' => 'Ваша учетная запись успешно обновлена.',
 
 ];

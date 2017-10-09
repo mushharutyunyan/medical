@@ -227,7 +227,8 @@ class DrugsController extends Controller
                     }
                 }
             }
-            $drug->sync($sub_field,$object_class->columnName,$new_data);
+            $drug->syncOptions($object_class,$new_data,$id);
+
         }
         return redirect('admin/manage/drugs')->with('status', 'Drug updated successfully');
     }

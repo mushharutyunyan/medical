@@ -303,4 +303,11 @@ class OrderController extends Controller
         }
         return response()->json(true);
     }
+
+    public function organizationCoordinates(Request $request){
+        $data = $request->all();
+        $storage = Storage::where('id',$data['storage_id'])->first();
+        $coordinates = OrganizationLocation::where('organization_id',$storage->organization_id)->first();
+        return response()->json($coordinates);
+    }
 }

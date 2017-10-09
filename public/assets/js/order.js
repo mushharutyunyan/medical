@@ -156,6 +156,7 @@ $(document).ready(function(){
             }
         })
     })
+
 });
 function show_order_details_history(self){
     $.ajax({
@@ -202,6 +203,28 @@ function show_order_details_messages(self){
                 $("#showOrderMessagesModal").find('.add-order-message').find('input[name="id"]').val(data.order.id);
                 $("#showOrderMessagesModal").modal("show");
             }
+        }
+    })
+}
+
+function organization_map(self){
+
+    $.ajax({
+        url: '/order/getOrganizationCoordinates',
+        type: 'GET',
+        data: {storage_id:$(self).attr('data-id')},
+        dataType: 'json',
+        success: function(data){
+            $('#organizationMap').modal('show');
+            var map = new google.maps.Map(document.getElementById('search_organization'), {
+                zoom: 16,
+                center: new google.maps.LatLng(data.latitude, data.longitude),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(data.latitude, data.longitude),
+                map: map
+            });
         }
     })
 }

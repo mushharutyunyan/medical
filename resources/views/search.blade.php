@@ -67,12 +67,12 @@
                                 </div>
                                 <a href="javascript:;" data-id="{{$drug->storage_id}}" class="get-drug-info">
                                     @if(App::getLocale() == 'am')
-                                    <p class="big">{{$drug->trade_name}}<a href="single-product.html" class="text-base"> ({{$drug->name}})</a></p>
+                                    <p class="big">{{$drug->trade_name}}<a href="javascript:;" class="text-base" data-id="{{$drug->storage_id}}" onclick="organization_map(this)"> ({{$drug->name}})</a></p>
                                     @else
                                         @if(App::getLocale() == 'ru')
-                                            <p class="big">{{$drug->trade_name_ru}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
+                                            <p class="big">{{$drug->trade_name_ru}}<a href="javascript:;" data-id="{{$drug->storage_id}}" class="text-base" onclick="organization_map(this)">({{$drug->name}})</a></p>
                                         @elseif(App::getLocale() == 'en')
-                                            <p class="big">{{$drug->trade_name_en}}<a href="single-product.html" class="text-base">({{$drug->name}})</a></p>
+                                            <p class="big">{{$drug->trade_name_en}}<a href="javascript:;" data-id="{{$drug->storage_id}}" class="text-base" onclick="organization_map(this)">({{$drug->name}})</a></p>
                                         @endif
                                     @endif
                                 </a>

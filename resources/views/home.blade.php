@@ -113,12 +113,12 @@
                             <div class="offset-top-10">
                                 <a href="javascript:;" data-id="{{$drug->storage_id}}" class="get-drug-info">
                                     @if(App::getLocale() == 'am')
-                                        <p class="big">{{$drug->storage->drug->trade_name}}<a href="single-product.html" class="text-base"> ({{$drug->storage->organization->name}})</a></p>
+                                        <p class="big">{{$drug->storage->drug->trade_name}}<a href="javascript:;" class="text-base" data-id="{{$drug->storage_id}}" onclick="organization_map(this)"> ({{$drug->storage->organization->name}})</a></p>
                                     @else
                                         @if(App::getLocale() == 'ru')
-                                            <p class="big">{{$drug->storage->drug->trade_name_ru}}<a href="single-product.html" class="text-base">({{$drug->storage->organization->name}})</a></p>
+                                            <p class="big">{{$drug->storage->drug->trade_name_ru}}<a href="javascript:;" class="text-base" data-id="{{$drug->storage_id}}" onclick="organization_map(this)">({{$drug->storage->organization->name}})</a></p>
                                         @elseif(App::getLocale() == 'en')
-                                            <p class="big">{{$drug->storage->drug->trade_name_en}}<a href="single-product.html" class="text-base">({{$drug->storage->organization->name}})</a></p>
+                                            <p class="big">{{$drug->storage->drug->trade_name_en}}<a href="javascript:;" class="text-base" data-id="{{$drug->storage_id}}" onclick="organization_map(this)">({{$drug->storage->organization->name}})</a></p>
                                         @endif
                                     @endif
                                 </a>
@@ -185,7 +185,7 @@
                     <div class="range offset-top-20">
                         <div class="cell-md-12 cell-sm-4">
                             <div class="unit unit-horizontal unit-spacing-21">
-                                <div class="unit-left"><a href="single-product.html">
+                                <div class="unit-left"><a href="javascript:;">
                                         @if(isset($drug_settings->picture))
                                             <?php $picture = \App\Models\DrugPicture::where('id',$drug_settings->picture)->first(); ?>
                                             <img alt="" src="/assets/admin/images/drugs/{{$picture->name}}" width="100" height="100">
@@ -228,7 +228,7 @@
                         <div class="cell-md-12 cell-sm-4">
                             <div class="unit unit-horizontal unit-spacing-21">
                                 <div class="unit-left">
-                                    <a href="single-product.html">
+                                    <a href="javascript:;">
                                         @if(isset($drug_settings->picture))
                                             <?php $picture = \App\Models\DrugPicture::where('id',$drug_settings->picture)->first(); ?>
                                             <img alt="" src="/assets/admin/images/drugs/{{$picture->name}}" width="100" height="100">

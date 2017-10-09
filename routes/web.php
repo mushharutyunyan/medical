@@ -42,6 +42,7 @@ Route::group(['middleware' => 'globalUser'],function(){
         Route::get('/info','OrderController@info');
         Route::post('/canceled','OrderController@canceled');
         Route::get('/rank/stars','OrderController@rank');
+        Route::get('/getOrganizationCoordinates','OrderController@organizationCoordinates');
     });
 
 

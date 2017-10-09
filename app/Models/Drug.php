@@ -170,33 +170,40 @@ class Drug extends Model
         return $this->hasMany('App\Models\Storage','drug_id');
     }
 
-    public function syncOptions(array $options, $column = 'option')
+    public function syncOptions($object_class,array $options, $id)
     {
-        $new_options = array_filter($options);
-        $old_options = $this->options->lists($column, 'id');
 
+        $new_options = array_filter($options);
+        $old_data = $object_class->where('drug_id',$id)->get();
+        $column = $object_class->columnName;
+        $old_options = array();
+        foreach($old_data as $data){
+            $old_options[$data->$column] = $data->id;
+        }
         // Delete removed options, if any
         if ($deleted = Arrays::keysDeleted($new_options, $old_options)) {
-            $this->options()->whereIn('id', $deleted)->delete();
+            $object_class->whereIn('id', $deleted)->delete();
         }
 
         // Create new options, if any
         if ($created = Arrays::keysCreated($new_options, $old_options)) {
             foreach ($created as $id) {
-                $new[] = $this->options()->getModel()->newInstance([
-                    $column => $new_options[$id],
-                ]);
+                $object_class::create(array(
+                    'drug_id' => $new_options[$id],
+                    $column => $id
+                ));
             }
 
-            $this->options()->saveMany($new);
+//            $this->options()->saveMany($new);
         }
 
         // Update changed options, if any
         if ($updated = Arrays::keysUpdated($new_options, $old_options)) {
             foreach ($updated as $id) {
-                $this->options()->find($id)->update([
-                    $column => $new_options[$id],
-                ]);
+                $object_class::where('drug_id', $new_options[$id])
+                ->update(array(
+                    $column => $id
+                ));
             }
         }
     }

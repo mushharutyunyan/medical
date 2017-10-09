@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'socialError' => 'Your Social Email already exists in our system.',
-    'accountUpdate' => 'Your Account has been updated successfully.',
+    'failed' => 'Այս հավատարմագրերը չեն համապատասխանում մեր գրառումներին',
+    'throttle' => 'Չափազանց շատ մուտքի փորձեր: Կրկին փորձեք :seconds seconds',
+    'socialError' => 'Ձեր սոցիալական էլփոստը արդեն առկա է մեր համակարգում',
+    'accountUpdate' => 'Ձեր հաշիվը հաջողությամբ թարմացվեց',
 
 ];
