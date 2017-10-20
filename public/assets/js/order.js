@@ -208,7 +208,6 @@ function show_order_details_messages(self){
 }
 
 function organization_map(self){
-
     $.ajax({
         url: '/order/getOrganizationCoordinates',
         type: 'GET',
@@ -217,7 +216,7 @@ function organization_map(self){
         success: function(data){
             $('#organizationMap').modal('show');
             var map = new google.maps.Map(document.getElementById('search_organization'), {
-                zoom: 16,
+                zoom: 12,
                 center: new google.maps.LatLng(data.latitude, data.longitude),
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
