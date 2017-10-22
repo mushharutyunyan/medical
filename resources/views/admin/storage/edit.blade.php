@@ -7,7 +7,7 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Edit Storage ({{$currentDrug->trade_name}})
+                        <i class="fa fa-gift"></i>{{Lang::get('admin_main.edit_storage')}} ({{$currentDrug->trade_name}})
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">
@@ -29,31 +29,31 @@
                             </div>
                         @endif
                         <div class="form-group">
-                            <label class="control-label col-md-3">Generic Name</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.generic_name')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('',$currentDrug->generic_name,['class' => 'form-control','disabled' => 'disabled'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Dosage Form</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.dosage_form')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('',$currentDrug->dosage_form,['class' => 'form-control','disabled' => 'disabled'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Dosage Strength</label>
+                            <label class="control-label col-md-3"> {{Lang::get('admin_main.dosage_strength')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('',$currentDrug->dosage_strength,['class' => 'form-control','disabled' => 'disabled'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Code</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.code')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('',$currentDrug->code,['class' => 'form-control','disabled' => 'disabled'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Count</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.count')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('storage_count',$storage->count,['class' => 'form-control'])}}
                             </div>
@@ -93,9 +93,9 @@
                                             @endforeach
                                         </select>
                                         @if($key == 'picture')
-                                            <button type="button" class="open-picture btn blue">Open</button>
+                                            <button type="button" class="open-picture btn blue">{{Lang::get('admin_main.open')}}</button>
                                         @elseif($key == 'character')
-                                            <button type="button" class="open-character btn blue">Open</button>
+                                            <button type="button" class="open-character btn blue">{{Lang::get('admin_main.open')}}</button>
                                         @endif
                                     @endif
                                 </div>
@@ -105,8 +105,8 @@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-9 col-md-3">
-                                <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                <button type="submit" class="btn green"><i class="fa fa-check"></i> {{Lang::get('admin_main.submit')}}</button>
+                                <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                             </div>
                         </div>
                     </div>

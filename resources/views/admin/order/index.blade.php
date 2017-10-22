@@ -30,7 +30,7 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     <a id="sample_editable_1_new" href="/admin/order/create" class="btn green">
-                                        Add New <i class="fa fa-plus"></i>
+                                        {{Lang::get('admin_main.add_new')}}<i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
@@ -39,12 +39,12 @@
                     <table class="table table-striped table-bordered table-hover datatable">
                         <thead>
                         <tr>
-                            <th>To</th>
-                            <th>From</th>
-                            <th>Status</th>
-                            <th>Delivery Status</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
+                            <th>{{Lang::get('admin_main.to')}}</th>
+                            <th>{{Lang::get('admin_main.from')}}</th>
+                            <th>{{Lang::get('admin_main.status')}}</th>
+                            <th>{{Lang::get('admin_main.delivery_status')}}</th>
+                            <th>{{Lang::get('admin_main.created_at')}}</th>
+                            <th>{{Lang::get('admin_main.actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -163,7 +163,7 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <i class="icon-bubble font-red-sunglo"></i>
-                                        <span class="caption-subject font-red-sunglo bold uppercase">Messages</span>
+                                        <span class="caption-subject font-red-sunglo bold uppercase">{{Lang::get('admin_main.messages')}}</span>
                                     </div>
                                 </div>
                                 <div class="portlet-body" id="chats">
@@ -205,7 +205,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Change Status</h4>
+                    <h4 class="modal-title">{{Lang::get('admin_main.change_status')}}</h4>
                 </div>
                 {!! Form::open(['id' => 'change_order_status_to']) !!}
                 <div class="modal-body">
@@ -226,7 +226,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn blue send-order-message-button">Send</button>
+                    <button class="btn blue send-order-message-button">{{Lang::get('admin_main.send')}}</button>
                 </div>
                 {!! Form::close() !!}
             </div>
@@ -237,7 +237,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Received Information</h4>
+                    <h4 class="modal-title">{{Lang::get('admin_main.send')}}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="scroller" style="height:300px;overflow-y: auto;" data-always-visible="1" data-rail-visible1="1">
@@ -246,11 +246,11 @@
                                 <table class="table table-striped table-bordered received-modal-list ">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Count</th>
-                                            <th>Settings</th>
-                                            <th class="received-modal-price-field">Price (Discounted)</th>
-                                            <th>Procent</th>
+                                            <th>{{Lang::get('admin_main.name')}}</th>
+                                            <th>{{Lang::get('admin_main.count')}}</th>
+                                            <th>{{Lang::get('admin_main.settings')}}</th>
+                                            <th class="received-modal-price-field">{{Lang::get('admin_main.price_discounted')}}</th>
+                                            <th>{{Lang::get('admin_main.procent')}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -264,7 +264,7 @@
                 <div class="modal-footer">
                     <form>
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
-                        <button type="button" class="btn btn-success received-order-modal">Received</button>
+                        <button type="button" class="btn btn-success received-order-modal">{{Lang::get('admin_main.received')}}</button>
                     </form>
                 </div>
             </div>
@@ -294,7 +294,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Discount Order</h4>
+                    <h4 class="modal-title">{{Lang::get('admin_main.discount_order')}}</h4>
                 </div>
                 <form class="discount-form">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -303,13 +303,13 @@
                     <div class="modal-body">
                         <div class="scroller" data-always-visible="1" data-rail-visible1="1">
                             <div class="form-group">
-                                <label>Discount proceent</label>
+                                <label>{{Lang::get('admin_main.discount_proceent')}}</label>
                                 <input type="text" name="discount" class="form-control">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-info">Save</button>
+                        <button class="btn btn-info">{{Lang::get('admin_main.save')}}</button>
                     </div>
                 </form>
             </div>

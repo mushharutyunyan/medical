@@ -7,7 +7,7 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Edit drug
+                        <i class="fa fa-gift"></i>{{Lang::get('admin_main.edit_drug')}}
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">
@@ -55,13 +55,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Code</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.code')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('code',$currentDrug->code,['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Category</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.category')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="category"><i class="fa fa-plus"></i></a>
                                 @if($categories->count() != 0   || Input::old('category') != 0)
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Group</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.group')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="category"><i class="fa fa-plus"></i></a>
                                 @if($group->count() != 0  || Input::old('group') != 0)
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Type</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.type')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="type"><i class="fa fa-plus"></i></a>
                                 @if($type->count() != 0  || Input::old('type') != 0)
@@ -138,7 +138,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-6">Series</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.series')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="series"><i class="fa fa-plus"></i></a>
                                 @if($series->count() != 0 || Input::old('series') != 0)
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Country</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.country')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="country"><i class="fa fa-plus"></i></a>
                                 @if($country->count() != 0 || Input::old('country') != 0)
@@ -186,7 +186,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Manufacturer</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.manufacturer')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="manufacturer"><i class="fa fa-plus"></i></a>
                                 @if($manufacturer->count() != 0 || Input::old('manufacturer') != 0)
@@ -283,7 +283,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Unit Price</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.unit_price')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="unit_price"><i class="fa fa-plus"></i></a>
                                 @if($unit_price->count() != 0 || Input::old('unit_price') != 0)
@@ -475,7 +475,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Character</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.character')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="character"><i class="fa fa-plus"></i></a>
                                 @if($character->count() != 0 || Input::old('character') != 0)
@@ -499,7 +499,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Picture</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.picture')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="picture"><i class="fa fa-plus"></i></a>
                                 @if($picture->count() != 0)
@@ -523,8 +523,8 @@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-6 col-md-6">
-                                <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                <button type="submit" class="btn green"><i class="fa fa-check"></i> {{Lang::get('admin_main.submit')}}</button>
+                                <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                             </div>
                         </div>
                     </div>

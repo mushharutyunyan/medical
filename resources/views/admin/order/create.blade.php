@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Order ({{Auth::guard('admin')->user()->organization->name}})
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.order')}} ({{Auth::guard('admin')->user()->organization->name}})
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -17,7 +17,7 @@
                                 <div class="col-md-4">
                                     {!! Form::open(['url' => 'admin/order/changeOrganization', "class" => "change_organization_form"]) !!}
                                     <select class="form-control" name="to" id="order_organization_list" >
-                                        <option value="0">Check Organization</option>
+                                        <option value="0">{{Lang::get('admin_main.check_organization')}}</option>
                                         @foreach($organizations as $organization)
                                             @if(Input::old('to') == $organization->id)
                                             <option selected value="{{$organization->id}}">{{$organization->name}}</option>
@@ -35,15 +35,15 @@
                         <table class="table table-striped table-bordered table-hover order-actions-table">
                             <thead>
                             <tr>
-                                <th>Drug</th>
-                                <th>Count</th>
+                                <th>{{Lang::get('admin_main.drug')}}</th>
+                                <th>{{Lang::get('admin_main.count')}}</th>
                             </tr>
                             </thead>
                             <tbody>
                             @for($i = 0; $i <= 15; $i++)
                                 <tr class="odd gradeX">
-                                    <td><button type="button" data-id="{{$i}}" class="btn btn-success search-drug-button order">Search</button></td>
-                                    <td><input type="text" class="form-control" name="count" placeholder="Count"></td>
+                                    <td><button type="button" data-id="{{$i}}" class="btn btn-success search-drug-button order">{{Lang::get('admin_main.search')}}</button></td>
+                                    <td><input type="text" class="form-control" name="count" placeholder="{{Lang::get('admin_main.count')}}"></td>
                                 </tr>
                             @endfor
                             </tbody>
@@ -60,13 +60,13 @@
                                         <option value="15">15</option>
                                         <option value="25">25</option>
                                     </select>
-                                    <button type="button" class="btn blue add-storage-row"><i class="fa fa-plus"></i>Add</button>
+                                    <button type="button" class="btn blue add-storage-row"><i class="fa fa-plus"></i>{{Lang::get('admin_main.add')}}</button>
                                 </div>
                                 <div class="pull-right">
                                     {!! Form::open(['class' => 'storage-save-all']) !!}
-                                    <button type="submit" data-count="0" class="btn green save-all-storage order-save"><i class="fa fa-check"></i>Save</button>
-                                    <button type="submit" data-count="0" class="btn yellow save-all-storage order-send"><i class="fa fa-check"></i>Send</button>
-                                    <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                    <button type="submit" data-count="0" class="btn green save-all-storage order-save"><i class="fa fa-check"></i>{{Lang::get('admin_main.save')}}</button>
+                                    <button type="submit" data-count="0" class="btn yellow save-all-storage order-send"><i class="fa fa-check"></i>{{Lang::get('admin_main.send')}}</button>
+                                    <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                                     {!! Form::close() !!}
 
                                 </div>

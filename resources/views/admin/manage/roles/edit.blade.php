@@ -7,7 +7,7 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Edit new role
+                        <i class="fa fa-gift"></i>{{Lang::get('admin_main.edit_role')}}
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">
@@ -28,7 +28,7 @@
                             </div>
                         @endif
                         <div class="form-group">
-                            <label class="control-label col-md-3">Name</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.name')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('name',$currentRole->name,['class' => 'form-control'])}}
                             </div>
@@ -37,8 +37,8 @@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                <button type="submit" class="btn green"><i class="fa fa-check"></i> {{Lang::get('admin_main.submit')}}</button>
+                                <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                             </div>
                         </div>
                     </div>

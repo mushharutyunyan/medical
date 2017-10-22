@@ -7,7 +7,7 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Create new drug
+                        <i class="fa fa-gift"></i>{{Lang::get('admin_main.create_new_drug')}}
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">
@@ -55,13 +55,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Code</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.code')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('code','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Category</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.category')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="category"><i class="fa fa-plus"></i></a>
                                 {{Form::text('category_1','',['class' => 'form-control'])}}
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Group</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.group')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="category"><i class="fa fa-plus"></i></a>
                                 {{Form::text('group_1','',['class' => 'form-control'])}}
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Type</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.type')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="type"><i class="fa fa-plus"></i></a>
                                 {{Form::text('type_1','',['class' => 'form-control'])}}
@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-md-6">Series</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.series')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="series"><i class="fa fa-plus"></i></a>
                                 {{Form::text('series_1','',['class' => 'form-control'])}}
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Country</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.country')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="country"><i class="fa fa-plus"></i></a>
                                 {{Form::text('country_1','',['class' => 'form-control'])}}
@@ -102,7 +102,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Manufacturer</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.manufacturer')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="manufacturer"><i class="fa fa-plus"></i></a>
                                 {{Form::text('manufacturer_1','',['class' => 'form-control'])}}
@@ -134,7 +134,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Unit Price</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.unit_price')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="unit_price"><i class="fa fa-plus"></i></a>
                                 {{Form::text('unit_price_1','',['class' => 'form-control'])}}
@@ -198,7 +198,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Character</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.character')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="character"><i class="fa fa-plus"></i></a>
                                 {{Form::textarea('character_1','',['class' => 'form-control'])}}
@@ -206,7 +206,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-6">Picture</label>
+                            <label class="control-label col-md-6">{{Lang::get('admin_main.picture')}}</label>
                             <div class="col-md-4">
                                 <a class="add_drug_param" data-name="picture"><i class="fa fa-plus"></i></a>
                                 {{Form::file('picture_1','',['class' => 'form-control'])}}
@@ -217,8 +217,8 @@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-6 col-md-6">
-                                <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                <button type="submit" class="btn green"><i class="fa fa-check"></i> {{Lang::get('admin_main.submit')}}</button>
+                                <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                             </div>
                         </div>
                     </div>

@@ -77,7 +77,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="/admin">
-                <img src="/assets/admin/img/logo-default.png" alt="logo" class="logo-default"/>
+                <img src="/assets/images/logo.png" width="88%" alt="logo" class="logo-default"/>
             </a>
             <div class="menu-toggler sidebar-toggler">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -92,14 +92,14 @@
         <div class="page-top">
             <!-- BEGIN HEADER SEARCH BOX -->
             <!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-            <form class="search-form search-form-expanded" action="extra_search.html" method="GET">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search..." name="query">
-                    <span class="input-group-btn">
-					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
-					</span>
-                </div>
-            </form>
+            {{--<form class="search-form search-form-expanded" action="extra_search.html" method="GET">--}}
+                {{--<div class="input-group">--}}
+                    {{--<input type="text" class="form-control" placeholder="{{Lang::get('admin_main.search')}}" name="query">--}}
+                    {{--<span class="input-group-btn">--}}
+					{{--<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>--}}
+					{{--</span>--}}
+                {{--</div>--}}
+            {{--</form>--}}
             <!-- END HEADER SEARCH BOX -->
             <!-- BEGIN TOP NAVIGATION MENU -->
             <div class="top-menu">
@@ -162,12 +162,12 @@
                             <li class="external">
                                 @if(isset($unread_messages))
                                 @if(count($unread_messages))
-                                <h3>You have <span class="bold">{{count($unread_messages)}} New</span> Messages</h3>
+                                <h3>{{Lang::get('admin_main.new_messages_text',['unread_messages_count' => count($unread_messages)])}}</h3>
                                 @else
-                                <h3>You don't have new Messages</h3>
+                                <h3>{{Lang::get('admin_main.not_message_text')}}</h3>
                                 @endif
                                 @endif
-                                <a href="/admin/message">view all</a>
+                                <a href="/admin/message">{{Lang::get('admin_main.view_all_text')}}</a>
                             </li>
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
@@ -207,8 +207,8 @@
                             <li class="external">
                                 @if(isset($orders))
                                 @if($orders->count())
-                                <h3>You have <span class="bold">{{$orders->count()}} pending</span> orders</h3>
-                                <a href="/admin/order">view all</a>
+                                <h3>{{Lang::get('admin_main.new_pending_orders',['orders_count' => $orders->count()])}}</h3>
+                                <a href="/admin/order">{{Lang::get('admin_main.view_all_text')}}</a>
                                 @endif
                                 @endif
                             </li>
@@ -238,6 +238,21 @@
                                     @endif
                                 </ul>
                             </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="fa fa-language"></i>
+                            <span class="badge badge-default">{{ Config::get('languages')[App::getLocale()] }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            @foreach (Config::get('languages') as $lang => $language)
+                                @if ($lang != App::getLocale())
+                                    <li>
+                                        <a href="{{ route('lang.switch', $lang) }}">{{$language}}</a>
+                                    </li>
+                                @endif
+                            @endforeach
                         </ul>
                     </li>
                     <!-- END TODO DROPDOWN -->
@@ -279,7 +294,7 @@
                             {{--</li>--}}
                             <li>
                                 <a href="/admin/logout">
-                                    <i class="icon-key"></i> Log Out </a>
+                                    <i class="icon-key"></i> {{Lang::get('admin_main.log_out')}} </a>
                             </li>
                         </ul>
                     </li>
@@ -319,7 +334,7 @@
                     @endif
                         <a href="javascript:;">
                             <i class="icon-briefcase"></i>
-                            <span class="title">Manage</span>
+                            <span class="title">{{Lang::get('admin_main.manage')}}</span>
                             <span class="arrow "></span>
                         </a>
                         <ul class="sub-menu">
@@ -328,7 +343,7 @@
                             @else
                             <li>
                             @endif
-                                <a href="/admin/manage/admins">Admins</a>
+                                <a href="/admin/manage/admins">{{Lang::get('admin_main.admins')}}</a>
                             </li>
                             @if(Auth::guard('admin')->user()['role_id'] == 1)
                                 @if(Request::segment(2) == 'manage' && Request::segment(3) == 'roles')
@@ -336,14 +351,14 @@
                                 @else
                                     <li>
                                 @endif
-                                    <a href="/admin/manage/roles">Roles</a>
+                                    <a href="/admin/manage/roles">{{Lang::get('admin_main.roles')}}</a>
                                 </li>
                                 @if(Request::segment(2) == 'manage' && Request::segment(3) == 'drugs')
                                     <li class="active">
                                 @else
                                 <li>
                                     @endif
-                                    <a href="/admin/manage/drugs">Drugs</a>
+                                    <a href="/admin/manage/drugs">{{Lang::get('admin_main.drugs')}}</a>
                                 </li>
                             @endif
                             @if(Request::segment(2) == 'manage' && Request::segment(3) == 'organizations')
@@ -351,21 +366,21 @@
                             @else
                                 <li>
                             @endif
-                                <a href="/admin/manage/organizations">Organizations</a>
+                                <a href="/admin/manage/organizations">{{Lang::get('admin_main.organizations')}}</a>
                             </li>
                             @if(Request::segment(2) == 'manage' && Request::segment(3) == 'circulation')
                                 <li class="active">
                             @else
                                 <li>
                             @endif
-                                    <a href="/admin/manage/circulation">Circulation</a>
+                                    <a href="/admin/manage/circulation">{{Lang::get('admin_main.circulation')}}</a>
                                 </li>
                             @if(Request::segment(2) == 'manage' && Request::segment(3) == 'topRated')
                                 <li class="active">
                             @else
                                 <li>
                                     @endif
-                                    <a href="/admin/manage/topRated">Top Rated Drugs</a>
+                                    <a href="/admin/manage/topRated">{{Lang::get('admin_main.top_rated_drugs')}}</a>
                                 </li>
                         </ul>
                     </li>
@@ -376,7 +391,7 @@
                     @endif
                         <a href="/admin/storage">
                             <i class="icon-basket"></i>
-                            <span class="title">Storage</span>
+                            <span class="title">{{Lang::get('admin_main.storage')}}</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
@@ -388,7 +403,7 @@
                     @endif
                             <a href="/admin/order">
                                 <i class="icon-basket"></i>
-                                <span class="title">Order</span>
+                                <span class="title">{{Lang::get('admin_main.order')}}</span>
                                 <span class="arrow "></span>
                             </a>
                         </li>
@@ -399,7 +414,7 @@
                             @endif
                             <a href="/admin/userOrder">
                                 <i class="icon-basket"></i>
-                                <span class="title">User Order</span>
+                                <span class="title">{{Lang::get('admin_main.user_order')}}</span>
                                 <span class="arrow "></span>
                             </a>
                         </li>
@@ -410,7 +425,7 @@
                             @endif
                             <a href="/admin/tickets">
                                 <i class="icon-basket"></i>
-                                <span class="title">Tickets</span>
+                                <span class="title">{{Lang::get('admin_main.tickets')}}</span>
                                 <span class="arrow "></span>
                             </a>
                         </li>
@@ -438,7 +453,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Search Drug</h4>
+                    <h4 class="modal-title">{{Lang::get('admin_main.search_drug')}}</h4>
                 </div>
                 <div class="modal-body">
 
@@ -461,8 +476,8 @@
                                 <table class="table table-striped table-bordered table-hover drug-settings-table" style="margin-top: 10px;">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Info</th>
+                                        <th>{{Lang::get('admin_main.name')}}</th>
+                                        <th>{{Lang::get('admin_main.info')}}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -479,8 +494,8 @@
                 </div>
                 <div class="modal-footer">
                     {!! Form::open(['class' => 'storage-save']) !!}
-                    <button type="button" data-dismiss="modal" class="btn default">Close</button>
-                    <button type="submit" class="btn green check-drug">Choose</button>
+                    <button type="button" data-dismiss="modal" class="btn default">{{Lang::get('admin_main.close')}}</button>
+                    <button type="submit" class="btn green check-drug">{{Lang::get('admin_main.choose')}}</button>
                     {!! Form::close([]) !!}
                 </div>
             </div>
@@ -503,7 +518,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title"><h4 class="modal-title">View Drug</h4></h4>
+                    <h4 class="modal-title"><h4 class="modal-title">{{Lang::get('admin_main.view_drug')}}</h4></h4>
                 </div>
                 <div class="modal-body">
 
@@ -524,8 +539,8 @@
                                 <table class="table table-striped table-bordered table-hover drug-settings-view-table" style="margin-top: 10px;">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Info</th>
+                                        <th>{{Lang::get('admin_main.name')}}</th>
+                                        <th>{{Lang::get('admin_main.info')}}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -543,7 +558,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Message</h4>
+                    <h4 class="modal-title">{{Lang::get('admin_main.message')}}</h4>
                 </div>
                 {!! Form::open(['id' => 'order_send']) !!}
                 <div class="modal-body">
@@ -566,7 +581,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn blue send-order-message-button">Send</button>
+                    <button class="btn blue send-order-message-button">{{Lang::get('admin_main.send')}}</button>
                 </div>
                 {!! Form::close() !!}
             </div>
@@ -575,7 +590,7 @@
     <!-- BEGIN FOOTER -->
     <div class="page-footer">
         <div class="page-footer-inner">
-            2014 &copy; Metronic by keenthemes.
+            2017 &copy;.
         </div>
         <div class="scroll-to-top">
             <i class="icon-arrow-up"></i>

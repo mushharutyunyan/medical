@@ -7,7 +7,7 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Create new Top rated Drug
+                        <i class="fa fa-gift"></i>{{Lang::get('admin_main.create_top_rated_drug')}}
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">
@@ -28,7 +28,7 @@
                             </div>
                         @endif
                         <div class="form-group">
-                            <label class="control-label col-md-3">Organiations</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.organizations')}}</label>
                             <div class="col-md-4">
                                 <select class="form-control" name="organization_id" id="top_rated_organization_id">
                                     <option></option>
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Drugs</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.drugs')}}</label>
                             <div class="col-md-4">
                                 <select class="form-control" name="storage_id" id="top_rated_drug_id">
 
@@ -50,8 +50,8 @@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                <button type="submit" class="btn green"><i class="fa fa-check"></i> {{Lang::get('admin_main.submit')}}</button>
+                                <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                             </div>
                         </div>
                     </div>

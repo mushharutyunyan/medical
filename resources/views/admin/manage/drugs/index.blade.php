@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Managed Drugs
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.manage_drugs')}}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -21,7 +21,7 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     <a id="sample_editable_1_new" href="/admin/manage/drugs/create" class="btn green">
-                                        Add New <i class="fa fa-plus"></i>
+                                        {{Lang::get('admin_main.add_new')}} <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
@@ -29,11 +29,11 @@
                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input class="form-control" type="text" value="{{session('search')}}" placeholder="Search" name="search">
+                                        <input class="form-control" type="text" value="{{session('search')}}" placeholder="{{Lang::get('admin_main.search')}}" name="search">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                        <button class="btn btn-info">Search</button>
+                                        <button class="btn btn-info">{{Lang::get('admin_main.search')}}</button>
                                 </div>
                             </form>
                         </div>
@@ -45,9 +45,9 @@
                             <th>Generic Name вещество (Ազդող նյութ)</th>
                             <th>Dosage Form форма (Դեղաձև)</th>
                             <th>Dosage Strength дозировка (Դեղաչափ)</th>
-                            <th>Code</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
+                            <th>{{Lang::get('admin_main.code')}}</th>
+                            <th>{{Lang::get('admin_main.created_at')}}</th>
+                            <th>{{Lang::get('admin_main.actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>

@@ -7,7 +7,7 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Create new organization
+                        <i class="fa fa-gift"></i>{{Lang::get('admin_main.create_organization')}}
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse">
@@ -28,7 +28,7 @@
                             </div>
                         @endif
                         <div class="form-group">
-                            <label class="control-label col-md-3">Name</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.name')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('name','',['class' => 'form-control'])}}
                                 @if(Input::old('redirect_url'))
@@ -39,13 +39,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Director</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.director')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('director','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Status</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.status')}}</label>
                             <div class="col-md-4">
                                 <select class="form-control" name="status">
                                     @foreach($status as $key => $value)
@@ -59,63 +59,63 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Email</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.email')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('email','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">City</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.city')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('city','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Street</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.street')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('street','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Apartment</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.apartment')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('apartment','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Phone</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.phone')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('phone','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Identification number</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.identification_number')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('identification_number','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Bank account number</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.bank_account_number')}}</label>
                             <div class="col-md-4">
                                 {{Form::text('bank_account_number','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">Picture</label>
+                            <label class="control-label col-md-3">{{Lang::get('admin_main.picture')}}</label>
                             <div class="col-md-4">
                                 {{Form::file('picture','',['class' => 'form-control'])}}
                             </div>
                         </div>
                         <input type="hidden"  name="latitude" value="{{$position->latitude}}">
                         <input type="hidden" name="longitude" value="{{$position->longitude}}">
-                        <input id="pac-input" class="controls form-control" type="text" placeholder="Search Box">
+                        <input id="pac-input" class="controls form-control" type="text" placeholder="{{Lang::get('admin_main.search')}}">
                         <div id="map" data-type="create"></div>
                     </div>
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn green"><i class="fa fa-check"></i> Submit</button>
-                                <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                <button type="submit" class="btn green"><i class="fa fa-check"></i> {{Lang::get('admin_main.submit')}}</button>
+                                <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                             </div>
                         </div>
                     </div>

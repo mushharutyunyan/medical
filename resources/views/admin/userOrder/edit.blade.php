@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>User Order Details
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.user_order_details')}}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -16,9 +16,9 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>Drug</th>
-                            <th>Count</th>
-                            <th>Price</th>
+                            <th>{{Lang::get('admin_main.drug')}}</th>
+                            <th>{{Lang::get('admin_main.count')}}</th>
+                            <th>{{Lang::get('admin_main.price')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -33,7 +33,7 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <button class="btn blue">Save changes</button>
+                    <button class="btn blue">{{Lang::get('admin_main.save')}}</button>
                     {!! Form::close() !!}
                 </div>
             </div>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn blue">Update</button>
+                    <button class="btn blue">{{Lang::get('admin_main.update')}}</button>
                 </div>
                 {!! Form::close() !!}
             </div>

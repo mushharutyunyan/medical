@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Circulation
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.circulation')}}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -17,8 +17,8 @@
                         </div>
                     @endif
                     <ul class="nav nav-tabs">
-                        <li class="{{isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy']) ? '' : 'active'}}"><a data-toggle="tab" href="#user_order">User Order</a></li>
-                        <li class="{{isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy']) ? 'active' : ''}}"><a data-toggle="tab" href="#order">Order</a></li>
+                        <li class="{{isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy']) ? '' : 'active'}}"><a data-toggle="tab" href="#user_order">{{Lang::get('admin_main.user_order')}}</a></li>
+                        <li class="{{isset($data['circulation_order_whole_sale']) && isset($data['circulation_order_pharmacy']) ? 'active' : ''}}"><a data-toggle="tab" href="#order">{{Lang::get('admin_main.order')}}</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -27,7 +27,7 @@
                             <form method="POST">
                                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                                 <div class="form-group col-md-6">
-                                    <label>By User:</label>
+                                    <label>{{Lang::get('admin_main.by_user')}}:</label>
                                     <select name="circulation_users" id="circulation_users" class="form-control">
                                         <option></option>
                                         @foreach($users as $user)
@@ -42,7 +42,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>By Organization:</label>
+                                    <label>{{Lang::get('admin_main.by_organization')}}:</label>
                                     <select name="user_order_organizations" id="user_order_organizations" class="form-control">
                                         <option></option>
                                         @foreach($user_order_organizations as $user_order_organization)
@@ -62,19 +62,19 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            User
+                                            {{Lang::get('admin_main.user')}}
                                         </th>
                                         <th>
-                                            Organization
+                                            {{Lang::get('admin_main.organization')}}
                                         </th>
                                         <th>
-                                            Order
+                                            {{Lang::get('admin_main.order')}}
                                         </th>
                                         <th>
-                                            Created At
+                                            {{Lang::get('admin_main.created_at')}}
                                         </th>
                                         <th>
-                                            Sum
+                                            {{Lang::get('admin_main.sum')}}
                                         </th>
                                     </tr>
                                 </thead>
@@ -119,7 +119,7 @@
                                 </tbody>
                             </table>
                             <div class="form-group">
-                                <label>User Order Sum:</label>
+                                <label>{{Lang::get('admin_main.by_organization_sum')}}:</label>
                                 <input type="text" class="form-control" disabled="disabled" value="{{$user_order_all_sum}}">
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                                 <form method="POST">
                                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                                     <div class="form-group col-md-6">
-                                        <label>Whole Sale:</label>
+                                        <label>{{Lang::get('admin_main.whole_sale')}}:</label>
                                         <select name="circulation_order_whole_sale" id="circulation_order_whole_sale" class="form-control">
                                             <option></option>
                                             @foreach($organizations as $organization)
@@ -143,7 +143,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>Pharmacy (other):</label>
+                                        <label>{{Lang::get('admin_main.pharmacy_other')}}:</label>
                                         <select name="circulation_order_pharmacy" id="circulation_order_pharmacy" class="form-control">
                                             <option></option>
                                             @foreach($organizations as $organization)
@@ -163,20 +163,19 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            To
+                                            {{Lang::get('admin_main.to')}}
                                         </th>
                                         <th>
-                                            From
+                                            {{Lang::get('admin_main.from')}}
                                         </th>
                                         <th>
-                                            Delivery Status
-                                        </th>
-
-                                        <th>
-                                            Sum (With discount)
+                                            {{Lang::get('admin_main.delivery_status')}}
                                         </th>
                                         <th>
-                                            Created At (Finish date)
+                                            {{Lang::get('admin_main.sum_with_discount')}}
+                                        </th>
+                                        <th>
+                                            {{Lang::get('admin_main.create_at_finish_date')}}
                                         </th>
                                     </tr>
                                 </thead>
@@ -227,7 +226,7 @@
                                 </tbody>
                             </table>
                             <div class="form-group">
-                                <label>Order Sum:</label>
+                                <label>{{Lang::get('admin_main.order_sum')}}:</label>
                                 <input type="text" class="form-control" disabled="disabled" value="{{$all_order_sum}}">
                             </div>
                         </div>

@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Messages
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.messages')}}
                     </div>
                 </div>
                 <div class="portlet-body">

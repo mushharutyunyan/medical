@@ -4,6 +4,7 @@ Route::get('admin/login','Admin\HomeController@login');
 Route::post('admin/login','Admin\LoginController@login');
 Route::get('admin/logout','Admin\LoginController@logout');
 Route::group(['namespace' => 'Admin','prefix' => 'admin','middleware' => 'globalAdmin'],function () {
+    Route::get('/language/{language}',['as'=>'lang.switch', 'uses'=>'LanguageController@switchLang']);
     // Controllers Within The "App\Http\Controllers\Admin" Namespace
     Route::group(['middleware' => 'adminAuth'],function(){
         Route::get('/','HomeController@home');

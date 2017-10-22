@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Managed Organizations
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.manage_organizations')}}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -21,7 +21,7 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     <a id="sample_editable_1_new" href="/admin/manage/organizations/create" class="btn green">
-                                        Add New <i class="fa fa-plus"></i>
+                                        {{Lang::get('admin_main.add_new')}} <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
@@ -31,28 +31,28 @@
                         <thead>
                         <tr>
                             <th>
-                                Name
+                                {{Lang::get('admin_main.name')}}
                             </th>
                             <th>
-                                Director
+                                {{Lang::get('admin_main.director')}}
                             </th>
                             <th>
-                                Email
+                                {{Lang::get('admin_main.email')}}
                             </th>
                             <th>
-                                Address
+                                {{Lang::get('admin_main.address')}}
                             </th>
                             <th>
-                                Phone
+                                {{Lang::get('admin_main.phone')}}
                             </th>
                             <th>
-                                Status
+                                {{Lang::get('admin_main.status')}}
                             </th>
                             <th>
-                                Created At
+                                {{Lang::get('admin_main.created_at')}}
                             </th>
                             <th>
-                                Actions
+                                {{Lang::get('admin_main.actions')}}
                             </th>
                         </tr>
                         </thead>

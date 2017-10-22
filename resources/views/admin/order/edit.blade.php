@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Order ({{Auth::guard('admin')->user()->organization->name}})
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.order')}} ({{Auth::guard('admin')->user()->organization->name}})
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -27,8 +27,8 @@
                         <table class="table table-striped table-bordered table-hover order-actions-table">
                             <thead>
                             <tr>
-                                <th>Drug</th>
-                                <th>Count</th>
+                                <th>{{Lang::get('admin_main.drug')}}</th>
+                                <th>{{Lang::get('admin_main.count')}}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,9 +39,9 @@
                                 ?>
                                 <tr class="odd gradeX process">
                                     <td>
-                                        <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-storage-id="{{$drug->storage_id}}">Watch</button>
+                                        <button class='view-edit-drug order btn btn-warning' data-id='{{$order->id}}' data-storage-id="{{$drug->storage_id}}">{{Lang::get('admin_main.watch')}}</button>
 
-                                        <button class='remove-storage-row btn btn-warning order' data-id='{{$i}}'>Clear</button>
+                                        <button class='remove-storage-row btn btn-warning order' data-id='{{$i}}'>{{Lang::get('admin_main.clear')}}</button>
                                         {{$drug->storage->drug->trade_name}}
                                         <input type='hidden' class='row-storage-id' name='storage_id_{{$i}}' value='{{$drug->storage_id}}'>
                                         <input type='hidden' class='row-count-in-storage' name='count_in_storage_{{$i}}' value='{{$drug->storage->count}}'>
@@ -73,8 +73,8 @@
                             @endforeach
                             @for($i = count($drugs); $i <= 15; $i++)
                                 <tr class="odd gradeX">
-                                    <td><button type="button" data-id="{{$i}}" class="btn btn-success search-drug-button order">Search</button></td>
-                                    <td><input type="text" class="form-control" name="count" placeholder="Count"></td>
+                                    <td><button type="button" data-id="{{$i}}" class="btn btn-success search-drug-button order">{{Lang::get('admin_main.search')}}</button></td>
+                                    <td><input type="text" class="form-control" name="count" placeholder="{{Lang::get('admin_main.count')}}"></td>
                                 </tr>
                             @endfor
                             </tbody>
@@ -96,16 +96,16 @@
                                 <div class="pull-right">
                                     {!! Form::open(['class' => 'storage-save-all']) !!}
                                     @if(!$order->status)
-                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn green save-all-storage order-save edit"><i class="fa fa-check"></i>Save</button>
-                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit" data-saved="{{!$order->status ? 1 : 0}}"><i class="fa fa-check"></i>Send</button>
+                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn green save-all-storage order-save edit"><i class="fa fa-check"></i>{{Lang::get('admin_main.save')}}</button>
+                                    <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit" data-saved="{{!$order->status ? 1 : 0}}"><i class="fa fa-check"></i>{{Lang::get('admin_main.send')}}</button>
                                     @else
                                         @if(Auth::guard('admin')->user()['organization_id'] == $order->to)
-                                        <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit answer"><i class="fa fa-check"></i>Re-Send</button>
+                                        <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit answer"><i class="fa fa-check"></i>{{Lang::get('admin_main.re_send')}}</button>
                                         @else
-                                        <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>Re-Send</button>
+                                        <button type="submit" data-count="0" data-id="{{$order->id}}" class="btn yellow save-all-storage order-send edit"><i class="fa fa-check"></i>{{Lang::get('admin_main.re_send')}}</button>
                                         @endif
                                     @endif
-                                    <a href="{{url()->previous()}}" type="button" class="btn default">Cancel</a>
+                                    <a href="{{url()->previous()}}" type="button" class="btn default">{{Lang::get('admin_main.cancel')}}</a>
                                     {!! Form::close() !!}
 
                                 </div>

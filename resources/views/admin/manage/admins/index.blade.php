@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Managed Admins
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.manage_admins')}}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -21,7 +21,7 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     <a id="sample_editable_1_new" href="/admin/manage/admins/create" class="btn green">
-                                        Add New <i class="fa fa-plus"></i>
+                                        {{Lang::get('admin_main.add_new')}} <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
@@ -54,22 +54,22 @@
                                 {{--<input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes"/>--}}
                             {{--</th>--}}
                             <th>
-                                Role
+                                {{Lang::get('admin_main.role')}}
                             </th>
                             <th>
-                                Organization
+                                {{Lang::get('admin_main.organization')}}
                             </th>
                             <th>
-                                Name
+                                {{Lang::get('admin_main.name')}}
                             </th>
                             <th>
-                                Username
+                                {{Lang::get('admin_main.username')}}
                             </th>
                             <th>
-                                Created At
+                                {{Lang::get('admin_main.created_at')}}
                             </th>
                             <th>
-                                Actions
+                                {{Lang::get('admin_main.actions')}}
                             </th>
                         </tr>
                         </thead>

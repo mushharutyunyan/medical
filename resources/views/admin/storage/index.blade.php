@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Manage Storage ({{$organization_name}})
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.manage_storage')}} ({{$organization_name}})
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -21,7 +21,7 @@
                             <div class="col-md-6">
                                 <div class="btn-group">
                                     <a id="sample_editable_1_new" href="/admin/storage/create" class="btn green">
-                                        Add New <i class="fa fa-plus"></i>
+                                        {{Lang::get('admin_main.add_new')}} <i class="fa fa-plus"></i>
                                     </a>
                                 </div>
                             </div>
@@ -31,19 +31,19 @@
                         <thead>
                         <tr>
                             <th>
-                                Drug
+                                {{Lang::get('admin_main.drug')}}
                             </th>
                             <th>
-                                Price
+                                {{Lang::get('admin_main.price')}}
                             </th>
                             <th>
-                                Count
+                                {{Lang::get('admin_main.count')}}
                             </th>
                             <th>
-                                Created At
+                                {{Lang::get('admin_main.created_at')}}
                             </th>
                             <th>
-                                Actions
+                                {{Lang::get('admin_main.actions')}}
                             </th>
                         </tr>
                         </thead>

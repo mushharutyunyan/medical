@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>Tickets
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.tickets')}}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -15,13 +15,13 @@
                         <thead>
                         <tr>
                             <th>
-                                Name
+                                {{Lang::get('admin_main.name')}}
                             </th>
                             <th>
-                                Email
+                                {{Lang::get('admin_main.email')}}
                             </th>
                             <th>
-                                Message
+                                {{Lang::get('admin_main.message')}}
                             </th>
                         </tr>
                         </thead>

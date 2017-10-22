@@ -7,7 +7,7 @@
             <div class="portlet box grey-cascade">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-user"></i>User Orders
+                        <i class="fa fa-user"></i>{{Lang::get('admin_main.user_order')}}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -19,12 +19,12 @@
                     <table class="table datatable table-striped table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Order (Status)</th>
-                            <th>User Info</th>
-                            <th>Pay method ,  Pay type</th>
-                            <th>Delivery address and time / Take time</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
+                            <th>{{Lang::get('admin_main.order_status')}}</th>
+                            <th>{{Lang::get('admin_main.user_info')}}</th>
+                            <th>{{Lang::get('admin_main.pay_method')}}, {{Lang::get('admin_main.pay_type')}}</th>
+                            <th>{{Lang::get('admin_main.delivery_address_and_time')}} / {{Lang::get('admin_main.take_time')}}</th>
+                            <th>{{Lang::get('admin_main.created_at')}}</th>
+                            <th>{{Lang::get('admin_main.actions')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -60,22 +60,22 @@
                                     @else
                                         @if($order->status != \App\Models\UserOrder::DELIVERED && $order->status != \App\Models\UserOrder::CANCELEDBYUSER && $order->status != \App\Models\UserOrder::CANCELED)
                                             @if($order->status == \App\Models\UserOrder::APPROVED && empty($order->pay_method))
-                                                <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
-                                                <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
+                                                <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">{{Lang::get('admin_main.cancel')}}</a>
+                                                <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">{{Lang::get('admin_main.close')}}</a>
                                             @else
                                                 @if($order->status != \App\Models\UserOrder::CLOSED && $order->status != \App\Models\UserOrder::CANCELED)
                                                     @if(empty($order->pay_method))
                                                         <a href="/admin/userOrder/{{$order->id}}/edit">Edit</a>
-                                                        <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">Approved</a>
-                                                        <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">Cancel</a>
+                                                        <a href="/admin/userOrder/{{$order->id}}/3" class="approved-order">{{Lang::get('admin_main.approved')}}</a>
+                                                        <a href="/admin/userOrder/{{$order->id}}/5" class="cancel-order">{{Lang::get('admin_main.cancel')}}</a>
                                                     @else
                                                         @if($order->status < \App\Models\UserOrder::APPROVEDBYPHARMACY)
-                                                            <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">Edit(Approved)</a>
+                                                            <a href="#" style="color: green;" data-id="{{$order->id}}" class="finish-order">{{Lang::get('admin_main.edit_approved')}}</a>
                                                         @else
-                                                            <a href="javascript:;" class="finished_delivery" data-id="{{$order->id}}" style="color: green;">Delivery</a>
+                                                            <a href="javascript:;" class="finished_delivery" data-id="{{$order->id}}" style="color: green;">{{Lang::get('admin_main.delivery')}}</a>
                                                         @endif
                                                     @endif
-                                                        <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">Close</a>
+                                                        <a href="/admin/userOrder/{{$order->id}}/4" class="cancel-order">{{Lang::get('admin_main.close')}}</a>
                                                 @endif
                                             @endif
                                         @endif
@@ -87,7 +87,7 @@
                                         </a>
                                     @endif
                                     @if($order_busy && $order_busy->admin_id == Auth::guard('admin')->user()['id'] && $order_busy->organization_id == Auth::guard('admin')->user()['organization_id'])
-                                        <a class="btn btn-danger" href="/admin/userOrder/release/{{$order->id}}">Release order</a>
+                                        <a class="btn btn-danger" href="/admin/userOrder/release/{{$order->id}}">{{Lang::get('admin_main.release_order')}}</a>
                                     @endif
                                 </td>
                             </tr>
@@ -111,9 +111,9 @@
                 <table class="table table-striped order-details-modal-table">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Count</th>
-                        <th>Price</th>
+                        <th>{{Lang::get('admin_main.name')}}</th>
+                        <th>{{Lang::get('admin_main.count')}}</th>
+                        <th>{{Lang::get('admin_main.price')}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -161,7 +161,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Order Finish</h4>
+                    <h4 class="modal-title">{{Lang::get('admin_main.order_finish')}}</h4>
                 </div>
                 <form id="order_finish_form">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -176,7 +176,7 @@
                             <input type="text" class="form-control" name="delivery_address">
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success">Finish</button>
+                        <button class="btn btn-success">{{Lang::get('admin_main.finish')}}</button>
                     </div>
                 </form>
             </div>
