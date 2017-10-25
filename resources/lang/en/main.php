@@ -128,5 +128,7 @@ return [
     'contact_form' => 'Contact form',
     'contact_info' => 'Contact info',
     'organization_map' => 'Organization in map',
-    'contact_info_messages' => 'We are always ready to help you. There are many ways to contact us. You may drop us a line, give us a call or send an email, choose what suits you most.'
+    'contact_info_messages' => 'We are always ready to help you. There are many ways to contact us. You may drop us a line, give us a call or send an email, choose what suits you most.',
+    'home_text_1' => 'Պատվիրեք Ձեր դեղերը և այլ ապրանքներ Ձեր բնակության կամ աշխատանքի վայրին հարմար դեղատանը, վճարեք և վերցրեք Ձեր պատվերը Ձեզ համար ամենահարմար ժամանակ:',
+    'footer_text' => 'Մեր նպատակն է ապահովել բնակչության համար մատչելի և հասկանալի միջավայր՝ դեղեր և բժշկական նշանակության ապրանքներ պատվիրելու համար: <br class="veil reveal-lg-block"> Մեր միջոցով Դուք կխնայեք Ձեր ժամանակը, գնումները կդարձնեք առավել ապահով և շահավետ:',
 ];

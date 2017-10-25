@@ -77,7 +77,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo">
             <a href="/admin">
-                <img src="/assets/images/logo.png" width="88%" alt="logo" class="logo-default"/>
+                <img src="/assets/images/logo.gif" width="88%" alt="logo" class="logo-default"/>
             </a>
             <div class="menu-toggler sidebar-toggler">
                 <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -162,7 +162,7 @@
                             <li class="external">
                                 @if(isset($unread_messages))
                                 @if(count($unread_messages))
-                                <h3>{{Lang::get('admin_main.new_messages_text',['unread_messages_count' => count($unread_messages)])}}</h3>
+                                <h3>{!! Lang::get('admin_main.new_messages_text',['unread_messages_count' => count($unread_messages)]) !!}</h3>
                                 @else
                                 <h3>{{Lang::get('admin_main.not_message_text')}}</h3>
                                 @endif
@@ -206,10 +206,10 @@
                         <ul class="dropdown-menu extended tasks">
                             <li class="external">
                                 @if(isset($orders))
-                                @if($orders->count())
-                                <h3>{{Lang::get('admin_main.new_pending_orders',['orders_count' => $orders->count()])}}</h3>
-                                <a href="/admin/order">{{Lang::get('admin_main.view_all_text')}}</a>
-                                @endif
+                                    @if($orders->count())
+                                    <h3>{!! Lang::get('admin_main.new_pending_orders',['orders_count' => $orders->count()]) !!}</h3>
+                                    <a href="/admin/order">{{Lang::get('admin_main.view_all_text')}}</a>
+                                    @endif
                                 @endif
                             </li>
                             <li>
@@ -249,7 +249,7 @@
                             @foreach (Config::get('languages') as $lang => $language)
                                 @if ($lang != App::getLocale())
                                     <li>
-                                        <a href="{{ route('lang.switch', $lang) }}">{{$language}}</a>
+                                        <a href="{{ route('langAdmin.switch', $lang) }}">{{$language}}</a>
                                     </li>
                                 @endif
                             @endforeach

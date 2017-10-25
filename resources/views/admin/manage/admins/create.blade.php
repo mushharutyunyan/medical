@@ -39,7 +39,7 @@
                                             @endif
                                         @endforeach
                                     </select>
-                                    <span class="help-block">{{Lang::get('admin_main.add_new_role_text')}}</span>
+                                    <span class="help-block">{!! Lang::get('admin_main.add_new_role_text') !!}</span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -54,7 +54,7 @@
                                             @endif
                                         @endforeach
                                     </select>
-                                    <span class="help-block">{{Lang::get('admin_main.add_new_organization_text')}}</span>
+                                    <span class="help-block">{!! Lang::get('admin_main.add_new_organization_text') !!}</span>
                                 </div>
                             </div>
                             <div class="form-group">

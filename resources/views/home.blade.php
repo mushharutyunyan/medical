@@ -4,25 +4,25 @@
     <section class="section-top-60">
         <div class="shell">
             <div class="range">
-                <div class="cell-md-4 cell-sm-6">
-                    <a href="category.html" class="thumbnail-variant-4 reveal-inline-block">
+                <div class="cell-md-4 cell-sm-6" >
+                    <a href=#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;">
                         <img alt="" src="/images/index-04.jpg" width="370" height="670" class="img-responsive">
                     </a>
                 </div>
                 <div class="cell-md-4 cell-sm-6 cell-md-push-1">
-                    <a href="category.html" class="thumbnail-variant-4 reveal-inline-block">
+                    <a href="#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;">
                         <img alt="" src="/images/index-07.jpg" width="370" height="670" class="img-responsive">
                     </a>
                 </div>
                 <div class="cell-md-4">
                     <div class="range">
                         <div class="cell-sm-6 cell-md-12">
-                            <a href="category.html" class="thumbnail-variant-4 reveal-inline-block inset-md-bottom-7-p">
+                            <a href="#" class="thumbnail-variant-4 reveal-inline-block inset-md-bottom-7-p" style="background: #7fcac8;">
                                 <img alt="" src="/images/index-05.jpg" width="370" height="320" class="img-responsive">
                             </a>
                         </div>
-                        <div class="cell-sm-6 cell-md-12 offset-top-30 offset-sm-top-0">
-                            <a href="category.html" class="thumbnail-variant-4 reveal-inline-block">
+                        <div class="cell-sm-6 cell-md-12 offset-top-30 offset-sm-top-0" >
+                            <a href="#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;">
                                 <img alt="" src="/images/index-06.jpg" width="370" height="320" class="img-responsive">
                             </a>
                         </div>
@@ -133,10 +133,10 @@
     </section>
     <section class="section-top-60">
         <div style="background-image: url(images/index-16.jpg); background-repeat: no-repeat; background-size: cover;" class="shell well-variant-1">
-            <h3>About Our Store</h3>
+            {{--<h3>About Our Store</h3>--}}
             <hr class="divider divider-base divider-bold">
-            <p class="text-regular text-uppercase">We are offering you the unique goods because our product is the real treasure.</p>
-            <p class="offset-top-20">If you are a true fan, you’ll love it. We have a tremendous variety in comparison to all of our competitors. Our collection is like a sea pearl among simple stones. Our devoted clients have noticed that our goods are the index of true, elegant taste.</p>
+            <p class="text-regular text-uppercase">{{Lang::get('main.home_text_1')}}</p>
+            {{--<p class="offset-top-20">If you are a true fan, you’ll love it. We have a tremendous variety in comparison to all of our competitors. Our collection is like a sea pearl among simple stones. Our devoted clients have noticed that our goods are the index of true, elegant taste.</p>--}}
             <p></p>
         </div>
     </section>
