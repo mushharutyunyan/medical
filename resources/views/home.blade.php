@@ -5,25 +5,25 @@
         <div class="shell">
             <div class="range">
                 <div class="cell-md-4 cell-sm-6" >
-                    <a href=#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;">
-                        <img alt="" src="/images/index-04.jpg" width="370" height="670" class="img-responsive">
+                    <a href=#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;width:370px;height:670px">
+                        {{--<img alt="" src="/images/index-04.jpg" width="370" height="670" class="img-responsive">--}}
                     </a>
                 </div>
                 <div class="cell-md-4 cell-sm-6 cell-md-push-1">
-                    <a href="#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;">
-                        <img alt="" src="/images/index-07.jpg" width="370" height="670" class="img-responsive">
+                    <a href="#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;width:370px;height:670px">
+                        {{--<img alt="" src="/images/index-07.jpg" width="370" height="670" class="img-responsive">--}}
                     </a>
                 </div>
                 <div class="cell-md-4">
                     <div class="range">
                         <div class="cell-sm-6 cell-md-12">
-                            <a href="#" class="thumbnail-variant-4 reveal-inline-block inset-md-bottom-7-p" style="background: #7fcac8;">
-                                <img alt="" src="/images/index-05.jpg" width="370" height="320" class="img-responsive">
+                            <a href="#" class="thumbnail-variant-4 reveal-inline-block inset-md-bottom-7-p" style="background: #7fcac8;width:370px;height:335px">
+                                {{--<img alt="" src="/images/index-05.jpg" width="370" height="320" class="img-responsive">--}}
                             </a>
                         </div>
                         <div class="cell-sm-6 cell-md-12 offset-top-30 offset-sm-top-0" >
-                            <a href="#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;">
-                                <img alt="" src="/images/index-06.jpg" width="370" height="320" class="img-responsive">
+                            <a href="#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;width:370px;height:330px">
+                                {{--<img alt="" src="/images/index-06.jpg" width="370" height="320" class="img-responsive">--}}
                             </a>
                         </div>
                     </div>
