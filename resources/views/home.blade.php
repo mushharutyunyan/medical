@@ -5,7 +5,7 @@
         <div class="shell">
             <div class="range">
                 <div class="cell-md-4 cell-sm-6" >
-                    <a href=#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;width:370px;height:670px">
+                    <a href="#" class="thumbnail-variant-4 reveal-inline-block" style="background: #7fcac8;width:370px;height:670px">
                         {{--<img alt="" src="/images/index-04.jpg" width="370" height="670" class="img-responsive">--}}
                     </a>
                 </div>
