@@ -13,6 +13,7 @@
 Auth::routes();
 Route::get('logout', 'Auth\LoginController@logout');
 Route::group(['middleware' => 'globalUser'],function(){
+    
     Route::get('/','HomeController@index');
     Route::get('/search','HomeController@search');
     Route::get('/contacts','HomeController@contact');
