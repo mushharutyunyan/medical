@@ -49,7 +49,7 @@ return [
     'forgotPassword' => 'Մոռացե՞լ եք գաղտնաբառը',
     'resetPassword' => 'Փոփոխել գաղտնաբառը',
     'newPassword' => 'Նոր գաղտնաբառ',
-    'resetPasswordButton' => 'Ուղարկել հղումը հաղտնաբառի փոփոխման համար',
+    'resetPasswordButton' => 'Ուղարկել հղումը գաղտնաբառի փոփոխման համար',
     'error' => 'Սխալ',
     'close' => 'Փակել',
     'send' => 'Ուղարկել',
